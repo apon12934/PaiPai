@@ -28,7 +28,7 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ===== BULLETPROOF LIGHT MODE OVERRIDES ===== */
+/* ===== LIGHT MODE GLOBAL OVERRIDES ===== */
 html.light, html.light body {
   background-color: #F8F9FE !important;
   color: #0F172A !important;
@@ -44,7 +44,7 @@ html.light .glass-history {
   box-shadow: 0 4px 25px rgba(15, 23, 42, 0.05) !important;
 }
 
-/* Force pure white background on any card in light mode */
+/* Force pure white background on any card container in light mode */
 html.light [class*="bg-[#151624]"],
 html.light [class*="bg-[#0D0E17]"],
 html.light [class*="bg-[#07080D]"],
@@ -53,17 +53,20 @@ html.light [class*="bg-[#0A0B12]"] {
   border-color: #E2E8F0 !important;
 }
 
-/* Force dark readable text for headings, paragraphs, and spans in light mode unless inside solid indigo/rose/emerald buttons */
-html.light h1:not(.text-white),
-html.light h2:not(.text-white),
-html.light h3:not(.text-white),
-html.light h4:not(.text-white),
-html.light p:not(.text-white),
-html.light span:not(.text-white):not(.text-emerald-600):not(.text-rose-600):not(.text-emerald-400):not(.text-rose-400) {
-  color: #0F172A;
+/* ===== CRITICAL ACCENT & HIGHLIGHT BUTTON TEXT OVERRIDES ===== */
+/* Active Indigo, Rose, and Emerald buttons MUST ALWAYS have pure white text and icons in BOTH light and dark modes */
+.bg-indigo-600,
+.bg-indigo-600 *,
+.bg-indigo-600 span,
+.bg-indigo-600 svg,
+.btn-gave-solid,
+.btn-gave-solid *,
+.btn-received-solid,
+.btn-received-solid * {
+  color: #FFFFFF !important;
 }
 
-/* Solid Action Buttons styling override */
+/* Solid Action Buttons */
 .btn-gave-solid {
   background-color: #E11D48 !important;
   color: #FFFFFF !important;
