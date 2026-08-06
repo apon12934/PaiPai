@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import GlassCard from '../ui/GlassCard';
+import { ArrowUpRight, ArrowDownLeft, X } from 'lucide-react';
 
 export default function TransactionForm({ onSubmit, editingTx = null, onCancelEdit, currency = '৳' }) {
   const [amount, setAmount] = useState('');
@@ -56,9 +57,10 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
         {editingTx && (
           <button
             onClick={onCancelEdit}
-            className="text-sm text-slate-400 hover:text-white transition-colors"
+            className="flex items-center gap-1 text-xs text-slate-400 hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-2.5 py-1 rounded-lg border border-white/5"
           >
-            Cancel
+            <X className="w-3.5 h-3.5" />
+            <span>Cancel</span>
           </button>
         )}
       </div>
@@ -95,19 +97,25 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
           <button
             onClick={() => handleSubmit('gave')}
             disabled={!parseFloat(amount)}
-            className="flex flex-col items-center justify-center p-3 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 disabled:opacity-50 transition-all duration-200"
+            className="flex flex-col items-center justify-center p-3 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 disabled:opacity-50 transition-all duration-200 group"
           >
-            <span className="font-semibold text-lg mb-1">↑ I Gave {currency}</span>
-            <span className="text-xs opacity-70">Press Enter</span>
+            <div className="flex items-center gap-1.5 font-semibold text-lg mb-0.5">
+              <ArrowUpRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              <span>I Gave {currency}</span>
+            </div>
+            <span className="text-[10px] opacity-70 font-mono">Press Enter</span>
           </button>
           
           <button
             onClick={() => handleSubmit('received')}
             disabled={!parseFloat(amount)}
-            className="flex flex-col items-center justify-center p-3 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 text-emerald-400 disabled:opacity-50 transition-all duration-200"
+            className="flex flex-col items-center justify-center p-3 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 text-emerald-400 disabled:opacity-50 transition-all duration-200 group"
           >
-            <span className="font-semibold text-lg mb-1">↓ I Received {currency}</span>
-            <span className="text-xs opacity-70">Shift + Enter</span>
+            <div className="flex items-center gap-1.5 font-semibold text-lg mb-0.5">
+              <ArrowDownLeft className="w-5 h-5 transition-transform group-hover:-translate-x-0.5 group-hover:translate-y-0.5" />
+              <span>I Received {currency}</span>
+            </div>
+            <span className="text-[10px] opacity-70 font-mono">Shift + Enter</span>
           </button>
         </div>
       </div>
