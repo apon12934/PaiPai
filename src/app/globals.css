@@ -53,20 +53,6 @@ html.light [class*="bg-[#0A0B12]"] {
   border-color: #E2E8F0 !important;
 }
 
-/* TARGETED HIGHLIGHT BUTTON TEXT OVERRIDES */
-/* Active Indigo, Rose, and Emerald buttons have pure white text */
-button.bg-indigo-600,
-button.bg-indigo-600 span,
-button.bg-indigo-600 svg,
-.btn-gave-solid,
-.btn-gave-solid span,
-.btn-gave-solid svg,
-.btn-received-solid,
-.btn-received-solid span,
-.btn-received-solid svg {
-  color: #FFFFFF !important;
-}
-
 /* Solid Action Buttons */
 .btn-gave-solid {
   background-color: #E11D48 !important;

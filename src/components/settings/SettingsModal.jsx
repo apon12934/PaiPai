@@ -227,8 +227,8 @@ export default function SettingsModal({
                     : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10'
                 }`}
               >
-                <Icon className="w-3.5 h-3.5" />
-                <span>{tab.label}</span>
+                <Icon className={`w-3.5 h-3.5 ${isAct ? 'text-white' : 'text-slate-600 dark:text-slate-400'}`} />
+                <span className={isAct ? 'text-white' : 'text-slate-700 dark:text-slate-300'}>{tab.label}</span>
               </button>
             );
           })}
@@ -253,10 +253,12 @@ export default function SettingsModal({
                       className={`flex items-center justify-between p-3 rounded-xl border text-xs font-bold transition-all ${
                         isSel
                           ? 'bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-600/20'
-                          : 'bg-slate-50 dark:bg-white/5 border-slate-300 dark:border-white/10 text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/10'
+                          : 'bg-slate-100 dark:bg-white/5 border-slate-300 dark:border-white/10 text-slate-800 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/10'
                       }`}
                     >
-                      <span className="truncate">{c.name}</span>
+                      <span className={`truncate font-bold ${isSel ? 'text-white' : 'text-slate-800 dark:text-slate-200'}`}>
+                        {c.name}
+                      </span>
                       <span className={`font-black text-sm ml-2 ${isSel ? 'text-white' : 'text-indigo-600 dark:text-indigo-400'}`}>
                         {c.symbol}
                       </span>
@@ -274,9 +276,9 @@ export default function SettingsModal({
               </label>
               <div className="grid grid-cols-3 gap-2">
                 {[
-                  { id: 'dark', label: 'Dark', icon: Moon, color: 'text-indigo-400' },
+                  { id: 'dark', label: 'Dark', icon: Moon, color: 'text-indigo-600 dark:text-indigo-400' },
                   { id: 'light', label: 'Light', icon: Sun, color: 'text-amber-500' },
-                  { id: 'system', label: 'Auto (Device)', icon: Laptop, color: 'text-emerald-500' },
+                  { id: 'system', label: 'Auto (Device)', icon: Laptop, color: 'text-emerald-600 dark:text-emerald-400' },
                 ].map((th) => {
                   const Icon = th.icon;
                   const isSel = theme === th.id;
@@ -287,11 +289,11 @@ export default function SettingsModal({
                       className={`p-3 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-1.5 transition-all ${
                         isSel
                           ? 'bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-600/20'
-                          : 'bg-slate-50 dark:bg-white/5 border-slate-300 dark:border-white/10 text-slate-800 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10'
+                          : 'bg-slate-100 dark:bg-white/5 border-slate-300 dark:border-white/10 text-slate-800 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/10'
                       }`}
                     >
                       <Icon className={`w-4 h-4 ${isSel ? 'text-white' : th.color}`} />
-                      <span>{th.label}</span>
+                      <span className={isSel ? 'text-white' : 'text-slate-800 dark:text-slate-200'}>{th.label}</span>
                     </button>
                   );
                 })}
@@ -317,10 +319,10 @@ export default function SettingsModal({
                       className={`p-3 rounded-xl border text-xs font-bold transition-all ${
                         isSel
                           ? 'bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-600/20'
-                          : 'bg-slate-50 dark:bg-white/5 border-slate-300 dark:border-white/10 text-slate-800 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10'
+                          : 'bg-slate-100 dark:bg-white/5 border-slate-300 dark:border-white/10 text-slate-800 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/10'
                       }`}
                     >
-                      {so.label}
+                      <span className={isSel ? 'text-white' : 'text-slate-800 dark:text-slate-200'}>{so.label}</span>
                     </button>
                   );
                 })}
@@ -352,7 +354,7 @@ export default function SettingsModal({
                 )}
 
                 {/* Current Preview */}
-                <div className="flex items-center gap-4 p-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl">
+                <div className="flex items-center gap-4 p-3 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl">
                   {photoURL ? (
                     <img
                       src={photoURL}
@@ -366,7 +368,7 @@ export default function SettingsModal({
                   )}
                   <div>
                     <h4 className="text-sm font-black text-slate-900 dark:text-white">{displayName || 'User'}</h4>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">{user.email}</p>
+                    <p className="text-xs font-semibold text-slate-600 dark:text-slate-400">{user.email}</p>
                   </div>
                 </div>
 
@@ -379,7 +381,7 @@ export default function SettingsModal({
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
                     placeholder="Your Name"
-                    className="w-full px-3 py-2.5 rounded-xl text-sm bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white"
+                    className="w-full px-3 py-2.5 rounded-xl text-sm bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white font-bold"
                   />
                 </div>
 
@@ -428,7 +430,7 @@ export default function SettingsModal({
                 </button>
               </form>
             ) : (
-              <div className="text-center py-6 text-slate-500 text-xs font-medium">
+              <div className="text-center py-6 text-slate-600 dark:text-slate-400 text-xs font-medium">
                 Please log in to customize your profile.
               </div>
             )}
@@ -458,7 +460,7 @@ export default function SettingsModal({
                 )}
 
                 {/* Google Provider Link Card */}
-                <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-between">
+                <div className="p-3.5 rounded-2xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-xl bg-slate-200 dark:bg-white/10 flex items-center justify-center">
                       <svg className="w-4 h-4" viewBox="0 0 24 24">
@@ -482,13 +484,13 @@ export default function SettingsModal({
                     </div>
                     <div>
                       <h4 className="text-xs font-black text-slate-900 dark:text-white">Google Account</h4>
-                      <p className="text-[10px] text-slate-500 dark:text-slate-400">
+                      <p className="text-[10px] font-bold text-slate-600 dark:text-slate-400">
                         {isGoogleLinked ? 'Linked ✓' : 'Not linked'}
                       </p>
                     </div>
                   </div>
                   {isGoogleLinked ? (
-                    <span className="flex items-center gap-1 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-300 dark:border-emerald-500/20">
+                    <span className="flex items-center gap-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-300 dark:border-emerald-500/20">
                       <Check className="w-3.5 h-3.5" /> Linked
                     </span>
                   ) : (
@@ -525,7 +527,7 @@ export default function SettingsModal({
                 </div>
               </>
             ) : (
-              <div className="text-center py-6 text-slate-500 text-xs font-medium">
+              <div className="text-center py-6 text-slate-600 dark:text-slate-400 text-xs font-medium">
                 Please log in to manage security settings.
               </div>
             )}
@@ -535,9 +537,9 @@ export default function SettingsModal({
         {/* TAB 4: DATA BACKUP & RESET */}
         {activeTab === 'data' && (
           <div className="space-y-4">
-            <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 space-y-3">
+            <div className="p-3.5 rounded-2xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 space-y-3">
               <h4 className="text-xs font-black text-slate-900 dark:text-white">Export Backup Data</h4>
-              <p className="text-xs text-slate-600 dark:text-slate-400">
+              <p className="text-xs font-medium text-slate-600 dark:text-slate-400">
                 Download a JSON backup of your contacts and transaction history.
               </p>
               <button
@@ -549,9 +551,9 @@ export default function SettingsModal({
               </button>
             </div>
 
-            <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 space-y-3">
+            <div className="p-3.5 rounded-2xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 space-y-3">
               <h4 className="text-xs font-black text-slate-900 dark:text-white">Import Backup File</h4>
-              <p className="text-xs text-slate-600 dark:text-slate-400">
+              <p className="text-xs font-medium text-slate-600 dark:text-slate-400">
                 Restore contacts and history from a previously exported JSON backup.
               </p>
               <label className="w-full flex items-center justify-center gap-2 bg-slate-200 hover:bg-slate-300 dark:bg-white/10 dark:hover:bg-white/15 text-slate-900 dark:text-white text-xs py-2.5 rounded-xl font-bold transition cursor-pointer text-center">
@@ -563,7 +565,7 @@ export default function SettingsModal({
 
             <div className="p-3.5 rounded-2xl bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 space-y-3">
               <h4 className="text-xs font-black text-rose-900 dark:text-rose-300">Reset Application Data</h4>
-              <p className="text-xs text-rose-700 dark:text-rose-400">
+              <p className="text-xs font-medium text-rose-700 dark:text-rose-400">
                 Delete all contacts and transaction history from this device/account.
               </p>
               <button
@@ -586,7 +588,7 @@ export default function SettingsModal({
           title="Delete Your Account Permanently?"
         >
           <div className="space-y-4">
-            <p className="text-xs text-slate-600 dark:text-slate-400">
+            <p className="text-xs font-medium text-slate-600 dark:text-slate-400">
               Are you sure you want to permanently delete your account? This will erase all your contacts, balance sheets, and transaction logs.
             </p>
             {deleteAccountMsg && (
