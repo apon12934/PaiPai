@@ -20,6 +20,16 @@
   --text-secondary-light: #64748B;
 }
 
+/* ===== HIDE NUMBER INPUT SPINNERS/STEPPERS ===== */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 /* ===== BASE BODY STYLES ===== */
 html, body {
   font-family: var(--font-sans);
@@ -97,7 +107,7 @@ html.light ::-webkit-scrollbar-thumb {
   border-left: 4px solid #10B981 !important;
 }
 
-/* ===== INPUT FIELDS ===== */
+/* ===== INPUT FIELDS & REMOVE NATIVE OUTLINES ===== */
 input[type="text"],
 input[type="email"],
 input[type="password"],
@@ -106,6 +116,7 @@ input[type="number"] {
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #F8FAFC;
   transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none !important;
 }
 
 html.light input[type="text"],
@@ -115,15 +126,16 @@ html.light input[type="number"] {
   background: #F1F4FA !important;
   border: 1px solid #DDE2EC !important;
   color: #0F172A !important;
+  outline: none !important;
 }
 
 input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="password"]:focus,
 input[type="number"]:focus {
-  outline: none;
+  outline: none !important;
   border-color: #6366F1 !important;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15) !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2) !important;
 }
 
 /* ===== HARDWARE-ACCELERATED FAST ANIMATIONS ===== */

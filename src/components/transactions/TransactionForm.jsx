@@ -50,8 +50,8 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
   return (
     <div className="w-full space-y-4">
       <div className="flex items-center justify-between mb-1">
-        <h3 className="text-sm font-bold text-slate-200 light:text-slate-800 uppercase tracking-wider">
-          {editingTx ? 'Edit Transaction' : 'Log Transaction'}
+        <h3 className="text-xs font-extrabold text-slate-300 light:text-slate-700 uppercase tracking-widest">
+          {editingTx ? 'Edit Transaction' : 'LOG TRANSACTION'}
         </h3>
         {editingTx && (
           <button
@@ -64,7 +64,7 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
         )}
       </div>
 
-      {/* Amount Input with Currency Symbol */}
+      {/* Clean Amount Input (No Spinners) */}
       <div className="relative">
         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-indigo-400">{currency}</span>
         <input
@@ -75,20 +75,20 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
           onChange={(e) => setAmount(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="0.00"
-          className="w-full bg-white/[0.04] light:bg-white border border-white/10 light:border-slate-300 rounded-2xl py-3.5 pl-12 pr-4 text-3xl font-extrabold text-white light:text-slate-900 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all"
+          className="w-full bg-white/[0.04] light:bg-white border border-white/10 light:border-slate-300 rounded-2xl py-3.5 pl-12 pr-4 text-3xl font-extrabold text-white light:text-slate-900 placeholder-slate-500 transition-all outline-none focus:outline-none"
         />
       </div>
 
-      {/* Note Pill Input Box */}
-      <div className="relative flex items-center bg-white/[0.04] light:bg-white border border-white/10 light:border-slate-300 rounded-2xl px-4 py-3">
-        <FileText className="w-4 h-4 text-slate-400 shrink-0 mr-3" />
+      {/* Clean Note Input Box (No Inner Blue Outline) */}
+      <div className="relative">
+        <FileText className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
         <input
           type="text"
           value={note}
           onChange={(e) => setNote(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Add a note (e.g. Dinner, Rent, Tuition)..."
-          className="w-full bg-transparent text-sm font-medium text-slate-200 light:text-slate-800 placeholder-slate-500 focus:outline-none"
+          className="w-full bg-white/[0.04] light:bg-white border border-white/10 light:border-slate-300 rounded-2xl py-3.5 pl-11 pr-4 text-sm font-medium text-slate-200 light:text-slate-800 placeholder-slate-500 transition-all outline-none focus:outline-none"
         />
       </div>
 
