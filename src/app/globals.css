@@ -40,32 +40,53 @@ html, body {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* LIGHT MODE OVERRIDES */
+/* ===== STRICT LIGHT MODE GLOBAL OVERRIDES ===== */
 html.light, html.light body {
   background-color: #F8F9FE !important;
   color: #0F172A !important;
 }
 
-html.light .glass-prominent {
-  background: #F8F9FE !important;
-  border: 1px solid #E2E8F0 !important;
-  box-shadow: 0 10px 40px rgba(15, 23, 42, 0.06) !important;
-}
-
-html.light .glass-card {
-  background: #FFFFFF !important;
-  border: 1px solid #E2E8F0 !important;
-  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04) !important;
-}
-
-html.light .glass-sidebar {
-  background: #FFFFFF !important;
-  border-right: 1px solid #E2E8F0 !important;
-}
-
+/* Force light background on all app containers and cards */
+html.light .glass-prominent,
+html.light .glass-card,
+html.light .glass-sidebar,
 html.light .glass-history {
   background: #FFFFFF !important;
-  border-left: 1px solid #E2E8F0 !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 0 4px 25px rgba(15, 23, 42, 0.05) !important;
+}
+
+html.light .bg-white\/\[0\.02\],
+html.light .bg-white\/\[0\.03\],
+html.light .bg-white\/\[0\.04\],
+html.light .bg-white\/5,
+html.light .bg-white\/10 {
+  background-color: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+}
+
+/* Force high-contrast dark text in light mode */
+html.light .text-slate-100,
+html.light .text-slate-200,
+html.light .text-slate-300,
+html.light .text-white {
+  color: #0F172A !important;
+}
+
+html.light .text-slate-400,
+html.light .text-slate-500 {
+  color: #475569 !important;
+}
+
+/* Preserve accent colors in light mode */
+html.light .text-emerald-400 {
+  color: #059669 !important;
+}
+html.light .text-rose-400 {
+  color: #E11D48 !important;
+}
+html.light .text-indigo-400 {
+  color: #4F46E5 !important;
 }
 
 /* Custom Scrollbar */
