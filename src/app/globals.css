@@ -3,17 +3,6 @@
 /* ===== FINTECH DESIGN SYSTEM (Dark & Light Mode) ===== */
 :root {
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  
-  /* Dark Theme Colors */
-  --bg-dark: #07080D;
-  --surface-dark: #10111A;
-  --surface-card-dark: #151624;
-  --border-dark: rgba(255, 255, 255, 0.08);
-
-  /* Light Theme Colors */
-  --bg-light: #F8F9FE;
-  --surface-light: #FFFFFF;
-  --border-light: #E2E8F0;
 }
 
 /* HIDE NUMBER INPUT SPINNERS */
@@ -37,56 +26,58 @@ html, body {
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* ===== STRICT LIGHT MODE GLOBAL OVERRIDES ===== */
+/* ===== BULLETPROOF LIGHT MODE OVERRIDES ===== */
 html.light, html.light body {
   background-color: #F8F9FE !important;
   color: #0F172A !important;
 }
 
-/* Force light background on all app containers and cards */
+/* Force light background on main panels and containers in Light Mode */
 html.light .glass-prominent,
 html.light .glass-card,
 html.light .glass-sidebar,
 html.light .glass-history {
-  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
   border-color: #E2E8F0 !important;
   box-shadow: 0 4px 25px rgba(15, 23, 42, 0.05) !important;
 }
 
-html.light .bg-white\/\[0\.02\],
-html.light .bg-white\/\[0\.03\],
-html.light .bg-white\/\[0\.04\],
-html.light .bg-white\/5,
-html.light .bg-white\/10 {
+/* Force pure white background on any card in light mode */
+html.light [class*="bg-[#151624]"],
+html.light [class*="bg-[#0D0E17]"],
+html.light [class*="bg-[#07080D]"],
+html.light [class*="bg-[#0A0B12]"] {
   background-color: #FFFFFF !important;
   border-color: #E2E8F0 !important;
 }
 
-/* Force high-contrast dark text in light mode */
-html.light .text-slate-100,
-html.light .text-slate-200,
-html.light .text-slate-300,
-html.light .text-white {
-  color: #0F172A !important;
+/* Force dark readable text for headings, paragraphs, and spans in light mode unless inside solid indigo/rose/emerald buttons */
+html.light h1:not(.text-white),
+html.light h2:not(.text-white),
+html.light h3:not(.text-white),
+html.light h4:not(.text-white),
+html.light p:not(.text-white),
+html.light span:not(.text-white):not(.text-emerald-600):not(.text-rose-600):not(.text-emerald-400):not(.text-rose-400) {
+  color: #0F172A;
 }
 
-html.light .text-slate-400,
-html.light .text-slate-500 {
-  color: #475569 !important;
+/* Solid Action Buttons styling override */
+.btn-gave-solid {
+  background-color: #E11D48 !important;
+  color: #FFFFFF !important;
+}
+.btn-gave-solid:hover {
+  background-color: #F43F5E !important;
 }
 
-/* Preserve accent colors in light mode */
-html.light .text-emerald-400 {
-  color: #059669 !important;
+.btn-received-solid {
+  background-color: #059669 !important;
+  color: #FFFFFF !important;
 }
-html.light .text-rose-400 {
-  color: #E11D48 !important;
-}
-html.light .text-indigo-400 {
-  color: #4F46E5 !important;
+.btn-received-solid:hover {
+  background-color: #10B981 !important;
 }
 
 /* Custom Scrollbar */

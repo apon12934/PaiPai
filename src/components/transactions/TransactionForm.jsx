@@ -97,25 +97,25 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
         <button
           onClick={() => handleSubmit('gave')}
           disabled={!parseFloat(amount)}
-          className="flex flex-col items-center justify-center p-4 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-bold shadow-lg shadow-rose-600/30 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 group cursor-pointer"
+          className="btn-gave-solid flex flex-col items-center justify-center p-4 rounded-2xl font-bold shadow-lg shadow-rose-600/30 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 group cursor-pointer"
         >
-          <div className="flex items-center gap-2 text-base font-extrabold mb-0.5">
-            <ArrowUpRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            <span>I Gave {currency}</span>
+          <div className="flex items-center gap-2 text-base font-extrabold mb-0.5 text-white">
+            <ArrowUpRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-white" />
+            <span className="text-white">I Gave {currency}</span>
           </div>
-          <span className="text-[10px] text-rose-100 font-mono font-medium">Press Enter</span>
+          <span className="text-[10px] text-white/80 font-mono font-medium">Press Enter</span>
         </button>
         
         <button
           onClick={() => handleSubmit('received')}
           disabled={!parseFloat(amount)}
-          className="flex flex-col items-center justify-center p-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-600/30 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 group cursor-pointer"
+          className="btn-received-solid flex flex-col items-center justify-center p-4 rounded-2xl font-bold shadow-lg shadow-emerald-600/30 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 group cursor-pointer"
         >
-          <div className="flex items-center gap-2 text-base font-extrabold mb-0.5">
-            <ArrowDownLeft className="w-5 h-5 transition-transform group-hover:-translate-x-0.5 group-hover:translate-y-0.5" />
-            <span>I Received {currency}</span>
+          <div className="flex items-center gap-2 text-base font-extrabold mb-0.5 text-white">
+            <ArrowDownLeft className="w-5 h-5 transition-transform group-hover:-translate-x-0.5 group-hover:translate-y-0.5 text-white" />
+            <span className="text-white">I Received {currency}</span>
           </div>
-          <span className="text-[10px] text-emerald-100 font-mono font-medium">Shift + Enter</span>
+          <span className="text-[10px] text-white/80 font-mono font-medium">Shift + Enter</span>
         </button>
       </div>
     </div>
