@@ -1,6 +1,6 @@
 // Database Sync Module (Firestore Cloud Sync - Isolated per User Account)
 import { db } from './firebase';
-import { doc, onSnapshot, setDoc, getDoc } from 'firebase/firestore';
+import { doc, onSnapshot, setDoc } from 'firebase/firestore';
 
 const LOCAL_STORAGE_KEY_PREFIX = 'paiPaiDB_';
 
@@ -59,14 +59,10 @@ export function setupCloudSync(user, onData, onError) {
       } else {
         // First time login for this account — initialize empty document
         const initialData = {};
-        setDoc(
-          userDocRef,
-          {
-            trackerData: initialData,
-            lastUpdated: new Date().toISOString(),
-          },
-          { merge: true }
-        ).catch((err) => console.warn('Init user doc warning:', err));
+        setDoc(userDocRef, {
+          trackerData: initialData,
+          lastUpdated: new Date().toISOString(),
+        }).catch((err) => console.warn('Init user doc warning:', err));
         saveLocalData(user.uid, initialData);
         onData(initialData);
       }
@@ -91,14 +87,11 @@ export async function saveCloudData(user, data) {
 
   try {
     const userDocRef = doc(db, 'users', user.uid);
-    await setDoc(
-      userDocRef,
-      {
-        trackerData: data,
-        lastUpdated: new Date().toISOString(),
-      },
-      { merge: true }
-    );
+    // Replace trackerData completely without merge:true so deleted contact keys are actually removed from Firestore
+    await setDoc(userDocRef, {
+      trackerData: data,
+      lastUpdated: new Date().toISOString(),
+    });
   } catch (error) {
     console.error('Failed to save to Firestore:', error);
   }
