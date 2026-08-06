@@ -3,6 +3,8 @@ import { auth, googleProvider } from './firebase';
 import {
   onAuthStateChanged,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   linkWithPopup,
@@ -13,17 +15,37 @@ import {
   signOut,
 } from 'firebase/auth';
 
-// Observe Auth State
+// Observe Auth State & Handle Redirect Result
 export function observeAuthState(callback) {
+  // Check for pending redirect result first
+  getRedirectResult(auth)
+    .then((result) => {
+      if (result?.user) {
+        callback(result.user);
+      }
+    })
+    .catch((err) => {
+      console.warn('Redirect result check:', err);
+    });
+
   return onAuthStateChanged(auth, callback);
 }
 
-// Sign In with Google
+// Sign In with Google (Popup with automatic Redirect fallback)
 export async function loginWithGoogle() {
   try {
     const result = await signInWithPopup(auth, googleProvider);
     return { success: true, user: result.user };
   } catch (error) {
+    // Fallback to redirect if popup is blocked or closed unexpectedly
+    if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
+      try {
+        await signInWithRedirect(auth, googleProvider);
+        return { success: true, redirecting: true };
+      } catch (redirectError) {
+        return { success: false, error: friendlyError(redirectError) };
+      }
+    }
     return { success: false, error: friendlyError(error) };
   }
 }
@@ -119,6 +141,7 @@ export async function logoutUser() {
 // Map Firebase error codes to user-friendly messages
 function friendlyError(error) {
   const map = {
+    'auth/unauthorized-domain': 'Domain not authorized! Add your domain (e.g. paipai.ddns.net or vercel.app) to Firebase Console > Authentication > Settings > Authorized domains.',
     'auth/email-already-in-use': 'This email is already registered. Try logging in.',
     'auth/invalid-email': 'Please enter a valid email address.',
     'auth/weak-password': 'Password must be at least 6 characters.',
@@ -126,7 +149,7 @@ function friendlyError(error) {
     'auth/wrong-password': 'Incorrect password. Please try again.',
     'auth/invalid-credential': 'Incorrect email or password. Please try again.',
     'auth/too-many-requests': 'Too many attempts. Please wait a moment.',
-    'auth/popup-closed-by-user': 'Sign-in popup was closed. Please try again.',
+    'auth/popup-closed-by-user': 'Sign-in popup closed. Please try again.',
     'auth/provider-already-linked': 'This provider is already linked to your account.',
     'auth/credential-already-in-use': 'This credential is already associated with another account.',
     'auth/requires-recent-login': 'Please log out and log back in before updating your password.',
