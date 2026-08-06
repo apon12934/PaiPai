@@ -44,7 +44,7 @@ html.light .glass-history {
   box-shadow: 0 4px 25px rgba(15, 23, 42, 0.05) !important;
 }
 
-/* Force pure white background on any card container in light mode */
+/* Force pure white background on card containers in light mode */
 html.light [class*="bg-[#151624]"],
 html.light [class*="bg-[#0D0E17]"],
 html.light [class*="bg-[#07080D]"],
@@ -53,16 +53,17 @@ html.light [class*="bg-[#0A0B12]"] {
   border-color: #E2E8F0 !important;
 }
 
-/* ===== CRITICAL ACCENT & HIGHLIGHT BUTTON TEXT OVERRIDES ===== */
-/* Active Indigo, Rose, and Emerald buttons MUST ALWAYS have pure white text and icons in BOTH light and dark modes */
-.bg-indigo-600,
-.bg-indigo-600 *,
-.bg-indigo-600 span,
-.bg-indigo-600 svg,
+/* TARGETED HIGHLIGHT BUTTON TEXT OVERRIDES */
+/* Active Indigo, Rose, and Emerald buttons have pure white text */
+button.bg-indigo-600,
+button.bg-indigo-600 span,
+button.bg-indigo-600 svg,
 .btn-gave-solid,
-.btn-gave-solid *,
+.btn-gave-solid span,
+.btn-gave-solid svg,
 .btn-received-solid,
-.btn-received-solid * {
+.btn-received-solid span,
+.btn-received-solid svg {
   color: #FFFFFF !important;
 }
 
