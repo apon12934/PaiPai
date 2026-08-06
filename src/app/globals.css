@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* ===== STITCH FINTECH DESIGN SYSTEM (PaiPai Theme) ===== */
+/* ===== FINTECH DESIGN SYSTEM (Dark & Light Mode) ===== */
 :root {
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   
@@ -9,18 +9,14 @@
   --surface-dark: #10111A;
   --surface-card-dark: #151624;
   --border-dark: rgba(255, 255, 255, 0.08);
-  --text-primary-dark: #F8FAFC;
-  --text-secondary-dark: #94A3B8;
 
   /* Light Theme Colors */
   --bg-light: #F8F9FE;
   --surface-light: #FFFFFF;
-  --border-light: #E9ECEF;
-  --text-primary-light: #0F172A;
-  --text-secondary-light: #64748B;
+  --border-light: #E2E8F0;
 }
 
-/* ===== HIDE NUMBER INPUT SPINNERS/STEPPERS ===== */
+/* HIDE NUMBER INPUT SPINNERS */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -30,46 +26,52 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
-/* ===== BASE BODY STYLES ===== */
+/* BASE BODY STYLES */
 html, body {
   font-family: var(--font-sans);
-  background-color: var(--bg-dark);
-  color: var(--text-primary-dark);
+  background-color: #07080D;
+  color: #F8FAFC;
   margin: 0;
   padding: 0;
   height: 100%;
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* ===== LIGHT MODE PREFERENCES ===== */
+/* LIGHT MODE OVERRIDES */
 html.light, html.light body {
-  background-color: #F8F9FE;
-  color: #0F172A;
+  background-color: #F8F9FE !important;
+  color: #0F172A !important;
+}
+
+html.light .glass-prominent {
+  background: #F8F9FE !important;
+  border: 1px solid #E2E8F0 !important;
+  box-shadow: 0 10px 40px rgba(15, 23, 42, 0.06) !important;
 }
 
 html.light .glass-card {
   background: #FFFFFF !important;
-  border: 1px solid #E9ECEF !important;
-  box-shadow: 0 10px 30px rgba(120, 119, 198, 0.06) !important;
+  border: 1px solid #E2E8F0 !important;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04) !important;
 }
 
 html.light .glass-sidebar {
   background: #FFFFFF !important;
-  border-right: 1px solid #E9ECEF !important;
+  border-right: 1px solid #E2E8F0 !important;
 }
 
 html.light .glass-history {
   background: #FFFFFF !important;
-  border-left: 1px solid #E9ECEF !important;
+  border-left: 1px solid #E2E8F0 !important;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
@@ -82,11 +84,17 @@ html.light ::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.15);
 }
 
-/* ===== GLASS & CARD CONTAINERS ===== */
+/* DARK MODE CONTAINERS */
+.glass-prominent {
+  background: #0A0B12;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
 .glass-card {
   background: #151624;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .glass-sidebar {
@@ -99,7 +107,7 @@ html.light ::-webkit-scrollbar-thumb {
   border-left: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* History Card Left Border Accent Stripes */
+/* History Card Left Accent Stripes */
 .history-card-gave {
   border-left: 4px solid #F43F5E !important;
 }
@@ -107,7 +115,7 @@ html.light ::-webkit-scrollbar-thumb {
   border-left: 4px solid #10B981 !important;
 }
 
-/* ===== INPUT FIELDS & REMOVE NATIVE OUTLINES ===== */
+/* INPUT STYLES FOR LIGHT AND DARK MODES */
 input[type="text"],
 input[type="email"],
 input[type="password"],
@@ -115,7 +123,7 @@ input[type="number"] {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #F8FAFC;
-  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.15s ease;
   outline: none !important;
 }
 
@@ -123,8 +131,8 @@ html.light input[type="text"],
 html.light input[type="email"],
 html.light input[type="password"],
 html.light input[type="number"] {
-  background: #F1F4FA !important;
-  border: 1px solid #DDE2EC !important;
+  background: #FFFFFF !important;
+  border: 1px solid #CBD5E1 !important;
   color: #0F172A !important;
   outline: none !important;
 }
@@ -133,33 +141,21 @@ input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="password"]:focus,
 input[type="number"]:focus {
-  outline: none !important;
   border-color: #6366F1 !important;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2) !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15) !important;
 }
 
-/* ===== HARDWARE-ACCELERATED FAST ANIMATIONS ===== */
+/* ANIMATIONS */
 @keyframes popIn {
   from { opacity: 0; transform: scale(0.97) translateY(6px); }
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-@keyframes slideUpFast {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
 .animate-pop-in {
   animation: popIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  will-change: transform, opacity;
 }
 
-.animate-slide-up-fast {
-  animation: slideUpFast 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  will-change: transform, opacity;
-}
-
-/* ===== RESIZER ===== */
+/* RESIZER */
 .resizer {
   width: 1px;
   cursor: col-resize;
@@ -170,7 +166,7 @@ input[type="number"]:focus {
   flex-shrink: 0;
 }
 html.light .resizer {
-  background: #E9ECEF;
+  background: #E2E8F0;
 }
 .resizer:hover, .resizer.active {
   background: #6366F1;

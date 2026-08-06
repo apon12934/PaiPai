@@ -14,7 +14,7 @@ export default function PersonItem({ name, balance = 0, isSelected, onClick, cur
 
   const initial = (name || 'P').charAt(0).toUpperCase();
 
-  let balanceColor = 'text-slate-500 light:text-slate-400';
+  let balanceColor = 'text-slate-400 light:text-slate-500';
   let balancePrefix = '';
 
   if (isPositive) {
@@ -25,10 +25,10 @@ export default function PersonItem({ name, balance = 0, isSelected, onClick, cur
     balancePrefix = '-';
   }
 
-  // Selected item classes with left indigo indicator stripe
+  // Selected item classes
   const baseClasses = 'w-full relative flex items-center justify-between rounded-xl px-3 py-2.5 text-sm transition-all duration-150 cursor-pointer overflow-hidden';
-  const selectedClasses = 'bg-[#1D1C33] light:bg-[#E0E8FF] text-white light:text-indigo-950 font-semibold shadow-sm border border-indigo-500/30 light:border-indigo-200';
-  const defaultClasses = 'bg-transparent hover:bg-white/[0.04] light:hover:bg-slate-100 text-slate-300 light:text-slate-700 font-medium';
+  const selectedClasses = 'bg-[#1D1C33] light:bg-indigo-50 text-white light:text-indigo-950 font-bold shadow-sm border border-indigo-500/30 light:border-indigo-200';
+  const defaultClasses = 'bg-transparent hover:bg-white/[0.04] light:hover:bg-slate-100 text-slate-300 light:text-slate-800 font-medium';
 
   return (
     <div 
@@ -49,7 +49,7 @@ export default function PersonItem({ name, balance = 0, isSelected, onClick, cur
         }`}>
           {initial}
         </div>
-        <span className="truncate font-semibold">{name}</span>
+        <span className="truncate font-semibold text-slate-200 light:text-slate-900">{name}</span>
       </div>
 
       <div className={`whitespace-nowrap text-xs font-mono tracking-tight ${balanceColor}`}>
