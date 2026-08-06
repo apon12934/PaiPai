@@ -13,31 +13,31 @@ export default function BalanceCard({ amount = 0, label, size = 'sm', currency =
   });
 
   let defaultLabel = 'All Settled Up';
-  let gradientClass = 'bg-gradient-to-br from-slate-700/50 to-slate-800/50';
-  let glowClass = 'shadow-[0_0_15px_rgba(100,116,139,0.1)]';
-  let textGradient = 'from-slate-200 to-slate-400';
+  let cardClass = 'bg-slate-500/10 border-slate-500/20';
+  let amountTextColor = 'text-slate-700 dark:text-slate-200';
+  let labelTextColor = 'text-slate-500 dark:text-slate-400';
 
   if (isPositive) {
     defaultLabel = 'They Owe You';
-    gradientClass = 'bg-gradient-to-br from-emerald-500/20 to-teal-500/10';
-    glowClass = 'shadow-[0_0_20px_rgba(16,185,129,0.15)]';
-    textGradient = 'from-emerald-300 to-teal-100';
+    cardClass = 'bg-emerald-500/10 border-emerald-500/30 dark:bg-emerald-500/15';
+    amountTextColor = 'text-emerald-700 dark:text-emerald-300';
+    labelTextColor = 'text-emerald-800/80 dark:text-emerald-400/90';
   } else if (isNegative) {
     defaultLabel = 'You Owe Them';
-    gradientClass = 'bg-gradient-to-br from-rose-500/20 to-red-500/10';
-    glowClass = 'shadow-[0_0_20px_rgba(244,63,94,0.15)]';
-    textGradient = 'from-rose-300 to-red-100';
+    cardClass = 'bg-rose-500/10 border-rose-500/30 dark:bg-rose-500/15';
+    amountTextColor = 'text-rose-700 dark:text-rose-300';
+    labelTextColor = 'text-rose-800/80 dark:text-rose-400/90';
   }
 
   const finalLabel = label || defaultLabel;
 
   return (
-    <GlassCard className={`relative overflow-hidden ${gradientClass} ${glowClass}`}>
+    <GlassCard className={`relative overflow-hidden transition-all ${cardClass}`}>
       <div className={`p-5 flex flex-col ${size === 'lg' ? 'items-center text-center' : 'items-start'}`}>
-        <p className={`text-slate-400 font-medium mb-1 ${size === 'lg' ? 'text-sm' : 'text-xs'}`}>
+        <p className={`font-semibold mb-1 tracking-wide ${labelTextColor} ${size === 'lg' ? 'text-sm uppercase' : 'text-xs'}`}>
           {finalLabel}
         </p>
-        <div className={`font-bold text-transparent bg-clip-text bg-gradient-to-r ${textGradient} ${size === 'lg' ? 'text-4xl' : 'text-xl'}`}>
+        <div className={`font-black tracking-tight ${amountTextColor} ${size === 'lg' ? 'text-4xl md:text-5xl' : 'text-xl'}`}>
           {currency} {displayAmount}
         </div>
       </div>

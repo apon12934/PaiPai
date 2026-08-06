@@ -10,17 +10,17 @@ export default function HistoryPanel({ transactions, onEdit, onDelete, editingTx
   });
 
   return (
-    <div className="w-full h-full bg-white/[0.02] border-l border-white/5 flex flex-col backdrop-blur-xl">
-      <div className="p-4 border-b border-white/5 flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-slate-300">History</h2>
-        <span className="text-[10px] text-slate-500 bg-white/5 px-2 py-0.5 rounded">
+    <div className="w-full h-full bg-slate-50/50 dark:bg-white/[0.02] border-l border-slate-200 dark:border-white/5 flex flex-col backdrop-blur-xl">
+      <div className="p-4 border-b border-slate-200 dark:border-white/5 flex items-center justify-between">
+        <h2 className="text-sm font-bold text-slate-900 dark:text-slate-200 tracking-tight">History Feed</h2>
+        <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 bg-slate-200 dark:bg-white/5 px-2 py-0.5 rounded-full font-mono">
           {transactions.length} items
         </span>
       </div>
       
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {sortedTransactions.length === 0 ? (
-          <p className="text-xs text-slate-600 text-center py-8 italic">No history yet.</p>
+          <p className="text-xs text-slate-500 text-center py-8 italic font-medium">No history recorded yet.</p>
         ) : (
           sortedTransactions.map((tx) => (
             <TransactionCard

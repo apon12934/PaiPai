@@ -49,18 +49,18 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
   };
 
   return (
-    <GlassCard className="p-6">
+    <GlassCard className="p-6 shadow-xl">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-medium text-slate-200">
+        <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200">
           {editingTx ? 'Edit Transaction' : 'Log Transaction'}
         </h3>
         {editingTx && (
           <button
             onClick={onCancelEdit}
-            className="flex items-center gap-1 text-xs text-slate-400 hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-2.5 py-1 rounded-lg border border-white/5"
+            className="flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition-colors bg-slate-200/60 dark:bg-white/5 hover:bg-slate-300 dark:hover:bg-white/10 px-2.5 py-1 rounded-lg border border-slate-300 dark:border-white/5"
           >
             <X className="w-3.5 h-3.5" />
-            <span>Cancel</span>
+            <span>Cancel Edit</span>
           </button>
         )}
       </div>
@@ -68,7 +68,7 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
       <div className="space-y-4">
         <div>
           <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-slate-400 font-bold">{currency}</span>
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-slate-500 dark:text-slate-400 font-bold">{currency}</span>
             <input
               ref={amountInputRef}
               type="number"
@@ -77,7 +77,7 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
               onChange={(e) => setAmount(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="0.00"
-              className="w-full bg-white/[0.03] border border-white/10 rounded-xl py-4 pl-12 pr-4 text-3xl font-bold text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500/50 transition-colors"
+              className="w-full bg-white dark:bg-white/[0.03] border border-slate-300 dark:border-white/10 rounded-xl py-4 pl-12 pr-4 text-3xl font-extrabold text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all"
             />
           </div>
         </div>
@@ -89,7 +89,7 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
             onChange={(e) => setNote(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Add a note (optional)"
-            className="w-full bg-white/[0.03] border border-white/10 rounded-lg px-4 py-3 text-sm text-slate-300 placeholder-slate-600 focus:outline-none focus:border-indigo-500/50 transition-colors"
+            className="w-full bg-white dark:bg-white/[0.03] border border-slate-300 dark:border-white/10 rounded-xl px-4 py-3 text-sm text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all"
           />
         </div>
 
@@ -97,25 +97,25 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
           <button
             onClick={() => handleSubmit('gave')}
             disabled={!parseFloat(amount)}
-            className="flex flex-col items-center justify-center p-3 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 disabled:opacity-50 transition-all duration-200 group"
+            className="flex flex-col items-center justify-center p-3.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold shadow-lg shadow-rose-600/20 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 group"
           >
-            <div className="flex items-center gap-1.5 font-semibold text-lg mb-0.5">
+            <div className="flex items-center gap-1.5 font-extrabold text-base md:text-lg mb-0.5 text-white">
               <ArrowUpRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               <span>I Gave {currency}</span>
             </div>
-            <span className="text-[10px] opacity-70 font-mono">Press Enter</span>
+            <span className="text-[10px] text-rose-100 font-medium font-mono">Press Enter</span>
           </button>
           
           <button
             onClick={() => handleSubmit('received')}
             disabled={!parseFloat(amount)}
-            className="flex flex-col items-center justify-center p-3 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 text-emerald-400 disabled:opacity-50 transition-all duration-200 group"
+            className="flex flex-col items-center justify-center p-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-600/20 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 group"
           >
-            <div className="flex items-center gap-1.5 font-semibold text-lg mb-0.5">
+            <div className="flex items-center gap-1.5 font-extrabold text-base md:text-lg mb-0.5 text-white">
               <ArrowDownLeft className="w-5 h-5 transition-transform group-hover:-translate-x-0.5 group-hover:translate-y-0.5" />
               <span>I Received {currency}</span>
             </div>
-            <span className="text-[10px] opacity-70 font-mono">Shift + Enter</span>
+            <span className="text-[10px] text-emerald-100 font-medium font-mono">Shift + Enter</span>
           </button>
         </div>
       </div>

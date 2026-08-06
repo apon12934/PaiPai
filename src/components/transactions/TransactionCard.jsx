@@ -17,37 +17,37 @@ export default function TransactionCard({ transaction, onEdit, onDelete, isEditi
     <GlassCard 
       variant="subtle" 
       className={`p-3 group relative overflow-hidden transition-all duration-200 ${
-        isEditing ? 'border-indigo-500/50 bg-indigo-500/5' : 'hover:border-white/15'
+        isEditing ? 'border-indigo-500/50 bg-indigo-500/10' : 'hover:border-slate-300 dark:hover:border-white/15'
       }`}
     >
       <div className="flex justify-between items-start mb-1">
-        <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+        <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${
           isGave 
-            ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' 
-            : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+            ? 'bg-rose-500/15 text-rose-700 dark:text-rose-300 border-rose-500/30' 
+            : 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30'
         }`}>
           {isGave ? 'You gave them' : 'They paid you'}
         </span>
-        <span className="text-[10px] text-slate-500">{formattedDate}</span>
+        <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold">{formattedDate}</span>
       </div>
 
       <div className="mt-2 mb-1">
-        <span className={`text-xl font-bold ${isGave ? 'text-rose-400' : 'text-emerald-400'}`}>
+        <span className={`text-2xl font-black tracking-tight ${isGave ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
           {isGave ? '-' : '+'}{currency}{transaction.amount.toFixed(2)}
         </span>
       </div>
 
       {transaction.note && (
-        <div className="mt-2 text-xs text-slate-300 bg-white/[0.03] border border-white/5 p-2 rounded-md">
+        <div className="mt-2 text-xs font-medium text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/5 p-2 rounded-lg">
           {transaction.note}
         </div>
       )}
 
       {/* Actions overlay */}
-      <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-[#0B1120]/90 backdrop-blur-sm p-1 rounded-lg border border-white/10">
+      <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 dark:bg-[#0B1120]/90 backdrop-blur-sm p-1 rounded-lg border border-slate-300 dark:border-white/10 shadow-md">
         <button
           onClick={onEdit}
-          className="p-1.5 text-blue-400 hover:bg-blue-400/20 rounded-md transition-colors"
+          className="p-1.5 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 rounded-md transition-colors"
           title="Edit"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5">
@@ -56,7 +56,7 @@ export default function TransactionCard({ transaction, onEdit, onDelete, isEditi
         </button>
         <button
           onClick={onDelete}
-          className="p-1.5 text-rose-400 hover:bg-rose-400/20 rounded-md transition-colors"
+          className="p-1.5 text-rose-600 dark:text-rose-400 hover:bg-rose-500/20 rounded-md transition-colors"
           title="Delete"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5">
