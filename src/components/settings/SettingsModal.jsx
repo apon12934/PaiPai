@@ -12,6 +12,7 @@ import {
   Database,
   Moon,
   Sun,
+  Laptop,
   Mail,
   Key,
   Download,
@@ -283,34 +284,45 @@ export default function SettingsModal({
               </div>
             </div>
 
-            {/* Theme Selector */}
+            {/* Theme Selector (Dark, Light, Auto System) */}
             <div>
               <label className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2.5">
                 <Moon className="w-3.5 h-3.5 text-indigo-400" />
                 <span>App Theme</span>
               </label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-3 gap-2">
                 <button
                   onClick={() => handleThemeChange('dark')}
-                  className={`p-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
+                  className={`p-2.5 rounded-xl border text-xs font-semibold flex flex-col items-center justify-center gap-1.5 transition-all ${
                     theme === 'dark'
-                      ? 'bg-indigo-600/20 border-indigo-500 text-white shadow-md'
+                      ? 'bg-indigo-600/20 border-indigo-500 text-white shadow-md shadow-indigo-500/10'
                       : 'bg-white/[0.02] border-white/10 text-slate-400 hover:text-slate-200'
                   }`}
                 >
                   <Moon className="w-4 h-4 text-indigo-400" />
-                  <span>Dark Glass (Default)</span>
+                  <span>Dark</span>
                 </button>
                 <button
                   onClick={() => handleThemeChange('light')}
-                  className={`p-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
+                  className={`p-2.5 rounded-xl border text-xs font-semibold flex flex-col items-center justify-center gap-1.5 transition-all ${
                     theme === 'light'
-                      ? 'bg-indigo-600/20 border-indigo-500 text-white shadow-md'
+                      ? 'bg-indigo-600/20 border-indigo-500 text-white shadow-md shadow-indigo-500/10'
                       : 'bg-white/[0.02] border-white/10 text-slate-400 hover:text-slate-200'
                   }`}
                 >
                   <Sun className="w-4 h-4 text-amber-400" />
-                  <span>Light Theme</span>
+                  <span>Light</span>
+                </button>
+                <button
+                  onClick={() => handleThemeChange('system')}
+                  className={`p-2.5 rounded-xl border text-xs font-semibold flex flex-col items-center justify-center gap-1.5 transition-all ${
+                    theme === 'system'
+                      ? 'bg-indigo-600/20 border-indigo-500 text-white shadow-md shadow-indigo-500/10'
+                      : 'bg-white/[0.02] border-white/10 text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  <Laptop className="w-4 h-4 text-emerald-400" />
+                  <span>Auto (Device)</span>
                 </button>
               </div>
             </div>

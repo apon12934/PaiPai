@@ -61,6 +61,33 @@ export default function Home() {
 
   const currency = appSettings.currency || '৳';
   const sortOrder = appSettings.sortOrder || 'newest';
+  const theme = appSettings.theme || 'dark';
+
+  // Dynamic Theme Effect (Dark, Light, or Auto System Device Preference)
+  useEffect(() => {
+    const applyTheme = () => {
+      const isDark =
+        theme === 'dark' ||
+        (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+      } else {
+        document.documentElement.classList.add('light');
+        document.documentElement.classList.remove('dark');
+      }
+    };
+
+    applyTheme();
+
+    if (theme === 'system') {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const handleChange = () => applyTheme();
+      mediaQuery.addEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
+    }
+  }, [theme]);
 
   // Resizer state
   const [leftWidth, setLeftWidth] = useState(280);
