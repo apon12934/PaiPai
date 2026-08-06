@@ -1,4 +1,7 @@
-// Firebase Configuration and Initialization Module
+// Firebase Configuration Template (SAMPLE / PUBLIC)
+// Copy this file to `js/firebase-config.js` and fill in your project credentials.
+// `js/firebase-config.js` is included in .gitignore to prevent committing secrets to public git.
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { 
     getAuth, 
@@ -7,9 +10,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// YOUR FIREBASE CONFIGURATION
-// Replace the placeholder values below with your Firebase project config from Firebase Console:
-// Project Settings > General > Your apps > Web app setup
 export const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
@@ -19,7 +19,6 @@ export const firebaseConfig = {
     appId: "YOUR_APP_ID"
 };
 
-// Initialize Firebase App
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
