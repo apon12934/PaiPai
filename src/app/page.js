@@ -10,19 +10,13 @@ import EmptyState from '@/components/layout/EmptyState';
 import AuthModal from '@/components/auth/AuthModal';
 import SettingsModal from '@/components/settings/SettingsModal';
 import ConfirmationModal from '@/components/ui/ConfirmationModal';
-import TransactionCard from '@/components/transactions/TransactionCard';
 import TransactionForm from '@/components/transactions/TransactionForm';
 import {
-  Home as HomeIcon,
-  Users,
-  History,
   Settings as SettingsIcon,
   Eye,
   LogIn,
   CheckCircle2,
   AlertCircle,
-  ArrowUpRight,
-  ArrowDownLeft,
   UserPlus,
 } from 'lucide-react';
 
@@ -34,7 +28,8 @@ export default function Home() {
   const [editingTxId, setEditingTxId] = useState(null);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
-  const [mobileTab, setMobileTab] = useState('home'); // 'home' | 'people' | 'history' | 'settings'
+  const [showMobileAddForm, setShowMobileAddForm] = useState(false);
+  const [newMobilePersonName, setNewMobilePersonName] = useState('');
 
   // Toast Banner State
   const [toastMsg, setToastMsg] = useState({ text: '', isError: false });
@@ -189,6 +184,15 @@ export default function Home() {
     },
     [dbState, saveData]
   );
+
+  const handleMobileAddPerson = (e) => {
+    e.preventDefault();
+    if (newMobilePersonName.trim()) {
+      handleAddPerson(newMobilePersonName.trim());
+      setNewMobilePersonName('');
+      setShowMobileAddForm(false);
+    }
+  };
 
   const handleDeletePerson = useCallback(() => {
     if (!selectedPerson) return;
@@ -465,7 +469,7 @@ export default function Home() {
         )}
       </div>
 
-      {/* MOBILE VIEW (< 768px Width): Responsive Stitch Mobile Design */}
+      {/* MOBILE VIEW (< 768px Width): Clean Single-Page View */}
       <div className="flex md:hidden flex-col w-full h-full bg-[#07080D] light:bg-[#F8F9FE] overflow-hidden">
         {/* Mobile Top Header */}
         <div className="p-4 flex items-center justify-between border-b border-white/5 light:border-slate-200 shrink-0">
@@ -490,6 +494,7 @@ export default function Home() {
           <button
             onClick={() => setSettingsModalOpen(true)}
             className="p-2 text-slate-400 hover:text-slate-200 bg-white/5 light:bg-slate-100 rounded-xl"
+            title="Settings"
           >
             <SettingsIcon className="w-4 h-4" />
           </button>
@@ -509,21 +514,42 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Active Contacts Horizontal Carousel (Stitch Mobile View) */}
+          {/* Contacts Carousel */}
           <div>
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-xs font-bold text-slate-400 light:text-slate-500 uppercase tracking-wider">
-                Active Contacts
+                Contacts ({people.length})
               </h2>
-              {selectedPerson && (
-                <button
-                  onClick={() => setSelectedPerson(null)}
-                  className="text-[11px] font-semibold text-indigo-400 hover:underline"
-                >
-                  View All
-                </button>
-              )}
+              <button
+                onClick={() => setShowMobileAddForm(!showMobileAddForm)}
+                className="flex items-center gap-1 text-xs font-bold text-indigo-400 hover:underline"
+              >
+                <UserPlus className="w-3.5 h-3.5" />
+                <span>+ Add</span>
+              </button>
             </div>
+
+            {/* Inline Add Contact Form for Mobile */}
+            {showMobileAddForm && (
+              <form onSubmit={handleMobileAddPerson} className="flex gap-2 mb-3 animate-pop-in">
+                <input
+                  type="text"
+                  autoFocus
+                  placeholder="New contact name..."
+                  value={newMobilePersonName}
+                  onChange={(e) => setNewMobilePersonName(e.target.value)}
+                  className="flex-1 bg-white/5 light:bg-white border border-white/10 light:border-slate-300 rounded-xl px-3 py-2 text-xs text-white light:text-slate-900 focus:outline-none"
+                />
+                <button
+                  type="submit"
+                  disabled={!newMobilePersonName.trim()}
+                  className="px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl disabled:opacity-40"
+                >
+                  Save
+                </button>
+              </form>
+            )}
+
             <div className="flex gap-3 overflow-x-auto pb-2">
               {people.map((p) => {
                 const initial = (p.name || 'P').charAt(0).toUpperCase();
@@ -555,7 +581,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Selected Contact Logger Form (Stitch Mobile View) */}
+          {/* Selected Contact Logger Form */}
           {selectedPerson ? (
             <div className="p-5 rounded-3xl glass-card space-y-4">
               <div className="flex items-center justify-between pb-2 border-b border-white/10 light:border-slate-200">
@@ -582,15 +608,15 @@ export default function Home() {
             </div>
           )}
 
-          {/* Recent Activity List (Stitch Mobile View) */}
-          <div className="space-y-3 pt-2">
+          {/* Recent Activity List */}
+          <div className="space-y-3 pt-2 pb-6">
             <h2 className="text-xs font-bold text-slate-400 light:text-slate-500 uppercase tracking-wider">
               Recent Activity
             </h2>
             {allTransactions.length === 0 ? (
               <p className="text-xs text-slate-500 italic py-4">No recent activity.</p>
             ) : (
-              allTransactions.slice(0, 8).map((tx) => (
+              allTransactions.slice(0, 10).map((tx) => (
                 <div
                   key={tx.id}
                   className="p-3.5 rounded-2xl bg-white/[0.03] light:bg-white border border-white/5 light:border-slate-200 flex items-center justify-between shadow-sm"
@@ -612,34 +638,6 @@ export default function Home() {
               ))
             )}
           </div>
-        </div>
-
-        {/* Mobile Bottom Navigation Bar (Stitch Design) */}
-        <div className="p-2 bg-[#0A0B12] light:bg-white border-t border-white/10 light:border-slate-200 flex items-center justify-around shrink-0">
-          {[
-            { id: 'home', label: 'Home', icon: HomeIcon },
-            { id: 'people', label: 'People', icon: Users },
-            { id: 'history', label: 'History', icon: History },
-            { id: 'settings', label: 'Settings', icon: SettingsIcon },
-          ].map((tab) => {
-            const Icon = tab.icon;
-            const isAct = mobileTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => {
-                  setMobileTab(tab.id);
-                  if (tab.id === 'settings') setSettingsModalOpen(true);
-                }}
-                className={`flex flex-col items-center gap-1 px-4 py-2 rounded-2xl transition-all ${
-                  isAct ? 'bg-indigo-600/20 text-indigo-400 font-bold' : 'text-slate-500 hover:text-slate-300'
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-                <span className="text-[10px]">{tab.label}</span>
-              </button>
-            );
-          })}
         </div>
       </div>
 
