@@ -41,7 +41,7 @@ export default function Sidebar({
           <div>
             <h1 className="text-lg font-bold text-white tracking-tight">PaiPai</h1>
             <span className="text-[9px] text-indigo-300 font-medium px-1.5 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/20">
-              পাই পাই
+              পাই পাই করে হিসাব নিব
             </span>
           </div>
         </div>
