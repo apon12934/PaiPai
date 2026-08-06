@@ -15,28 +15,28 @@ export default function TransactionCard({ transaction, onEdit, onDelete, isEditi
   return (
     <GlassCard 
       variant="subtle" 
-      className={`p-4 group relative overflow-hidden transition-all duration-150 rounded-2xl ${
+      className={`p-3.5 group relative overflow-hidden transition-all duration-150 rounded-2xl ${
         isGave ? 'history-card-gave' : 'history-card-received'
       } ${
         isEditing ? 'border-indigo-500 bg-indigo-500/10' : 'hover:border-white/15 light:hover:border-slate-300'
       }`}
     >
       {/* Top Row: Type Pill + Date */}
-      <div className="flex justify-between items-center mb-2">
+      <div className="flex justify-between items-center mb-1.5">
         <span className={`text-[10px] font-extrabold tracking-wider uppercase ${
           isGave ? 'text-rose-400 light:text-rose-600' : 'text-emerald-400 light:text-emerald-600'
         }`}>
           {isGave ? 'YOU GAVE THEM' : 'THEY PAID YOU'}
         </span>
-        <span className="text-[10px] text-slate-400 light:text-slate-500 font-medium">{formattedDate}</span>
+        <span className="text-[10px] text-slate-400 light:text-slate-500 font-semibold">{formattedDate}</span>
       </div>
 
       {/* Bottom Row: Note Title + Large Amount */}
       <div className="flex justify-between items-end gap-2 mt-1">
-        <span className="text-xs text-slate-300 light:text-slate-700 font-medium truncate max-w-[140px]">
+        <span className="text-xs text-slate-200 light:text-slate-800 font-semibold truncate max-w-[140px]">
           {transaction.note || (isGave ? 'Expense Logged' : 'Payment Received')}
         </span>
-        <span className={`text-lg font-bold font-mono tracking-tight shrink-0 ${
+        <span className={`text-lg font-extrabold font-mono tracking-tight shrink-0 ${
           isGave ? 'text-rose-400 light:text-rose-600' : 'text-emerald-400 light:text-emerald-600'
         }`}>
           {isGave ? '-' : '+'}{currency} {transaction.amount.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
