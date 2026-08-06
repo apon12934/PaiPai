@@ -221,14 +221,16 @@ export default function SettingsModal({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-black whitespace-nowrap transition-all ${
                   isAct
                     ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
-                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10'
+                    : 'bg-slate-100 dark:bg-white/5 text-black dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-white/10'
                 }`}
               >
-                <Icon className={`w-3.5 h-3.5 ${isAct ? 'text-white' : 'text-slate-600 dark:text-slate-400'}`} />
-                <span className={isAct ? 'text-white' : 'text-slate-700 dark:text-slate-300'}>{tab.label}</span>
+                <Icon className={`w-3.5 h-3.5 ${isAct ? 'text-white' : 'text-slate-700 dark:text-slate-300'}`} />
+                <span className={isAct ? 'text-white font-black' : 'text-black dark:text-slate-100 font-black'}>
+                  {tab.label}
+                </span>
               </button>
             );
           })}
@@ -239,7 +241,7 @@ export default function SettingsModal({
           <div className="space-y-6">
             {/* Currency Selector */}
             <div>
-              <label className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-slate-700 dark:text-slate-400 mb-2.5">
+              <label className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-black dark:text-slate-300 mb-2.5">
                 <Coins className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                 <span>Currency Symbol</span>
               </label>
@@ -250,13 +252,13 @@ export default function SettingsModal({
                     <button
                       key={c.code}
                       onClick={() => handleCurrencyChange(c.symbol)}
-                      className={`flex items-center justify-between p-3 rounded-xl border text-xs font-bold transition-all ${
+                      className={`flex items-center justify-between p-3 rounded-xl border text-xs font-black transition-all ${
                         isSel
                           ? 'bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-600/20'
-                          : 'bg-slate-100 dark:bg-white/5 border-slate-300 dark:border-white/10 text-slate-800 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/10'
+                          : 'bg-slate-100 dark:bg-white/5 border-slate-300 dark:border-white/10 hover:bg-slate-200 dark:hover:bg-white/10'
                       }`}
                     >
-                      <span className={`truncate font-bold ${isSel ? 'text-white' : 'text-slate-800 dark:text-slate-200'}`}>
+                      <span className={`truncate font-black ${isSel ? 'text-white' : 'text-black dark:text-slate-100'}`}>
                         {c.name}
                       </span>
                       <span className={`font-black text-sm ml-2 ${isSel ? 'text-white' : 'text-indigo-600 dark:text-indigo-400'}`}>
@@ -270,7 +272,7 @@ export default function SettingsModal({
 
             {/* Theme Selector (Dark, Light, Auto System) */}
             <div>
-              <label className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-slate-700 dark:text-slate-400 mb-2.5">
+              <label className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-black dark:text-slate-300 mb-2.5">
                 <Moon className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                 <span>App Theme</span>
               </label>
@@ -286,14 +288,16 @@ export default function SettingsModal({
                     <button
                       key={th.id}
                       onClick={() => handleThemeChange(th.id)}
-                      className={`p-3 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-1.5 transition-all ${
+                      className={`p-3 rounded-xl border text-xs font-black flex flex-col items-center justify-center gap-1.5 transition-all ${
                         isSel
                           ? 'bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-600/20'
-                          : 'bg-slate-100 dark:bg-white/5 border-slate-300 dark:border-white/10 text-slate-800 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/10'
+                          : 'bg-slate-100 dark:bg-white/5 border-slate-300 dark:border-white/10 hover:bg-slate-200 dark:hover:bg-white/10'
                       }`}
                     >
                       <Icon className={`w-4 h-4 ${isSel ? 'text-white' : th.color}`} />
-                      <span className={isSel ? 'text-white' : 'text-slate-800 dark:text-slate-200'}>{th.label}</span>
+                      <span className={isSel ? 'text-white font-black' : 'text-black dark:text-slate-100 font-black'}>
+                        {th.label}
+                      </span>
                     </button>
                   );
                 })}
@@ -302,7 +306,7 @@ export default function SettingsModal({
 
             {/* Transaction Sort Order */}
             <div>
-              <label className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-slate-700 dark:text-slate-400 mb-2.5">
+              <label className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-black dark:text-slate-300 mb-2.5">
                 <ArrowUpDown className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                 <span>History Sort Order</span>
               </label>
@@ -316,13 +320,15 @@ export default function SettingsModal({
                     <button
                       key={so.id}
                       onClick={() => handleSortChange(so.id)}
-                      className={`p-3 rounded-xl border text-xs font-bold transition-all ${
+                      className={`p-3 rounded-xl border text-xs font-black transition-all ${
                         isSel
                           ? 'bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-600/20'
-                          : 'bg-slate-100 dark:bg-white/5 border-slate-300 dark:border-white/10 text-slate-800 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/10'
+                          : 'bg-slate-100 dark:bg-white/5 border-slate-300 dark:border-white/10 hover:bg-slate-200 dark:hover:bg-white/10'
                       }`}
                     >
-                      <span className={isSel ? 'text-white' : 'text-slate-800 dark:text-slate-200'}>{so.label}</span>
+                      <span className={isSel ? 'text-white font-black' : 'text-black dark:text-slate-100 font-black'}>
+                        {so.label}
+                      </span>
                     </button>
                   );
                 })}
@@ -338,10 +344,10 @@ export default function SettingsModal({
               <form onSubmit={handleSaveProfile} className="space-y-5">
                 {profileMsg.text && (
                   <div
-                    className={`text-xs p-3 rounded-xl border flex items-center gap-2 font-semibold ${
+                    className={`text-xs p-3 rounded-xl border flex items-center gap-2 font-bold ${
                       profileMsg.isError
-                        ? 'bg-rose-100 text-rose-800 border-rose-300 dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20'
-                        : 'bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20'
+                        ? 'bg-rose-100 text-rose-900 border-rose-300 dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20'
+                        : 'bg-emerald-100 text-emerald-900 border-emerald-300 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20'
                     }`}
                   >
                     {profileMsg.isError ? (
@@ -367,13 +373,13 @@ export default function SettingsModal({
                     </div>
                   )}
                   <div>
-                    <h4 className="text-sm font-black text-slate-900 dark:text-white">{displayName || 'User'}</h4>
-                    <p className="text-xs font-semibold text-slate-600 dark:text-slate-400">{user.email}</p>
+                    <h4 className="text-sm font-black text-black dark:text-white">{displayName || 'User'}</h4>
+                    <p className="text-xs font-bold text-black dark:text-slate-400">{user.email}</p>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-slate-700 dark:text-slate-400 mb-1">
+                  <label className="block text-xs font-black uppercase tracking-wider text-black dark:text-slate-300 mb-1">
                     Display Name
                   </label>
                   <input
@@ -381,13 +387,13 @@ export default function SettingsModal({
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
                     placeholder="Your Name"
-                    className="w-full px-3 py-2.5 rounded-xl text-sm bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white font-bold"
+                    className="w-full px-3 py-2.5 rounded-xl text-sm bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-black dark:text-white font-black"
                   />
                 </div>
 
                 {/* Cloudinary PC Photo Upload */}
                 <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-slate-700 dark:text-slate-400 mb-2">
+                  <label className="block text-xs font-black uppercase tracking-wider text-black dark:text-slate-300 mb-2">
                     Upload Photo from PC (Cloudinary)
                   </label>
                   <label className="flex items-center justify-center gap-2 w-full p-3 border border-dashed border-indigo-500/40 hover:border-indigo-500 bg-indigo-50 dark:bg-indigo-500/5 hover:bg-indigo-100 dark:hover:bg-indigo-500/10 rounded-xl cursor-pointer transition-all">
@@ -396,7 +402,7 @@ export default function SettingsModal({
                     ) : (
                       <UploadCloud className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                     )}
-                    <span className="text-xs font-bold text-indigo-700 dark:text-indigo-300">
+                    <span className="text-xs font-black text-indigo-700 dark:text-indigo-300">
                       {isUploadingPhoto ? 'Uploading to Cloudinary...' : 'Choose Image File from PC'}
                     </span>
                     <input
@@ -414,7 +420,7 @@ export default function SettingsModal({
                   <button
                     type="button"
                     onClick={handleResetToGooglePhoto}
-                    className="flex items-center justify-center gap-2 w-full bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-300 text-xs py-2.5 rounded-xl border border-slate-300 dark:border-white/10 transition font-bold"
+                    className="flex items-center justify-center gap-2 w-full bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-black dark:text-slate-300 text-xs py-2.5 rounded-xl border border-slate-300 dark:border-white/10 transition font-black"
                   >
                     <RotateCcw className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                     <span>Reset to Google Profile Picture</span>
@@ -424,13 +430,13 @@ export default function SettingsModal({
                 <button
                   type="submit"
                   disabled={isUploadingPhoto}
-                  className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl text-xs transition shadow-lg shadow-indigo-600/20 disabled:opacity-50"
+                  className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black py-2.5 rounded-xl text-xs transition shadow-lg shadow-indigo-600/20 disabled:opacity-50"
                 >
                   Save Profile Changes
                 </button>
               </form>
             ) : (
-              <div className="text-center py-6 text-slate-600 dark:text-slate-400 text-xs font-medium">
+              <div className="text-center py-6 text-black dark:text-slate-400 text-xs font-bold">
                 Please log in to customize your profile.
               </div>
             )}
@@ -444,10 +450,10 @@ export default function SettingsModal({
               <>
                 {linkMsg.text && (
                   <div
-                    className={`text-xs p-3 rounded-xl border flex items-center gap-2 font-semibold ${
+                    className={`text-xs p-3 rounded-xl border flex items-center gap-2 font-bold ${
                       linkMsg.isError
-                        ? 'bg-rose-100 text-rose-800 border-rose-300 dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20'
-                        : 'bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20'
+                        ? 'bg-rose-100 text-rose-900 border-rose-300 dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20'
+                        : 'bg-emerald-100 text-emerald-900 border-emerald-300 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20'
                     }`}
                   >
                     {linkMsg.isError ? (
@@ -483,20 +489,20 @@ export default function SettingsModal({
                       </svg>
                     </div>
                     <div>
-                      <h4 className="text-xs font-black text-slate-900 dark:text-white">Google Account</h4>
-                      <p className="text-[10px] font-bold text-slate-600 dark:text-slate-400">
+                      <h4 className="text-xs font-black text-black dark:text-white">Google Account</h4>
+                      <p className="text-[10px] font-black text-black dark:text-slate-400">
                         {isGoogleLinked ? 'Linked ✓' : 'Not linked'}
                       </p>
                     </div>
                   </div>
                   {isGoogleLinked ? (
-                    <span className="flex items-center gap-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-300 dark:border-emerald-500/20">
+                    <span className="flex items-center gap-1 text-[11px] font-black text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-300 dark:border-emerald-500/20">
                       <Check className="w-3.5 h-3.5" /> Linked
                     </span>
                   ) : (
                     <button
                       onClick={handleLinkGoogle}
-                      className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-lg transition font-bold shadow-sm"
+                      className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-lg transition font-black shadow-sm"
                     >
                       Link Google
                     </button>
@@ -510,16 +516,16 @@ export default function SettingsModal({
                   </h4>
                   <div className="p-3.5 rounded-2xl bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 flex items-center justify-between">
                     <div>
-                      <h5 className="text-xs font-bold text-rose-900 dark:text-rose-300">
+                      <h5 className="text-xs font-black text-rose-900 dark:text-rose-300">
                         Permanently Delete Account
                       </h5>
-                      <p className="text-[10px] text-rose-700 dark:text-rose-400">
+                      <p className="text-[10px] text-rose-700 dark:text-rose-400 font-bold">
                         Removes profile and cloud database files permanently.
                       </p>
                     </div>
                     <button
                       onClick={() => setShowDeleteAccountModal(true)}
-                      className="bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition shadow-md shadow-rose-600/20"
+                      className="bg-rose-600 hover:bg-rose-500 text-white text-xs font-black px-3 py-1.5 rounded-lg transition shadow-md shadow-rose-600/20"
                     >
                       Delete Account
                     </button>
@@ -527,7 +533,7 @@ export default function SettingsModal({
                 </div>
               </>
             ) : (
-              <div className="text-center py-6 text-slate-600 dark:text-slate-400 text-xs font-medium">
+              <div className="text-center py-6 text-black dark:text-slate-400 text-xs font-bold">
                 Please log in to manage security settings.
               </div>
             )}
@@ -538,42 +544,42 @@ export default function SettingsModal({
         {activeTab === 'data' && (
           <div className="space-y-4">
             <div className="p-3.5 rounded-2xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 space-y-3">
-              <h4 className="text-xs font-black text-slate-900 dark:text-white">Export Backup Data</h4>
-              <p className="text-xs font-medium text-slate-600 dark:text-slate-400">
+              <h4 className="text-xs font-black text-black dark:text-white">Export Backup Data</h4>
+              <p className="text-xs font-bold text-black dark:text-slate-400">
                 Download a JSON backup of your contacts and transaction history.
               </p>
               <button
                 onClick={onExport}
-                className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs py-2.5 rounded-xl font-bold transition shadow-md shadow-indigo-600/20"
+                className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs py-2.5 rounded-xl font-black transition shadow-md shadow-indigo-600/20"
               >
-                <Download className="w-3.5 h-3.5" />
-                <span>Download JSON Backup</span>
+                <Download className="w-3.5 h-3.5 text-white" />
+                <span className="text-white font-black">Download JSON Backup</span>
               </button>
             </div>
 
             <div className="p-3.5 rounded-2xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 space-y-3">
-              <h4 className="text-xs font-black text-slate-900 dark:text-white">Import Backup File</h4>
-              <p className="text-xs font-medium text-slate-600 dark:text-slate-400">
+              <h4 className="text-xs font-black text-black dark:text-white">Import Backup File</h4>
+              <p className="text-xs font-bold text-black dark:text-slate-400">
                 Restore contacts and history from a previously exported JSON backup.
               </p>
-              <label className="w-full flex items-center justify-center gap-2 bg-slate-200 hover:bg-slate-300 dark:bg-white/10 dark:hover:bg-white/15 text-slate-900 dark:text-white text-xs py-2.5 rounded-xl font-bold transition cursor-pointer text-center">
-                <Upload className="w-3.5 h-3.5" />
-                <span>Select JSON File</span>
+              <label className="w-full flex items-center justify-center gap-2 bg-slate-200 hover:bg-slate-300 dark:bg-white/10 dark:hover:bg-white/15 text-black dark:text-white text-xs py-2.5 rounded-xl font-black transition cursor-pointer text-center">
+                <Upload className="w-3.5 h-3.5 text-black dark:text-white" />
+                <span className="text-black dark:text-white font-black">Select JSON File</span>
                 <input type="file" className="hidden" accept=".json" onChange={onImport} />
               </label>
             </div>
 
             <div className="p-3.5 rounded-2xl bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 space-y-3">
               <h4 className="text-xs font-black text-rose-900 dark:text-rose-300">Reset Application Data</h4>
-              <p className="text-xs font-medium text-rose-700 dark:text-rose-400">
+              <p className="text-xs font-bold text-rose-700 dark:text-rose-400">
                 Delete all contacts and transaction history from this device/account.
               </p>
               <button
                 onClick={onClearAllData}
-                className="w-full flex items-center justify-center gap-2 bg-rose-600 hover:bg-rose-500 text-white text-xs py-2.5 rounded-xl font-bold transition shadow-md shadow-rose-600/20"
+                className="w-full flex items-center justify-center gap-2 bg-rose-600 hover:bg-rose-500 text-white text-xs py-2.5 rounded-xl font-black transition shadow-md shadow-rose-600/20"
               >
-                <Trash2 className="w-3.5 h-3.5" />
-                <span>Reset All Data</span>
+                <Trash2 className="w-3.5 h-3.5 text-white" />
+                <span className="text-white font-black">Reset All Data</span>
               </button>
             </div>
           </div>
@@ -588,7 +594,7 @@ export default function SettingsModal({
           title="Delete Your Account Permanently?"
         >
           <div className="space-y-4">
-            <p className="text-xs font-medium text-slate-600 dark:text-slate-400">
+            <p className="text-xs font-bold text-black dark:text-slate-400">
               Are you sure you want to permanently delete your account? This will erase all your contacts, balance sheets, and transaction logs.
             </p>
             {deleteAccountMsg && (
@@ -599,13 +605,13 @@ export default function SettingsModal({
             <div className="flex gap-2">
               <button
                 onClick={() => setShowDeleteAccountModal(false)}
-                className="flex-1 py-2 bg-slate-200 text-slate-800 text-xs font-bold rounded-xl"
+                className="flex-1 py-2 bg-slate-200 text-black text-xs font-black rounded-xl"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDeleteAccountConfirm}
-                className="flex-1 py-2 bg-rose-600 text-white text-xs font-bold rounded-xl shadow-md shadow-rose-600/20"
+                className="flex-1 py-2 bg-rose-600 text-white text-xs font-black rounded-xl shadow-md shadow-rose-600/20"
               >
                 Yes, Delete Account
               </button>
