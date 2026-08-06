@@ -1,34 +1,50 @@
 # PaiPai (পাই পাই) — Debt & Tab Tracker
 
-PaiPai is a sleek, responsive debt and expense tab tracking web application designed to help you keep accurate tabs on money owed and received across friends, family, and colleagues.
+A modern, premium debt and expense tracking web app with real-time cloud sync across all your devices.
 
-![PaiPai](https://img.shields.io/badge/App-PaiPai-indigo) ![License](https://img.shields.io/badge/License-MIT-blue)
+![Next.js](https://img.shields.io/badge/Next.js-16-black) ![Firebase](https://img.shields.io/badge/Firebase-Auth%20%2B%20Firestore-orange) ![Vercel](https://img.shields.io/badge/Deploy-Vercel-black)
 
 ## Features
 
-- ৳ **Bangladeshi Taka & Currency Balance Tracking**: See net overall balance and individual person tabs at a glance.
-- 🔐 **Multi-Device Cloud Sync**: Log in from any phone, laptop, or tablet.
-- 🌐 **Google Sign-In & Email/Password**: Log in via Google or Email/Password, or link both to one account.
-- 📁 **Offline First & Backup Export**: Works offline locally and allows 1-click JSON backup export & import.
-- 📐 **Resizable 3-Pane UI**: Split-pane interface with draggable resizers.
+- ৳ **Balance Tracking**: Net balances per person and overall grand total
+- 🔐 **Multi-Device Sync**: Sign in with Google or Email/Password, data syncs instantly
+- 🔗 **Account Linking**: Connect both Google and Email login to one account
+- 🌙 **Premium Dark UI**: Glassmorphism design with gradient accents
+- ⌨️ **Keyboard Shortcuts**: Enter = I Gave, Shift+Enter = I Received
+- 📁 **Backup**: Export & import JSON backups
+- ⚡ **Offline Support**: Works locally when signed out, auto-migrates data on first login
 
-## Setup Instructions for Developers
+## Quick Start
 
-1. **Clone the repository**:
+1. **Clone & install**:
    ```bash
    git clone https://github.com/apon12934/PaiPai.git
    cd PaiPai
+   npm install
    ```
 
-2. **Set up Firebase Credentials**:
-   - Copy `js/firebase-config.sample.js` to `js/firebase-config.js`:
-     ```bash
-     cp js/firebase-config.sample.js js/firebase-config.js
-     ```
-   - Open `js/firebase-config.js` and paste your Firebase project credentials from [Firebase Console](https://console.firebase.google.com/).
+2. **Set up Firebase credentials**:
+   ```bash
+   cp .env.example .env.local
+   ```
+   Fill in your Firebase config values in `.env.local`.
 
 3. **Run locally**:
-   - Open `index.html` in any web browser, or use VS Code Live Server / `npx serve`.
+   ```bash
+   npm run dev
+   ```
+
+4. **Build for production**:
+   ```bash
+   npm run build
+   ```
+
+## Tech Stack
+
+- **Framework**: Next.js 15 (App Router, Static Export)
+- **UI**: React 19, TailwindCSS v4
+- **Backend**: Firebase Authentication + Cloud Firestore
+- **Hosting**: Vercel
 
 ## License
 MIT License.
