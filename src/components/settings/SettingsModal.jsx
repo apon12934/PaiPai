@@ -23,6 +23,7 @@ import {
   ArrowUpDown,
   Coins,
   RotateCcw,
+  UserX,
 } from 'lucide-react';
 
 const CURRENCIES = [
@@ -58,6 +59,7 @@ export default function SettingsModal({
     user,
     updateUserProfile,
     updateUserPassword,
+    deleteUserAccount,
     getLinkedProviders,
     linkGoogleAccount,
     linkEmailAccount,
@@ -177,6 +179,24 @@ export default function SettingsModal({
       setNewPassword('');
     } else {
       setSecurityMsg({ text: res.error || 'Failed to update password.', isError: true });
+    }
+  };
+
+  // Handle Account Deletion
+  const handleDeleteAccount = async () => {
+    if (
+      confirm(
+        'DANGER: Are you sure you want to PERMANENTLY delete your account and all your expense history? This cannot be undone!'
+      )
+    ) {
+      setSecurityMsg({ text: '', isError: false });
+      const res = await deleteUserAccount(currentPassword);
+      if (res.success) {
+        onClose();
+        alert('Your user account and database records have been permanently deleted.');
+      } else {
+        setSecurityMsg({ text: res.error || 'Failed to delete account.', isError: true });
+      }
     }
   };
 
@@ -615,6 +635,26 @@ export default function SettingsModal({
                   </button>
                 </form>
               )}
+
+              {/* Delete Account Danger Box */}
+              <div className="pt-4 border-t border-white/5">
+                <div className="p-4 border border-rose-500/30 rounded-xl bg-rose-500/5 space-y-2">
+                  <h4 className="flex items-center gap-2 text-xs font-semibold text-rose-400 uppercase">
+                    <UserX className="w-4 h-4" />
+                    <span>Delete User Account</span>
+                  </h4>
+                  <p className="text-xs text-slate-400">
+                    Permanently delete your account credentials and wipe all your data from the database.
+                  </p>
+                  <button
+                    onClick={handleDeleteAccount}
+                    className="w-full bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-xs py-2 rounded-lg font-semibold transition border border-rose-500/30 flex items-center justify-center gap-2"
+                  >
+                    <UserX className="w-3.5 h-3.5" />
+                    <span>Permanently Delete My Account</span>
+                  </button>
+                </div>
+              </div>
             </>
           ) : (
             <div className="text-center py-6 text-slate-400 text-xs">

@@ -1,5 +1,5 @@
 // Authentication Functions Module
-import { auth, googleProvider } from './firebase';
+import { auth, googleProvider, db } from './firebase';
 import {
   onAuthStateChanged,
   signInWithPopup,
@@ -13,8 +13,11 @@ import {
   EmailAuthProvider,
   updateProfile,
   updatePassword,
+  deleteUser,
   signOut,
 } from 'firebase/auth';
+import { doc, deleteDoc } from 'firebase/firestore';
+import { clearAllLocalCache } from './db';
 
 // Observe Auth State & Handle Redirect Result
 export function observeAuthState(callback) {
@@ -121,6 +124,48 @@ export async function updateUserPassword(currentPassword, newPassword) {
   }
 }
 
+// Delete User Account Permanently (Auth + Firestore Data)
+export async function deleteUserAccount(currentPassword) {
+  const user = auth.currentUser;
+  if (!user) return { success: false, error: 'No user logged in.' };
+
+  try {
+    // 1. Delete Firestore user document
+    try {
+      const userDocRef = doc(db, 'users', user.uid);
+      await deleteDoc(userDocRef);
+    } catch (e) {
+      console.warn('Firestore user doc delete warning:', e);
+    }
+
+    // 2. Re-authenticate if password provided
+    if (currentPassword && user.email) {
+      try {
+        const credential = EmailAuthProvider.credential(user.email, currentPassword);
+        await reauthenticateWithCredential(user, credential);
+      } catch (reAuthErr) {
+        console.warn('Re-auth warning:', reAuthErr);
+      }
+    }
+
+    // 3. Delete user account from Firebase Auth
+    await deleteUser(user);
+
+    // 4. Clear local cache
+    clearAllLocalCache();
+
+    return { success: true };
+  } catch (error) {
+    if (error.code === 'auth/requires-recent-login') {
+      return {
+        success: false,
+        error: 'Security requirement: Please log out and log back in before deleting your account.',
+      };
+    }
+    return { success: false, error: friendlyError(error) };
+  }
+}
+
 // Check linked providers
 export function getLinkedProviders(user) {
   if (!user) return { hasGoogle: false, hasEmail: false };
@@ -155,7 +200,7 @@ function friendlyError(error) {
     'auth/popup-closed-by-user': 'Sign-in popup closed. Please try again.',
     'auth/provider-already-linked': 'This provider is already linked to your account.',
     'auth/credential-already-in-use': 'This credential is already associated with another account.',
-    'auth/requires-recent-login': 'Please log out and log back in before updating your password.',
+    'auth/requires-recent-login': 'Security requirement: Please log out and log back in before performing this action.',
   };
   return map[error.code] || error.message || 'An unexpected error occurred.';
 }

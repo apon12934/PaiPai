@@ -10,6 +10,7 @@ import {
   linkEmailAccount as _linkEmailAccount,
   updateUserProfile as _updateUserProfile,
   updateUserPassword as _updateUserPassword,
+  deleteUserAccount as _deleteUserAccount,
   getLinkedProviders as _getLinkedProviders,
   logoutUser as _logoutUser,
 } from '@/lib/auth';
@@ -63,6 +64,12 @@ export function AuthProvider({ children }) {
     return await _updateUserPassword(currentPassword, newPassword);
   };
 
+  const deleteUserAccount = async (currentPassword) => {
+    const result = await _deleteUserAccount(currentPassword);
+    if (result.success) setUser(null);
+    return result;
+  };
+
   const getLinkedProviders = () => {
     return _getLinkedProviders(user);
   };
@@ -82,6 +89,7 @@ export function AuthProvider({ children }) {
     linkEmailAccount,
     updateUserProfile,
     updateUserPassword,
+    deleteUserAccount,
     getLinkedProviders,
     logout,
   };
