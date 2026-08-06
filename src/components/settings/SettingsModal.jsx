@@ -22,6 +22,7 @@ import {
   AlertCircle,
   ArrowUpDown,
   Coins,
+  RotateCcw,
 } from 'lucide-react';
 
 const CURRENCIES = [
@@ -83,6 +84,10 @@ export default function SettingsModal({
   const [linkEmailInput, setLinkEmailInput] = useState('');
   const [linkPassInput, setLinkPassInput] = useState('');
 
+  // Extract original Google profile photo if available
+  const googleProviderData = user?.providerData?.find((p) => p.providerId === 'google.com');
+  const googlePhotoURL = googleProviderData?.photoURL || '';
+
   useEffect(() => {
     if (user) {
       setDisplayName(user.displayName || '');
@@ -127,11 +132,20 @@ export default function SettingsModal({
       const cloudinaryUrl = await uploadImageToCloudinary(file);
       setPhotoURL(cloudinaryUrl);
       setCustomPhotoInput('');
-      setProfileMsg({ text: 'Image uploaded to Cloudinary! Click Save Profile Changes.', isError: false });
+      setProfileMsg({ text: 'Image uploaded & optimized! Click Save Profile Changes.', isError: false });
     } catch (err) {
       setProfileMsg({ text: err.message || 'Failed to upload photo to Cloudinary.', isError: true });
     } finally {
       setIsUploadingPhoto(false);
+    }
+  };
+
+  // Reset to Google Account original photo
+  const handleResetToGooglePhoto = () => {
+    if (googlePhotoURL) {
+      setPhotoURL(googlePhotoURL);
+      setCustomPhotoInput('');
+      setProfileMsg({ text: 'Reset to Google profile photo! Click Save Profile Changes.', isError: false });
     }
   };
 
@@ -392,6 +406,18 @@ export default function SettingsModal({
                   />
                 </label>
               </div>
+
+              {/* Reset to Google Photo button */}
+              {googlePhotoURL && (
+                <button
+                  type="button"
+                  onClick={handleResetToGooglePhoto}
+                  className="flex items-center justify-center gap-2 w-full bg-white/[0.03] hover:bg-white/[0.07] text-slate-300 text-xs py-2.5 rounded-xl border border-white/10 transition font-medium"
+                >
+                  <RotateCcw className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>Reset to Google Account Profile Picture</span>
+                </button>
+              )}
 
               {/* Preset Avatars */}
               <div>
