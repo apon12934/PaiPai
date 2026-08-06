@@ -28,10 +28,10 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ===== LIGHT MODE GLOBAL OVERRIDES ===== */
+/* ===== STRICT LIGHT MODE: 100% PURE BLACK TEXT FOR ALL UNSELECTED ELEMENTS ===== */
 html.light, html.light body {
   background-color: #F8F9FE !important;
-  color: #0F172A !important;
+  color: #000000 !important;
 }
 
 /* Force light background on main panels and containers in Light Mode */
@@ -40,17 +40,52 @@ html.light .glass-card,
 html.light .glass-sidebar,
 html.light .glass-history {
   background-color: #FFFFFF !important;
-  border-color: #E2E8F0 !important;
+  border-color: #CBD5E1 !important;
   box-shadow: 0 4px 25px rgba(15, 23, 42, 0.05) !important;
 }
 
-/* Force pure white background on card containers in light mode */
+/* Force pure white background on any card container in light mode */
 html.light [class*="bg-[#151624]"],
 html.light [class*="bg-[#0D0E17]"],
 html.light [class*="bg-[#07080D]"],
 html.light [class*="bg-[#0A0B12]"] {
   background-color: #FFFFFF !important;
-  border-color: #E2E8F0 !important;
+  border-color: #CBD5E1 !important;
+}
+
+/* Force pure solid black text on all unselected text, headings, and labels in Light Mode */
+html.light h1:not(.text-white),
+html.light h2:not(.text-white),
+html.light h3:not(.text-white),
+html.light h4:not(.text-white),
+html.light h5:not(.text-white),
+html.light p:not(.text-white),
+html.light label:not(.text-white),
+html.light span:not(.text-white):not(.text-emerald-600):not(.text-rose-600):not(.text-emerald-400):not(.text-rose-400),
+html.light button:not(.bg-indigo-600):not(.btn-gave-solid):not(.btn-received-solid) {
+  color: #000000 !important;
+}
+
+/* Force gray utility text to be solid black in Light Mode */
+html.light .text-slate-300,
+html.light .text-slate-400,
+html.light .text-slate-500,
+html.light .text-slate-600,
+html.light .text-slate-700,
+html.light .text-slate-800 {
+  color: #000000 !important;
+}
+
+/* HIGHLIGHTED ACTIVE BUTTONS MUST ALWAYS HAVE PURE WHITE TEXT */
+button.bg-indigo-600,
+button.bg-indigo-600 *,
+.bg-indigo-600,
+.bg-indigo-600 *,
+.btn-gave-solid,
+.btn-gave-solid *,
+.btn-received-solid,
+.btn-received-solid * {
+  color: #FFFFFF !important;
 }
 
 /* Solid Action Buttons */
@@ -135,7 +170,7 @@ html.light input[type="password"],
 html.light input[type="number"] {
   background: #FFFFFF !important;
   border: 1px solid #CBD5E1 !important;
-  color: #0F172A !important;
+  color: #000000 !important;
   outline: none !important;
 }
 
