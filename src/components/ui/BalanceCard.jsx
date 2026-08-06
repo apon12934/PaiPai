@@ -1,13 +1,16 @@
 'use client';
+
 import React from 'react';
 import GlassCard from './GlassCard';
 
-export default function BalanceCard({ amount = 0, label, size = 'sm' }) {
+export default function BalanceCard({ amount = 0, label, size = 'sm', currency = '৳' }) {
   const isPositive = amount > 0;
   const isNegative = amount < 0;
-  const isZero = amount === 0;
 
-  const displayAmount = Math.abs(amount).toLocaleString();
+  const displayAmount = Math.abs(amount).toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 
   let defaultLabel = 'All Settled Up';
   let gradientClass = 'bg-gradient-to-br from-slate-700/50 to-slate-800/50';
@@ -35,7 +38,7 @@ export default function BalanceCard({ amount = 0, label, size = 'sm' }) {
           {finalLabel}
         </p>
         <div className={`font-bold text-transparent bg-clip-text bg-gradient-to-r ${textGradient} ${size === 'lg' ? 'text-4xl' : 'text-xl'}`}>
-          ৳ {displayAmount}
+          {currency} {displayAmount}
         </div>
       </div>
     </GlassCard>

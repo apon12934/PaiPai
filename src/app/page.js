@@ -8,6 +8,7 @@ import MainPanel from '@/components/layout/MainPanel';
 import HistoryPanel from '@/components/layout/HistoryPanel';
 import EmptyState from '@/components/layout/EmptyState';
 import AuthModal from '@/components/auth/AuthModal';
+import SettingsModal from '@/components/settings/SettingsModal';
 
 export default function Home() {
   const { user } = useAuth();
@@ -16,6 +17,17 @@ export default function Home() {
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [editingTxId, setEditingTxId] = useState(null);
   const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [settingsModalOpen, setSettingsModalOpen] = useState(false);
+
+  // Settings state from dbState or default
+  const appSettings = dbState._settings || {
+    currency: '৳',
+    theme: 'dark',
+    sortOrder: 'newest',
+  };
+
+  const currency = appSettings.currency || '৳';
+  const sortOrder = appSettings.sortOrder || 'newest';
 
   // Resizer state
   const [leftWidth, setLeftWidth] = useState(280);
@@ -31,8 +43,9 @@ export default function Home() {
     }
   }, [dbState, selectedPerson]);
 
-  // Compute people list with balances
+  // Compute people list with balances (excluding internal keys like _settings)
   const people = Object.keys(dbState)
+    .filter((key) => !key.startsWith('_'))
     .sort()
     .map((name) => {
       const txs = dbState[name] || [];
@@ -51,6 +64,28 @@ export default function Home() {
   const selectedBalance = selectedPerson
     ? people.find((p) => p.name === selectedPerson)?.balance || 0
     : 0;
+
+  // Settings update handler
+  const handleUpdateSettings = useCallback(
+    (newSettings) => {
+      saveData({
+        ...dbState,
+        _settings: newSettings,
+      });
+    },
+    [dbState, saveData]
+  );
+
+  // Clear all application data
+  const handleClearAllData = useCallback(() => {
+    if (confirm('ARE YOU SURE? This will permanently delete ALL people and transactions!')) {
+      saveData({});
+      setSelectedPerson(null);
+      setEditingTxId(null);
+      setSettingsModalOpen(false);
+      alert('All data has been reset.');
+    }
+  }, [saveData]);
 
   // Transaction handlers
   const handleAddPerson = useCallback(
@@ -130,7 +165,7 @@ export default function Home() {
 
   // Export / Import
   const handleExport = useCallback(() => {
-    if (Object.keys(dbState).length === 0) {
+    if (people.length === 0) {
       alert("You don't have any data to export yet!");
       return;
     }
@@ -141,7 +176,7 @@ export default function Home() {
     a.download = `paipai-backup-${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
-  }, [dbState]);
+  }, [dbState, people.length]);
 
   const handleImport = useCallback(
     (event) => {
@@ -227,6 +262,8 @@ export default function Home() {
             onExport={handleExport}
             onImport={handleImport}
             onOpenLogin={() => setAuthModalOpen(true)}
+            onOpenSettings={() => setSettingsModalOpen(true)}
+            currency={currency}
           />
         </div>
 
@@ -249,6 +286,7 @@ export default function Home() {
                 onSubmitTx={handleSubmitTx}
                 editingTx={editingTx}
                 onCancelEdit={handleCancelEdit}
+                currency={currency}
               />
             </div>
 
@@ -268,6 +306,8 @@ export default function Home() {
                 onEdit={handleEditTx}
                 onDelete={handleDeleteTx}
                 editingTxId={editingTxId}
+                currency={currency}
+                sortOrder={sortOrder}
               />
             </div>
           </>
@@ -278,6 +318,17 @@ export default function Home() {
 
       {/* Auth Modal */}
       <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} />
+
+      {/* Settings Modal */}
+      <SettingsModal
+        isOpen={settingsModalOpen}
+        onClose={() => setSettingsModalOpen(false)}
+        settings={appSettings}
+        onUpdateSettings={handleUpdateSettings}
+        onExport={handleExport}
+        onImport={handleImport}
+        onClearAllData={handleClearAllData}
+      />
     </div>
   );
 }

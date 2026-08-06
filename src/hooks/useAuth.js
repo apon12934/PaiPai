@@ -8,6 +8,8 @@ import {
   loginWithEmail as _loginWithEmail,
   linkGoogleAccount as _linkGoogleAccount,
   linkEmailAccount as _linkEmailAccount,
+  updateUserProfile as _updateUserProfile,
+  updateUserPassword as _updateUserPassword,
   getLinkedProviders as _getLinkedProviders,
   logoutUser as _logoutUser,
 } from '@/lib/auth';
@@ -27,30 +29,37 @@ export function AuthProvider({ children }) {
   }, []);
 
   const loginWithGoogle = async () => {
-    const result = await _loginWithGoogle();
-    return result;
+    return await _loginWithGoogle();
   };
 
   const signUpWithEmail = async (email, password) => {
-    const result = await _signUpWithEmail(email, password);
-    return result;
+    return await _signUpWithEmail(email, password);
   };
 
   const loginWithEmail = async (email, password) => {
-    const result = await _loginWithEmail(email, password);
-    return result;
+    return await _loginWithEmail(email, password);
   };
 
   const linkGoogleAccount = async () => {
     const result = await _linkGoogleAccount();
-    if (result.success) setUser(result.user);
+    if (result.success && result.user) setUser({ ...result.user });
     return result;
   };
 
   const linkEmailAccount = async (email, password) => {
     const result = await _linkEmailAccount(email, password);
-    if (result.success) setUser(result.user);
+    if (result.success && result.user) setUser({ ...result.user });
     return result;
+  };
+
+  const updateUserProfile = async (displayName, photoURL) => {
+    const result = await _updateUserProfile(displayName, photoURL);
+    if (result.success && result.user) setUser({ ...result.user });
+    return result;
+  };
+
+  const updateUserPassword = async (newPassword) => {
+    return await _updateUserPassword(newPassword);
   };
 
   const getLinkedProviders = () => {
@@ -58,8 +67,7 @@ export function AuthProvider({ children }) {
   };
 
   const logout = async () => {
-    const result = await _logoutUser();
-    return result;
+    return await _logoutUser();
   };
 
   const value = {
@@ -70,6 +78,8 @@ export function AuthProvider({ children }) {
     loginWithEmail,
     linkGoogleAccount,
     linkEmailAccount,
+    updateUserProfile,
+    updateUserPassword,
     getLinkedProviders,
     logout,
   };

@@ -15,6 +15,8 @@ export default function Sidebar({
   onExport,
   onImport,
   onOpenLogin,
+  onOpenSettings,
+  currency = '৳',
 }) {
   const { user } = useAuth();
   const [newPersonName, setNewPersonName] = useState('');
@@ -33,7 +35,7 @@ export default function Sidebar({
       <div className="p-4 border-b border-white/5 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white font-black text-lg shadow-lg shadow-indigo-500/20">
-            ৳
+            {currency}
           </div>
           <div>
             <h1 className="text-lg font-bold text-white tracking-tight">PaiPai</h1>
@@ -43,25 +45,34 @@ export default function Sidebar({
           </div>
         </div>
         {!user && (
-          <button
-            onClick={onOpenLogin}
-            className="text-xs font-medium text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-lg transition-all duration-200 border border-white/5"
-          >
-            Log In
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={onOpenSettings}
+              className="text-xs font-medium text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 p-1.5 rounded-lg transition-all border border-white/5"
+              title="Settings"
+            >
+              ⚙️
+            </button>
+            <button
+              onClick={onOpenLogin}
+              className="text-xs font-medium text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-lg transition-all border border-white/5"
+            >
+              Log In
+            </button>
+          </div>
         )}
       </div>
 
       {/* User Auth Bar */}
       {user && (
         <div className="border-b border-white/5">
-          <UserProfileBar />
+          <UserProfileBar onOpenSettings={onOpenSettings} />
         </div>
       )}
 
       {/* Grand Total */}
       <div className="p-4 border-b border-white/5">
-        <BalanceCard amount={grandTotal} size="sm" label="Overall Balance" />
+        <BalanceCard amount={grandTotal} size="sm" label="Overall Balance" currency={currency} />
       </div>
 
       {/* Add Person */}
@@ -97,6 +108,7 @@ export default function Sidebar({
               balance={person.balance}
               isSelected={selectedPerson === person.name}
               onClick={() => onSelectPerson(person.name)}
+              currency={currency}
             />
           ))}
           {people.length === 0 && (

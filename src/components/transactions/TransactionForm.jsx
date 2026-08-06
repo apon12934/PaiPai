@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import GlassCard from '../ui/GlassCard';
 
-export default function TransactionForm({ onSubmit, editingTx = null, onCancelEdit }) {
+export default function TransactionForm({ onSubmit, editingTx = null, onCancelEdit, currency = '৳' }) {
   const [amount, setAmount] = useState('');
   const [note, setNote] = useState('');
   const amountInputRef = useRef(null);
@@ -66,7 +66,7 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
       <div className="space-y-4">
         <div>
           <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-slate-400">৳</span>
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-slate-400 font-bold">{currency}</span>
             <input
               ref={amountInputRef}
               type="number"
@@ -97,7 +97,7 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
             disabled={!parseFloat(amount)}
             className="flex flex-col items-center justify-center p-3 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 disabled:opacity-50 transition-all duration-200"
           >
-            <span className="font-semibold text-lg mb-1">↑ I Gave ৳</span>
+            <span className="font-semibold text-lg mb-1">↑ I Gave {currency}</span>
             <span className="text-xs opacity-70">Press Enter</span>
           </button>
           
@@ -106,7 +106,7 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
             disabled={!parseFloat(amount)}
             className="flex flex-col items-center justify-center p-3 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 text-emerald-400 disabled:opacity-50 transition-all duration-200"
           >
-            <span className="font-semibold text-lg mb-1">↓ I Received ৳</span>
+            <span className="font-semibold text-lg mb-1">↓ I Received {currency}</span>
             <span className="text-xs opacity-70">Shift + Enter</span>
           </button>
         </div>

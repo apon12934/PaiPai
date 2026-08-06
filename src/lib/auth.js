@@ -8,6 +8,8 @@ import {
   linkWithPopup,
   linkWithCredential,
   EmailAuthProvider,
+  updateProfile,
+  updatePassword,
   signOut,
 } from 'firebase/auth';
 
@@ -69,6 +71,31 @@ export async function linkEmailAccount(email, password) {
   }
 }
 
+// Update User Profile (DisplayName & PhotoURL)
+export async function updateUserProfile(displayName, photoURL) {
+  if (!auth.currentUser) return { success: false, error: 'No user logged in.' };
+  try {
+    await updateProfile(auth.currentUser, {
+      displayName: displayName || auth.currentUser.displayName,
+      photoURL: photoURL !== undefined ? photoURL : auth.currentUser.photoURL,
+    });
+    return { success: true, user: auth.currentUser };
+  } catch (error) {
+    return { success: false, error: friendlyError(error) };
+  }
+}
+
+// Update User Password
+export async function updateUserPassword(newPassword) {
+  if (!auth.currentUser) return { success: false, error: 'No user logged in.' };
+  try {
+    await updatePassword(auth.currentUser, newPassword);
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: friendlyError(error) };
+  }
+}
+
 // Check linked providers
 export function getLinkedProviders(user) {
   if (!user) return { hasGoogle: false, hasEmail: false };
@@ -102,6 +129,7 @@ function friendlyError(error) {
     'auth/popup-closed-by-user': 'Sign-in popup was closed. Please try again.',
     'auth/provider-already-linked': 'This provider is already linked to your account.',
     'auth/credential-already-in-use': 'This credential is already associated with another account.',
+    'auth/requires-recent-login': 'Please log out and log back in before updating your password.',
   };
   return map[error.code] || error.message || 'An unexpected error occurred.';
 }

@@ -3,7 +3,15 @@
 import BalanceCard from '../ui/BalanceCard';
 import TransactionForm from '../transactions/TransactionForm';
 
-export default function MainPanel({ person, balance, onDelete, onSubmitTx, editingTx, onCancelEdit }) {
+export default function MainPanel({
+  person,
+  balance,
+  onDelete,
+  onSubmitTx,
+  editingTx,
+  onCancelEdit,
+  currency = '৳',
+}) {
   return (
     <div className="h-full overflow-y-auto bg-transparent">
       <div className="max-w-3xl mx-auto p-6 md:p-8 space-y-8">
@@ -20,7 +28,7 @@ export default function MainPanel({ person, balance, onDelete, onSubmitTx, editi
 
         {/* Balance */}
         <div className="animate-slide-up">
-          <BalanceCard amount={balance} size="lg" />
+          <BalanceCard amount={balance} size="lg" currency={currency} />
         </div>
 
         {/* Transaction Form */}
@@ -29,6 +37,7 @@ export default function MainPanel({ person, balance, onDelete, onSubmitTx, editi
             onSubmit={onSubmitTx}
             editingTx={editingTx}
             onCancelEdit={onCancelEdit}
+            currency={currency}
           />
         </div>
       </div>

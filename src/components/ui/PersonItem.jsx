@@ -1,12 +1,16 @@
 'use client';
+
 import React from 'react';
 
-export default function PersonItem({ name, balance = 0, isSelected, onClick }) {
+export default function PersonItem({ name, balance = 0, isSelected, onClick, currency = '৳' }) {
   const isPositive = balance > 0;
   const isNegative = balance < 0;
   const isZero = balance === 0;
 
-  const displayBalance = Math.abs(balance).toLocaleString();
+  const displayBalance = Math.abs(balance).toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 
   let balanceColor = 'text-slate-500';
   let balancePrefix = '';
@@ -20,7 +24,7 @@ export default function PersonItem({ name, balance = 0, isSelected, onClick }) {
   }
 
   const baseClasses = 'w-full flex items-center justify-between rounded-xl p-3 text-sm transition-all duration-200 cursor-pointer';
-  const selectedClasses = 'bg-indigo-600/20 border border-indigo-500/30 text-white';
+  const selectedClasses = 'bg-indigo-600/20 border border-indigo-500/30 text-white shadow-lg shadow-indigo-600/10';
   const defaultClasses = 'bg-transparent border border-transparent hover:bg-white/5 text-slate-300';
 
   return (
@@ -32,7 +36,7 @@ export default function PersonItem({ name, balance = 0, isSelected, onClick }) {
         {name}
       </div>
       <div className={`whitespace-nowrap font-semibold ${balanceColor}`}>
-        {isZero ? 'Settled' : `${balancePrefix}৳${displayBalance}`}
+        {isZero ? 'Settled' : `${balancePrefix}${currency}${displayBalance}`}
       </div>
     </div>
   );
