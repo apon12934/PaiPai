@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState } from 'react';
 import Modal from '../ui/Modal';
 import Button from '../ui/Button';
@@ -13,27 +14,30 @@ export default function AuthModal({ isOpen, onClose }) {
   const { loginWithGoogle, signUpWithEmail, loginWithEmail, loading } = useAuth();
 
   const handleGoogle = async () => {
-    try {
-      setError(null);
-      await loginWithGoogle();
-      onClose();
-    } catch (err) {
-      setError(err.message || 'Failed to sign in with Google');
+    setError(null);
+    const res = await loginWithGoogle();
+    if (res.success) {
+      if (!res.redirecting) {
+        onClose();
+      }
+    } else if (res.error) {
+      setError(res.error);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      setError(null);
-      if (isLogin) {
-        await loginWithEmail(email, password);
-      } else {
-        await signUpWithEmail(email, password);
-      }
+    setError(null);
+    let res;
+    if (isLogin) {
+      res = await loginWithEmail(email, password);
+    } else {
+      res = await signUpWithEmail(email, password);
+    }
+    if (res.success) {
       onClose();
-    } catch (err) {
-      setError(err.message || `Failed to ${isLogin ? 'log in' : 'sign up'}`);
+    } else if (res.error) {
+      setError(res.error);
     }
   };
 
@@ -89,7 +93,7 @@ export default function AuthModal({ isOpen, onClose }) {
           </div>
           
           {error && (
-            <div className="text-rose-400 text-sm p-3 bg-rose-500/10 rounded-xl border border-rose-500/20">
+            <div className="text-rose-400 text-xs p-3 bg-rose-500/10 rounded-xl border border-rose-500/20 leading-relaxed">
               {error}
             </div>
           )}
