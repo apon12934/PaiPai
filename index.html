@@ -5,36 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PaiPai — Debt & Expense Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { background-color: #f1f5f9; margin: 0; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        
-        .resizer {
-            width: 8px;
-            cursor: col-resize;
-            background-color: #f1f5f9;
-            border-left: 1px solid #e2e8f0;
-            border-right: 1px solid #e2e8f0;
-            transition: background-color 0.2s ease;
-            z-index: 10;
-        }
-        .resizer:hover, .resizer.active {
-            background-color: #cbd5e1;
-        }
-        .no-select {
-            user-select: none;
-            -webkit-user-select: none;
-        }
-    </style>
+    <link rel="stylesheet" href="./css/styles.css">
 </head>
 <body class="h-screen w-screen flex items-center justify-center p-4 font-sans text-gray-800">
 
-    <div id="app-container" class="flex w-full max-w-[1600px] h-full max-h-[90vh] bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+    <!-- App Container -->
+    <div id="app-container" class="flex w-full max-w-[1600px] h-full max-h-[90vh] bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden relative">
         
-        <div id="panel-left" class="flex flex-col min-w-[250px]" style="width: 25%;">
-            <div class="bg-slate-800 p-5 text-white flex items-center justify-between">
+        <!-- Left Panel: Sidebar -->
+        <div id="panel-left" class="flex flex-col min-w-[260px]" style="width: 25%;">
+            <!-- Header & Brand -->
+            <div class="bg-slate-800 p-4 text-white flex items-center justify-between">
                 <div class="flex items-center gap-2.5">
                     <div class="w-8 h-8 rounded-lg bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-300 font-black text-base">
                         ৳
@@ -46,8 +27,33 @@
                         </h1>
                     </div>
                 </div>
+                <button id="open-login-btn" class="bg-slate-700 hover:bg-slate-600 text-xs px-2.5 py-1.5 rounded-md font-medium text-slate-200 transition">
+                    Log In
+                </button>
+            </div>
+
+            <!-- Logged-in User Profile Bar -->
+            <div id="user-profile-bar" class="bg-slate-900 px-4 py-2.5 text-white flex items-center justify-between hidden text-xs border-b border-slate-800">
+                <div class="flex items-center gap-2 overflow-hidden">
+                    <div id="user-avatar" class="w-6 h-6 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center text-[11px] shrink-0">
+                        U
+                    </div>
+                    <div class="truncate">
+                        <p id="user-name" class="font-semibold truncate">User</p>
+                        <p id="user-email" class="text-[10px] text-slate-400 truncate">user@example.com</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                    <button id="account-link-btn" title="Link Accounts" class="bg-slate-800 hover:bg-slate-700 text-slate-300 p-1.5 rounded transition">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                    </button>
+                    <button id="logout-btn" title="Log Out" class="bg-slate-800 hover:bg-red-900/60 text-slate-300 hover:text-red-300 p-1.5 rounded transition">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    </button>
+                </div>
             </div>
             
+            <!-- Sidebar Body -->
             <div class="p-4 flex-1 flex flex-col overflow-hidden">
                 <div id="grand-total-container" class="p-4 rounded-lg mb-4 border text-center transition-colors">
                     <p class="text-[10px] uppercase tracking-wider font-semibold mb-1" id="grand-total-label">Overall Balance</p>
@@ -75,8 +81,10 @@
             </div>
         </div>
 
+        <!-- Resizer Left -->
         <div class="resizer hidden md:block" id="resizer-left"></div>
 
+        <!-- Center Panel: Main Workspace -->
         <div id="panel-main" class="flex-1 flex flex-col min-w-[300px] hidden relative bg-gray-50/50">
             <div class="p-6 md:p-8 flex-1 overflow-y-auto">
                 <div class="flex justify-between items-center mb-6">
@@ -122,8 +130,10 @@
             </div>
         </div>
 
+        <!-- Resizer Right -->
         <div class="resizer hidden md:block" id="resizer-right"></div>
 
+        <!-- Right Panel: Transaction History -->
         <div id="panel-right" class="flex flex-col min-w-[300px] hidden bg-white" style="width: 30%;">
             <div class="p-6 border-b border-gray-100 bg-gray-50/50">
                 <h3 class="font-bold text-lg">History</h3>
@@ -133,278 +143,118 @@
             </div>
         </div>
 
+        <!-- Empty State View -->
         <div id="empty-state" class="flex-1 flex flex-col items-center justify-center text-gray-400 p-12">
             <svg class="w-20 h-20 mb-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
             <h2 class="text-xl font-medium text-gray-500 mb-2">No workspace active</h2>
             <p class="text-sm">Select or add a person from the sidebar to open their tab.</p>
         </div>
 
+        <!-- AUTH MODAL -->
+        <div id="auth-modal" class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 hidden p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 animate-fade-in border border-gray-100 relative">
+                <button id="close-auth-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg">&times;</button>
+                
+                <h2 id="auth-title" class="text-xl font-bold text-slate-800 mb-1">Log In to PaiPai</h2>
+                <p class="text-xs text-gray-500 mb-6">Sync your debts and transactions across all your devices.</p>
+
+                <!-- Google Sign-In Button -->
+                <button id="google-auth-btn" class="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 py-2.5 rounded-lg text-sm font-semibold transition shadow-sm mb-4">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                    </svg>
+                    Continue with Google
+                </button>
+
+                <div class="relative flex py-2 items-center mb-4">
+                    <div class="flex-grow border-t border-gray-200"></div>
+                    <span class="flex-shrink mx-4 text-gray-400 text-xs uppercase font-medium">Or email</span>
+                    <div class="flex-grow border-t border-gray-200"></div>
+                </div>
+
+                <div id="auth-error" class="bg-red-50 border border-red-200 text-red-600 text-xs p-3 rounded-lg mb-4 hidden"></div>
+
+                <form id="auth-form" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Email</label>
+                        <input type="email" id="auth-email" required placeholder="you@example.com"
+                               class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Password</label>
+                        <input type="password" id="auth-password" required minlength="6" placeholder="••••••••"
+                               class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-500">
+                    </div>
+                    <button type="submit" id="auth-submit-btn" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2.5 rounded-lg text-sm transition">
+                        Log In
+                    </button>
+                </form>
+
+                <div class="mt-4 text-center">
+                    <button id="toggle-auth-mode" class="text-xs text-slate-600 hover:text-slate-900 underline font-medium">
+                        Don't have an account? Sign Up
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACCOUNT LINKING MODAL -->
+        <div id="account-link-modal" class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 hidden p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 animate-fade-in border border-gray-100 relative">
+                <button id="close-link-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg">&times;</button>
+                
+                <h2 class="text-xl font-bold text-slate-800 mb-1">Linked Login Accounts</h2>
+                <p class="text-xs text-gray-500 mb-6">Connect both Google and Email/Password to log into your account either way.</p>
+
+                <!-- Status Cards -->
+                <div class="space-y-3 mb-6">
+                    <div class="flex items-center justify-between p-3 border border-gray-200 rounded-xl bg-gray-50/50">
+                        <div class="flex items-center gap-3">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                            </svg>
+                            <div>
+                                <p class="text-sm font-semibold text-slate-800">Google</p>
+                                <p id="link-google-status" class="text-[11px] text-gray-500">Checking...</p>
+                            </div>
+                        </div>
+                        <button id="link-google-action-btn" class="bg-slate-800 hover:bg-slate-700 text-white text-xs px-3 py-1.5 rounded transition font-medium">
+                            Link Google
+                        </button>
+                    </div>
+
+                    <div class="flex items-center justify-between p-3 border border-gray-200 rounded-xl bg-gray-50/50">
+                        <div class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            <div>
+                                <p class="text-sm font-semibold text-slate-800">Email & Password</p>
+                                <p id="link-email-status" class="text-[11px] text-gray-500">Checking...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form to Link Email if not linked -->
+                <form id="link-email-form" class="space-y-3 pt-3 border-t border-gray-100 hidden">
+                    <p class="text-xs font-semibold text-slate-700">Attach Email & Password Login</p>
+                    <input type="email" id="link-email-input" required placeholder="Email address" class="w-full px-3 py-2 border border-gray-300 rounded-md text-xs">
+                    <input type="password" id="link-pass-input" required minlength="6" placeholder="Set password" class="w-full px-3 py-2 border border-gray-300 rounded-md text-xs">
+                    <button type="submit" id="link-email-submit-form" class="w-full bg-slate-800 hover:bg-slate-700 text-white text-xs py-2 rounded-md font-semibold transition">
+                        Attach Email Login
+                    </button>
+                </form>
+            </div>
+        </div>
+
     </div>
 
-    <script>
-        // Load data with fallback/migration from debtTrackerDB to paiPaiDB
-        let db = JSON.parse(localStorage.getItem('paiPaiDB')) || JSON.parse(localStorage.getItem('debtTrackerDB')) || {};
-        let currentSelectedPerson = null;
-        let editingTxId = null;
-
-        function saveDB() { 
-            localStorage.setItem('paiPaiDB', JSON.stringify(db)); 
-        }
-
-        const panelLeft = document.getElementById('panel-left');
-        const panelMain = document.getElementById('panel-main');
-        const panelRight = document.getElementById('panel-right');
-        const resizerLeft = document.getElementById('resizer-left');
-        const resizerRight = document.getElementById('resizer-right');
-        const peopleList = document.getElementById('people-list');
-        const emptyState = document.getElementById('empty-state');
-        const currentPersonNameEl = document.getElementById('current-person-name');
-        const balanceCard = document.getElementById('balance-card');
-        const balanceLabel = document.getElementById('balance-label');
-        const balanceAmount = document.getElementById('balance-amount');
-        const txHistory = document.getElementById('tx-history');
-        const grandTotalContainer = document.getElementById('grand-total-container');
-        const grandTotalLabel = document.getElementById('grand-total-label');
-        const grandTotalAmount = document.getElementById('grand-total-amount');
-
-        function initResizers() {
-            let isResizingLeft = false, isResizingRight = false;
-            resizerLeft.addEventListener('mousedown', () => { isResizingLeft = true; resizerLeft.classList.add('active'); document.body.classList.add('no-select'); document.body.style.cursor = 'col-resize'; });
-            resizerRight.addEventListener('mousedown', () => { isResizingRight = true; resizerRight.classList.add('active'); document.body.classList.add('no-select'); document.body.style.cursor = 'col-resize'; });
-            
-            document.addEventListener('mousemove', (e) => {
-                if (isResizingLeft) {
-                    const newWidth = e.clientX - panelLeft.getBoundingClientRect().left;
-                    if (newWidth > 200 && newWidth < 500) panelLeft.style.width = `${newWidth}px`;
-                }
-                if (isResizingRight) {
-                    const newWidth = document.getElementById('app-container').getBoundingClientRect().right - e.clientX;
-                    if (newWidth > 250 && newWidth < 600) panelRight.style.width = `${newWidth}px`;
-                }
-            });
-            document.addEventListener('mouseup', () => {
-                isResizingLeft = isResizingRight = false;
-                resizerLeft.classList.remove('active'); resizerRight.classList.remove('active');
-                document.body.classList.remove('no-select'); document.body.style.cursor = 'default';
-            });
-        }
-
-        function updateGrandTotal() {
-            let overallTotalGave = 0, overallTotalReceived = 0;
-            for (const person in db) {
-                db[person].forEach(tx => {
-                    if (tx.type === 'gave') overallTotalGave += tx.amount;
-                    if (tx.type === 'received') overallTotalReceived += tx.amount;
-                });
-            }
-            const grandTotal = overallTotalGave - overallTotalReceived;
-            grandTotalContainer.className = 'p-4 rounded-lg mb-4 border text-center transition-colors';
-            
-            if (grandTotal > 0) {
-                grandTotalContainer.classList.add('bg-green-50', 'border-green-200', 'text-green-800');
-                grandTotalLabel.innerText = "Total Everyone Owes You";
-                grandTotalAmount.innerText = `৳${grandTotal.toFixed(2)}`;
-            } else if (grandTotal < 0) {
-                grandTotalContainer.classList.add('bg-red-50', 'border-red-200', 'text-red-800');
-                grandTotalLabel.innerText = "Total You Owe Overall";
-                grandTotalAmount.innerText = `৳${Math.abs(grandTotal).toFixed(2)}`;
-            } else {
-                grandTotalContainer.classList.add('bg-gray-50', 'border-gray-200', 'text-gray-800');
-                grandTotalLabel.innerText = "Overall Net Balance";
-                grandTotalAmount.innerText = "৳0.00";
-            }
-        }
-
-        function renderPeopleList() {
-            peopleList.innerHTML = '';
-            const people = Object.keys(db).sort();
-            if (people.length === 0) {
-                peopleList.innerHTML = '<li class="text-sm text-gray-400 italic p-2">No people added yet.</li>';
-                updateGrandTotal(); return;
-            }
-            people.forEach(person => {
-                const li = document.createElement('li');
-                const isSelected = person === currentSelectedPerson;
-                let totalGave = 0, totalReceived = 0;
-                db[person].forEach(tx => {
-                    if (tx.type === 'gave') totalGave += tx.amount;
-                    if (tx.type === 'received') totalReceived += tx.amount;
-                });
-                const balance = totalGave - totalReceived;
-                let indicator = balance > 0 ? `<span class="text-xs text-green-600 font-bold">+৳${balance.toFixed(2)}</span>` : 
-                                balance < 0 ? `<span class="text-xs text-red-500 font-bold">-৳${Math.abs(balance).toFixed(2)}</span>` : 
-                                `<span class="text-xs text-gray-400">Settled</span>`;
-                li.className = `cursor-pointer p-3 rounded-lg flex justify-between items-center transition-all ${isSelected ? 'bg-slate-800 text-white shadow-md' : 'hover:bg-gray-100 text-gray-700'}`;
-                li.innerHTML = `<span class="font-medium text-sm truncate pr-2">${person}</span><div class="${isSelected && balance > 0 ? 'text-green-300' : (isSelected && balance < 0 ? 'text-red-300' : '')}">${indicator}</div>`;
-                li.onclick = () => selectPerson(person);
-                peopleList.appendChild(li);
-            });
-            updateGrandTotal();
-        }
-
-        function selectPerson(person) {
-            currentSelectedPerson = person;
-            cancelEdit(); renderPeopleList();
-            panelMain.classList.remove('hidden'); panelRight.classList.remove('hidden'); resizerRight.classList.remove('hidden'); resizerLeft.classList.remove('hidden'); emptyState.classList.add('hidden');
-            currentPersonNameEl.innerText = person; renderDashboard();
-            document.getElementById('tx-amount').focus();
-        }
-
-        function renderDashboard() {
-            if (!currentSelectedPerson) return;
-            const txs = db[currentSelectedPerson];
-            let totalGave = 0, totalReceived = 0;
-            txHistory.innerHTML = '';
-
-            if (txs.length === 0) {
-                txHistory.innerHTML = '<div class="text-center p-8 text-gray-400 text-sm">No history yet.</div>';
-            } else {
-                [...txs].reverse().forEach(tx => {
-                    if (tx.type === 'gave') totalGave += tx.amount;
-                    if (tx.type === 'received') totalReceived += tx.amount;
-                    const dateObj = new Date(tx.date);
-                    const isGave = tx.type === 'gave';
-                    const isEditing = tx.id === editingTxId;
-                    const div = document.createElement('div');
-                    div.className = `flex flex-col p-4 border rounded-xl shadow-sm transition-all ${isEditing ? 'border-slate-500 bg-slate-50' : 'bg-white border-gray-100 hover:border-gray-300'}`;
-                    div.innerHTML = `
-                        <div class="flex justify-between items-start mb-2">
-                            <div>
-                                <p class="font-semibold text-sm ${isGave ? 'text-red-600' : 'text-green-600'}">${isGave ? 'You gave them' : 'They paid you'}</p>
-                                <p class="text-xs text-gray-400 mt-0.5">${dateObj.toLocaleDateString()}</p>
-                            </div>
-                            <span class="font-bold text-lg ${isGave ? 'text-red-600' : 'text-green-600'}">৳${tx.amount.toFixed(2)}</span>
-                        </div>
-                        ${tx.note ? `<p class="text-sm text-gray-600 bg-gray-50 p-2 rounded-md mb-3 border border-gray-100">${tx.note}</p>` : ''}
-                        <div class="flex justify-end gap-2 mt-auto border-t border-gray-50 pt-2">
-                            <button onclick="editTx('${tx.id}')" class="text-xs text-blue-500 hover:text-blue-700 flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg> Edit</button>
-                            <span class="text-gray-200">|</span>
-                            <button onclick="deleteTx('${tx.id}')" class="text-xs text-red-400 hover:text-red-600 flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> Delete</button>
-                        </div>`;
-                    txHistory.appendChild(div);
-                });
-            }
-
-            const netBalance = totalGave - totalReceived;
-            balanceCard.className = 'p-6 rounded-xl mb-8 text-center border shadow-sm transition-colors';
-            if (netBalance > 0) { balanceCard.classList.add('bg-green-50', 'border-green-200', 'text-green-800'); balanceLabel.innerText = "They Owe You"; balanceAmount.innerText = `৳${netBalance.toFixed(2)}`; }
-            else if (netBalance < 0) { balanceCard.classList.add('bg-red-50', 'border-red-200', 'text-red-800'); balanceLabel.innerText = "You Owe Them"; balanceAmount.innerText = `৳${Math.abs(netBalance).toFixed(2)}`; }
-            else { balanceCard.classList.add('bg-white', 'border-gray-200', 'text-gray-800'); balanceLabel.innerText = "All Settled Up"; balanceAmount.innerText = "৳0.00"; }
-        }
-
-        window.processTx = function(type) {
-            const amountInput = document.getElementById('tx-amount');
-            const noteInput = document.getElementById('tx-note');
-            const amount = parseFloat(amountInput.value);
-            const note = noteInput.value.trim();
-
-            if (!currentSelectedPerson || isNaN(amount) || amount <= 0) { amountInput.focus(); return; }
-
-            if (editingTxId) {
-                const txIndex = db[currentSelectedPerson].findIndex(t => t.id === editingTxId);
-                if (txIndex !== -1) { db[currentSelectedPerson][txIndex].amount = amount; db[currentSelectedPerson][txIndex].type = type; db[currentSelectedPerson][txIndex].note = note; }
-            } else {
-                db[currentSelectedPerson].push({ id: Date.now().toString(), date: new Date().toISOString(), amount: amount, type: type, note: note });
-            }
-            saveDB(); cancelEdit(); renderDashboard(); renderPeopleList();
-        };
-
-        window.editTx = function(id) {
-            const tx = db[currentSelectedPerson].find(t => t.id === id);
-            if (tx) {
-                editingTxId = id;
-                document.getElementById('tx-amount').value = tx.amount; document.getElementById('tx-note').value = tx.note;
-                document.getElementById('form-title').innerText = "Edit Transaction"; document.getElementById('form-title').classList.add('text-blue-600'); document.getElementById('cancel-edit-btn').classList.remove('hidden');
-                document.getElementById('tx-amount').focus(); renderDashboard();
-            }
-        };
-
-        window.cancelEdit = function() {
-            editingTxId = null;
-            document.getElementById('tx-amount').value = ''; document.getElementById('tx-note').value = '';
-            document.getElementById('form-title').innerText = "Log Transaction"; document.getElementById('form-title').classList.remove('text-blue-600'); document.getElementById('cancel-edit-btn').classList.add('hidden');
-            if(currentSelectedPerson) { renderDashboard(); document.getElementById('tx-amount').focus(); }
-        };
-
-        window.deleteTx = function(id) {
-            if (confirm("Delete this transaction?")) {
-                db[currentSelectedPerson] = db[currentSelectedPerson].filter(tx => tx.id !== id);
-                if (editingTxId === id) cancelEdit();
-                saveDB(); renderDashboard(); renderPeopleList();
-            }
-        };
-
-        window.deletePerson = function() {
-            if (confirm(`Delete ${currentSelectedPerson} and all their history?`)) {
-                delete db[currentSelectedPerson]; saveDB(); currentSelectedPerson = null;
-                panelMain.classList.add('hidden'); panelRight.classList.add('hidden'); resizerRight.classList.add('hidden'); resizerLeft.classList.add('hidden'); emptyState.classList.remove('hidden');
-                renderPeopleList();
-            }
-        };
-
-        // Export Data
-        window.exportData = function() {
-            if (Object.keys(db).length === 0) {
-                alert("You don't have any data to export yet!");
-                return;
-            }
-            const dataStr = JSON.stringify(db, null, 2);
-            const blob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `paipai-backup-${new Date().toISOString().split('T')[0]}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-        };
-
-        // Import Data
-        window.importData = function(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const importedData = JSON.parse(e.target.result);
-                    if (typeof importedData === 'object' && importedData !== null) {
-                        db = importedData;
-                        saveDB();
-                        currentSelectedPerson = null;
-                        emptyState.classList.remove('hidden');
-                        panelMain.classList.add('hidden');
-                        panelRight.classList.add('hidden');
-                        resizerLeft.classList.add('hidden');
-                        resizerRight.classList.add('hidden');
-                        renderPeopleList();
-                        alert("PaiPai backup restored successfully!");
-                    } else {
-                        throw new Error("Invalid format");
-                    }
-                } catch (err) {
-                    alert("Invalid backup file. Please make sure you selected a valid JSON file generated by PaiPai.");
-                }
-            };
-            reader.readAsText(file);
-            event.target.value = ''; // Reset input so you can select the same file again if needed
-        };
-
-        // Keyboard Shortcut Listeners
-        document.getElementById('tx-form').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault(); 
-                if (e.shiftKey) processTx('received'); 
-                else processTx('gave'); 
-            }
-        });
-
-        document.getElementById('add-person-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const input = document.getElementById('new-person-name'); const name = input.value.trim();
-            if (name && !db[name]) { db[name] = []; saveDB(); input.value = ''; selectPerson(name); } 
-            else if (db[name]) alert("This person already exists!");
-        });
-
-        initResizers(); renderPeopleList();
-    </script>
+    <!-- ES6 Application Module -->
+    <script type="module" src="./js/app.js"></script>
 </body>
 </html>
