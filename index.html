@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Debt & Tab Tracker</title>
+    <title>PaiPai — Debt & Expense Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #f1f5f9; margin: 0; }
@@ -34,8 +34,18 @@
     <div id="app-container" class="flex w-full max-w-[1600px] h-full max-h-[90vh] bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
         
         <div id="panel-left" class="flex flex-col min-w-[250px]" style="width: 25%;">
-            <div class="bg-slate-800 p-5 text-white">
-                <h1 class="text-xl font-bold">Debt Tracker</h1>
+            <div class="bg-slate-800 p-5 text-white flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-300 font-black text-base">
+                        ৳
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold tracking-tight flex items-center gap-2">
+                            PaiPai
+                            <span class="text-[10px] font-normal text-slate-300 bg-slate-700/80 px-1.5 py-0.5 rounded border border-slate-600">পাই পাই</span>
+                        </h1>
+                    </div>
+                </div>
             </div>
             
             <div class="p-4 flex-1 flex flex-col overflow-hidden">
@@ -71,7 +81,7 @@
             <div class="p-6 md:p-8 flex-1 overflow-y-auto">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-2xl font-bold text-slate-800" id="current-person-name">Person</h2>
-                    <button onclick="deletePerson()" class="text-red-500 hover:text-red-700 text-xs font-medium bg-red-50 px-3 py-1 rounded-full">Delete Person</button>
+                    <button onclick="deletePerson()" class="text-red-500 hover:text-red-700 text-xs font-medium bg-red-50 px-3 py-1 rounded-full border border-red-100 hover:bg-red-100 transition">Delete Person</button>
                 </div>
 
                 <div id="balance-card" class="p-6 rounded-xl mb-8 text-center border shadow-sm bg-white">
@@ -98,11 +108,11 @@
                         </div>
                         
                         <div class="flex gap-4 pt-2">
-                            <button type="button" onclick="processTx('gave')" class="flex-1 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 py-2 rounded-lg transition shadow-sm flex flex-col items-center justify-center">
+                            <button type="button" onclick="processTx('gave')" class="flex-1 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 py-2.5 rounded-lg transition shadow-sm flex flex-col items-center justify-center">
                                 <span class="font-bold">↑ I Gave ৳</span>
                                 <span class="text-[10px] opacity-70 font-medium">Press Enter</span>
                             </button>
-                            <button type="button" onclick="processTx('received')" class="flex-1 bg-green-50 hover:bg-green-100 text-green-700 border border-green-200 py-2 rounded-lg transition shadow-sm flex flex-col items-center justify-center">
+                            <button type="button" onclick="processTx('received')" class="flex-1 bg-green-50 hover:bg-green-100 text-green-700 border border-green-200 py-2.5 rounded-lg transition shadow-sm flex flex-col items-center justify-center">
                                 <span class="font-bold">↓ I Received ৳</span>
                                 <span class="text-[10px] opacity-70 font-medium">Shift + Enter</span>
                             </button>
@@ -126,17 +136,20 @@
         <div id="empty-state" class="flex-1 flex flex-col items-center justify-center text-gray-400 p-12">
             <svg class="w-20 h-20 mb-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
             <h2 class="text-xl font-medium text-gray-500 mb-2">No workspace active</h2>
-            <p>Select or add a person from the sidebar to open their tab.</p>
+            <p class="text-sm">Select or add a person from the sidebar to open their tab.</p>
         </div>
 
     </div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('debtTrackerDB')) || {};
+        // Load data with fallback/migration from debtTrackerDB to paiPaiDB
+        let db = JSON.parse(localStorage.getItem('paiPaiDB')) || JSON.parse(localStorage.getItem('debtTrackerDB')) || {};
         let currentSelectedPerson = null;
         let editingTxId = null;
 
-        function saveDB() { localStorage.setItem('debtTrackerDB', JSON.stringify(db)); }
+        function saveDB() { 
+            localStorage.setItem('paiPaiDB', JSON.stringify(db)); 
+        }
 
         const panelLeft = document.getElementById('panel-left');
         const panelMain = document.getElementById('panel-main');
@@ -340,7 +353,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `debt-tracker-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `paipai-backup-${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             URL.revokeObjectURL(url);
         };
@@ -363,12 +376,12 @@
                         resizerLeft.classList.add('hidden');
                         resizerRight.classList.add('hidden');
                         renderPeopleList();
-                        alert("Backup restored successfully!");
+                        alert("PaiPai backup restored successfully!");
                     } else {
                         throw new Error("Invalid format");
                     }
                 } catch (err) {
-                    alert("Invalid backup file. Please make sure you selected a valid JSON file generated by this app.");
+                    alert("Invalid backup file. Please make sure you selected a valid JSON file generated by PaiPai.");
                 }
             };
             reader.readAsText(file);
