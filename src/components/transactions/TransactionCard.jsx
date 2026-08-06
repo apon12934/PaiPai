@@ -10,43 +10,40 @@ export default function TransactionCard({ transaction, onEdit, onDelete, isEditi
     month: 'short',
     day: 'numeric',
     year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
   });
 
   return (
     <GlassCard 
       variant="subtle" 
-      className={`p-3.5 group relative overflow-hidden transition-all duration-150 ${
-        isEditing ? 'border-indigo-500/50 bg-indigo-500/[0.06]' : 'hover:border-white/15 light:hover:border-slate-300'
+      className={`p-4 group relative overflow-hidden transition-all duration-150 rounded-2xl ${
+        isGave ? 'history-card-gave' : 'history-card-received'
+      } ${
+        isEditing ? 'border-indigo-500 bg-indigo-500/10' : 'hover:border-white/15 light:hover:border-slate-300'
       }`}
     >
-      <div className="flex justify-between items-center mb-1.5">
-        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${
-          isGave 
-            ? 'bg-rose-500/10 text-rose-400 border-rose-500/20 light:bg-rose-50 light:text-rose-700 light:border-rose-200' 
-            : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 light:bg-emerald-50 light:text-emerald-700 light:border-emerald-200'
-        }`}>
-          {isGave ? 'You gave them' : 'They paid you'}
-        </span>
-        <span className="text-[10px] text-slate-400 light:text-slate-500">{formattedDate}</span>
-      </div>
-
-      <div className="my-1">
-        <span className={`text-xl font-bold tracking-tight ${
+      {/* Top Row: Type Pill + Date */}
+      <div className="flex justify-between items-center mb-2">
+        <span className={`text-[10px] font-extrabold tracking-wider uppercase ${
           isGave ? 'text-rose-400 light:text-rose-600' : 'text-emerald-400 light:text-emerald-600'
         }`}>
-          {isGave ? '-' : '+'}{currency}{transaction.amount.toFixed(2)}
+          {isGave ? 'YOU GAVE THEM' : 'THEY PAID YOU'}
+        </span>
+        <span className="text-[10px] text-slate-400 light:text-slate-500 font-medium">{formattedDate}</span>
+      </div>
+
+      {/* Bottom Row: Note Title + Large Amount */}
+      <div className="flex justify-between items-end gap-2 mt-1">
+        <span className="text-xs text-slate-300 light:text-slate-700 font-medium truncate max-w-[140px]">
+          {transaction.note || (isGave ? 'Expense Logged' : 'Payment Received')}
+        </span>
+        <span className={`text-lg font-bold font-mono tracking-tight shrink-0 ${
+          isGave ? 'text-rose-400 light:text-rose-600' : 'text-emerald-400 light:text-emerald-600'
+        }`}>
+          {isGave ? '-' : '+'}{currency} {transaction.amount.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
         </span>
       </div>
 
-      {transaction.note && (
-        <div className="mt-2 text-xs text-slate-300 light:text-slate-700 bg-white/5 light:bg-slate-100 border border-white/5 light:border-slate-200 p-2 rounded-lg">
-          {transaction.note}
-        </div>
-      )}
-
-      {/* Hover action menu */}
+      {/* Hover Action Menu */}
       <div className="absolute top-2.5 right-2.5 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900/90 light:bg-white/90 backdrop-blur-sm p-1 rounded-lg border border-white/10 light:border-slate-200 shadow-md">
         <button
           onClick={onEdit}

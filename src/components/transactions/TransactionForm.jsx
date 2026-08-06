@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import GlassCard from '../ui/GlassCard';
-import { ArrowUpRight, ArrowDownLeft, X } from 'lucide-react';
+import { ArrowUpRight, ArrowDownLeft, X, FileText } from 'lucide-react';
 
 export default function TransactionForm({ onSubmit, editingTx = null, onCancelEdit, currency = '৳' }) {
   const [amount, setAmount] = useState('');
@@ -49,76 +48,68 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
   };
 
   return (
-    <GlassCard className="p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-base font-semibold text-slate-200 light:text-slate-800">
-          {editingTx ? 'Edit Transaction' : 'Log Transaction'}
-        </h3>
-        {editingTx && (
+    <div className="w-full space-y-4 pt-2">
+      {editingTx && (
+        <div className="flex items-center justify-between bg-indigo-500/10 border border-indigo-500/20 px-3 py-1.5 rounded-xl text-xs text-indigo-300">
+          <span>Editing Transaction</span>
           <button
             onClick={onCancelEdit}
-            className="flex items-center gap-1 text-xs text-slate-400 hover:text-slate-200 light:text-slate-500 light:hover:text-slate-900 transition-colors bg-white/5 hover:bg-white/10 px-2.5 py-1 rounded-lg border border-white/10 light:border-slate-200"
+            className="flex items-center gap-1 text-slate-400 hover:text-white"
           >
             <X className="w-3.5 h-3.5" />
             <span>Cancel</span>
           </button>
-        )}
+        </div>
+      )}
+
+      {/* Amount Input with Currency Symbol and Underline Divider (Stitch Style) */}
+      <div className="relative border-b border-white/10 light:border-slate-300 pb-3">
+        <span className="absolute left-2 top-1/2 -translate-y-1/2 text-2xl font-bold text-slate-400">{currency}</span>
+        <input
+          ref={amountInputRef}
+          type="number"
+          step="0.01"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="0.00"
+          className="w-full bg-transparent text-right text-3xl font-extrabold text-white light:text-slate-900 placeholder-slate-600 focus:outline-none pr-2"
+        />
       </div>
 
-      <div className="space-y-4">
-        <div>
-          <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-slate-400 font-bold">{currency}</span>
-            <input
-              ref={amountInputRef}
-              type="number"
-              step="0.01"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="0.00"
-              className="w-full bg-white/5 light:bg-white border border-white/10 light:border-slate-300 rounded-xl py-3.5 pl-12 pr-4 text-3xl font-bold text-slate-100 light:text-slate-900 placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-all"
-            />
-          </div>
-        </div>
-
-        <div>
-          <input
-            type="text"
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Add a note (optional)"
-            className="w-full bg-white/5 light:bg-white border border-white/10 light:border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-200 light:text-slate-800 placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-all"
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-3 pt-1">
-          <button
-            onClick={() => handleSubmit('gave')}
-            disabled={!parseFloat(amount)}
-            className="flex flex-col items-center justify-center p-3 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 light:bg-rose-50 light:hover:bg-rose-100 light:text-rose-700 light:border-rose-200 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 group cursor-pointer"
-          >
-            <div className="flex items-center gap-1.5 font-semibold text-base mb-0.5">
-              <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              <span>I Gave {currency}</span>
-            </div>
-            <span className="text-[10px] text-slate-400 light:text-slate-500 font-mono">Press Enter</span>
-          </button>
-          
-          <button
-            onClick={() => handleSubmit('received')}
-            disabled={!parseFloat(amount)}
-            className="flex flex-col items-center justify-center p-3 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 light:bg-emerald-50 light:hover:bg-emerald-100 light:text-emerald-700 light:border-emerald-200 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 group cursor-pointer"
-          >
-            <div className="flex items-center gap-1.5 font-semibold text-base mb-0.5">
-              <ArrowDownLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5 group-hover:translate-y-0.5" />
-              <span>I Received {currency}</span>
-            </div>
-            <span className="text-[10px] text-slate-400 light:text-slate-500 font-mono">Shift + Enter</span>
-          </button>
-        </div>
+      {/* Note Pill Input Box (Stitch Style) */}
+      <div className="relative flex items-center bg-white/[0.04] light:bg-slate-100 border border-white/10 light:border-slate-200 rounded-xl px-3 py-2.5">
+        <FileText className="w-4 h-4 text-slate-400 shrink-0 mr-2.5" />
+        <input
+          type="text"
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Lunch at Madchef..."
+          className="w-full bg-transparent text-xs text-slate-200 light:text-slate-800 placeholder-slate-500 focus:outline-none"
+        />
       </div>
-    </GlassCard>
+
+      {/* Side by Side Action Buttons (Stitch Style) */}
+      <div className="grid grid-cols-2 gap-3 pt-2">
+        <button
+          onClick={() => handleSubmit('gave')}
+          disabled={!parseFloat(amount)}
+          className="flex flex-col items-center justify-center p-3.5 rounded-2xl bg-rose-500/10 hover:bg-rose-500/20 light:bg-rose-50 light:hover:bg-rose-100 border border-rose-500/20 light:border-rose-200 text-rose-400 light:text-rose-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 group cursor-pointer"
+        >
+          <ArrowUpRight className="w-5 h-5 mb-1 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          <span className="text-xs font-bold">I Gave {currency}</span>
+        </button>
+        
+        <button
+          onClick={() => handleSubmit('received')}
+          disabled={!parseFloat(amount)}
+          className="flex flex-col items-center justify-center p-3.5 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 light:bg-emerald-50 light:hover:bg-emerald-100 border border-emerald-500/20 light:border-emerald-200 text-emerald-400 light:text-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 group cursor-pointer"
+        >
+          <ArrowDownLeft className="w-5 h-5 mb-1 transition-transform group-hover:-translate-x-0.5 group-hover:translate-y-0.5" />
+          <span className="text-xs font-bold">I Received {currency}</span>
+        </button>
+      </div>
+    </div>
   );
 }

@@ -10,7 +10,21 @@ import EmptyState from '@/components/layout/EmptyState';
 import AuthModal from '@/components/auth/AuthModal';
 import SettingsModal from '@/components/settings/SettingsModal';
 import ConfirmationModal from '@/components/ui/ConfirmationModal';
-import { Eye, LogIn, CheckCircle2, AlertCircle } from 'lucide-react';
+import TransactionCard from '@/components/transactions/TransactionCard';
+import TransactionForm from '@/components/transactions/TransactionForm';
+import {
+  Home as HomeIcon,
+  Users,
+  History,
+  Settings as SettingsIcon,
+  Eye,
+  LogIn,
+  CheckCircle2,
+  AlertCircle,
+  ArrowUpRight,
+  ArrowDownLeft,
+  UserPlus,
+} from 'lucide-react';
 
 export default function Home() {
   const { user, loading: authLoading } = useAuth();
@@ -20,8 +34,9 @@ export default function Home() {
   const [editingTxId, setEditingTxId] = useState(null);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
+  const [mobileTab, setMobileTab] = useState('home'); // 'home' | 'people' | 'history' | 'settings'
 
-  // Toast Banner State (Replaces native alert popups)
+  // Toast Banner State
   const [toastMsg, setToastMsg] = useState({ text: '', isError: false });
 
   const showToast = useCallback((text, isError = false) => {
@@ -31,7 +46,7 @@ export default function Home() {
     }, 4000);
   }, []);
 
-  // Confirmation Modal State (Replaces native confirm popups)
+  // Confirmation Modal State
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
     title: '',
@@ -45,14 +60,14 @@ export default function Home() {
     setConfirmModal((prev) => ({ ...prev, isOpen: false }));
   }, []);
 
-  // Automatically prompt auth modal for unauthenticated visitors
+  // Prompt auth modal for unauthenticated visitors
   useEffect(() => {
     if (!authLoading && !user && !isGuestMode) {
       setAuthModalOpen(true);
     }
   }, [authLoading, user, isGuestMode]);
 
-  // Settings state from dbState or default
+  // Settings state from dbState
   const appSettings = dbState._settings || {
     currency: '৳',
     theme: 'dark',
@@ -103,7 +118,7 @@ export default function Home() {
     }
   }, [dbState, selectedPerson]);
 
-  // Compute people list with balances (excluding internal keys like _settings)
+  // Compute people list with balances
   const people = Object.keys(dbState)
     .filter((key) => !key.startsWith('_'))
     .sort()
@@ -124,6 +139,15 @@ export default function Home() {
   const selectedBalance = selectedPerson
     ? people.find((p) => p.name === selectedPerson)?.balance || 0
     : 0;
+
+  // Flatten all transactions for mobile recent activity
+  const allTransactions = [];
+  people.forEach((p) => {
+    (dbState[p.name] || []).forEach((tx) => {
+      allTransactions.push({ ...tx, personName: p.name });
+    });
+  });
+  allTransactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   // Settings update handler
   const handleUpdateSettings = useCallback(
@@ -216,8 +240,9 @@ export default function Home() {
         ];
       }
       saveData(newData);
+      showToast('Transaction logged successfully!');
     },
-    [selectedPerson, editingTxId, dbState, saveData]
+    [selectedPerson, editingTxId, dbState, saveData, showToast]
   );
 
   const handleEditTx = useCallback((id) => {
@@ -326,18 +351,17 @@ export default function Home() {
     };
   }, []);
 
-  // Find editing tx for the form
   const editingTx =
     editingTxId && selectedPerson && dbState[selectedPerson]
       ? dbState[selectedPerson].find((t) => t.id === editingTxId)
       : null;
 
   return (
-    <div className="h-screen w-screen flex flex-col items-center justify-center p-3 relative z-10">
+    <div className="h-screen w-screen flex flex-col items-center justify-center p-0 md:p-3 relative z-10 overflow-hidden">
       {/* Toast Notification Banner */}
       {toastMsg.text && (
         <div
-          className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-2xl border text-xs font-semibold flex items-center gap-2 shadow-2xl backdrop-blur-xl transition-all animate-slide-up ${
+          className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-2xl border text-xs font-semibold flex items-center gap-2 shadow-2xl backdrop-blur-xl transition-all animate-pop-in ${
             toastMsg.isError
               ? 'bg-rose-500/20 border-rose-500/40 text-rose-300 shadow-rose-500/20'
               : 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300 shadow-emerald-500/20'
@@ -354,11 +378,11 @@ export default function Home() {
 
       {/* Guest Mode Warning Banner */}
       {!user && isGuestMode && (
-        <div className="w-full max-w-[1600px] mb-2 px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-center justify-between text-xs text-amber-300 backdrop-blur-md animate-fade-in">
+        <div className="w-full max-w-[1600px] mb-2 px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-center justify-between text-xs text-amber-300 backdrop-blur-md animate-pop-in">
           <div className="flex items-center gap-2">
             <Eye className="w-4 h-4 text-amber-400 shrink-0" />
             <span>
-              <strong>Guest Mode:</strong> You are exploring in preview mode. Data is NOT saved to browser storage.
+              <strong>Guest Mode:</strong> Previewing live app. Data is NOT saved.
             </span>
           </div>
           <button
@@ -366,14 +390,15 @@ export default function Home() {
             className="flex items-center gap-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 font-semibold px-3 py-1 rounded-lg border border-amber-500/30 transition-all"
           >
             <LogIn className="w-3.5 h-3.5" />
-            <span>Sign In to Save Account Data</span>
+            <span>Sign In</span>
           </button>
         </div>
       )}
 
+      {/* DESKTOP VIEW (≥ 768px Width): 3-Panel Split View */}
       <div
         ref={containerRef}
-        className="flex w-full max-w-[1600px] h-full max-h-[92vh] glass-prominent rounded-2xl overflow-hidden"
+        className="hidden md:flex w-full max-w-[1600px] h-full max-h-[92vh] glass-prominent rounded-3xl overflow-hidden"
       >
         {/* Left Sidebar */}
         <div style={{ width: leftWidth, minWidth: 220 }} className="flex-shrink-0">
@@ -394,12 +419,12 @@ export default function Home() {
         {/* Left Resizer */}
         {selectedPerson && (
           <div
-            className="resizer hidden md:block"
+            className="resizer"
             onMouseDown={() => handleMouseDown('left')}
           />
         )}
 
-        {/* Center + Right Panels or Empty State */}
+        {/* Center Workspace or Empty State */}
         {selectedPerson ? (
           <>
             <div className="flex-1 min-w-[300px]">
@@ -416,14 +441,14 @@ export default function Home() {
 
             {/* Right Resizer */}
             <div
-              className="resizer hidden md:block"
+              className="resizer"
               onMouseDown={() => handleMouseDown('right')}
             />
 
             {/* Right History Panel */}
             <div
               style={{ width: rightWidth, minWidth: 250 }}
-              className="flex-shrink-0 hidden md:flex"
+              className="flex-shrink-0"
             >
               <HistoryPanel
                 transactions={dbState[selectedPerson] || []}
@@ -438,6 +463,184 @@ export default function Home() {
         ) : (
           <EmptyState />
         )}
+      </div>
+
+      {/* MOBILE VIEW (< 768px Width): Responsive Stitch Mobile Design */}
+      <div className="flex md:hidden flex-col w-full h-full bg-[#07080D] light:bg-[#F8F9FE] overflow-hidden">
+        {/* Mobile Top Header */}
+        <div className="p-4 flex items-center justify-between border-b border-white/5 light:border-slate-200 shrink-0">
+          <div className="flex items-center gap-2">
+            {user?.photoURL ? (
+              <img
+                src={user.photoURL}
+                alt="Avatar"
+                onClick={() => setSettingsModalOpen(true)}
+                className="w-8 h-8 rounded-full object-cover border border-indigo-500 cursor-pointer"
+              />
+            ) : (
+              <div
+                onClick={() => setSettingsModalOpen(true)}
+                className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-xs cursor-pointer shadow-md shadow-indigo-600/30"
+              >
+                {(user?.displayName || user?.email || 'P').charAt(0).toUpperCase()}
+              </div>
+            )}
+            <h1 className="text-lg font-bold text-slate-100 light:text-slate-900 tracking-tight">PaiPai</h1>
+          </div>
+          <button
+            onClick={() => setSettingsModalOpen(true)}
+            className="p-2 text-slate-400 hover:text-slate-200 bg-white/5 light:bg-slate-100 rounded-xl"
+          >
+            <SettingsIcon className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Mobile Body Content Stack */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-6">
+          {/* Total Net Position Card */}
+          <div className="p-6 rounded-3xl bg-white/[0.03] light:bg-white border border-white/5 light:border-slate-200 shadow-xl text-center space-y-2">
+            <span className="text-[10px] font-extrabold text-indigo-400 uppercase tracking-widest block">
+              Total Net Position
+            </span>
+            <div className={`text-4xl font-black font-mono tracking-tight ${
+              grandTotal > 0 ? 'text-emerald-400 light:text-emerald-600' : grandTotal < 0 ? 'text-rose-400 light:text-rose-600' : 'text-slate-200 light:text-slate-800'
+            }`}>
+              {grandTotal > 0 ? '+' : grandTotal < 0 ? '-' : ''}{currency} {Math.abs(grandTotal).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+            </div>
+          </div>
+
+          {/* Active Contacts Horizontal Carousel (Stitch Mobile View) */}
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-xs font-bold text-slate-400 light:text-slate-500 uppercase tracking-wider">
+                Active Contacts
+              </h2>
+              {selectedPerson && (
+                <button
+                  onClick={() => setSelectedPerson(null)}
+                  className="text-[11px] font-semibold text-indigo-400 hover:underline"
+                >
+                  View All
+                </button>
+              )}
+            </div>
+            <div className="flex gap-3 overflow-x-auto pb-2">
+              {people.map((p) => {
+                const initial = (p.name || 'P').charAt(0).toUpperCase();
+                const isSel = selectedPerson === p.name;
+                return (
+                  <div
+                    key={p.name}
+                    onClick={() => setSelectedPerson(p.name)}
+                    className={`flex flex-col items-center p-3.5 rounded-2xl border min-w-[110px] transition-all cursor-pointer ${
+                      isSel
+                        ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-600/30 scale-105'
+                        : 'bg-white/[0.03] light:bg-white border-white/5 light:border-slate-200 text-slate-300 light:text-slate-800'
+                    }`}
+                  >
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm mb-2 ${
+                      isSel ? 'bg-white text-indigo-600' : 'bg-white/10 light:bg-slate-200 text-slate-300 light:text-slate-700'
+                    }`}>
+                      {initial}
+                    </div>
+                    <span className="text-xs font-bold truncate max-w-[90px]">{p.name}</span>
+                    <span className={`text-[10px] font-mono font-bold mt-0.5 ${
+                      p.balance > 0 ? (isSel ? 'text-emerald-200' : 'text-emerald-400') : p.balance < 0 ? (isSel ? 'text-rose-200' : 'text-rose-400') : 'text-slate-400'
+                    }`}>
+                      {p.balance > 0 ? '+' : p.balance < 0 ? '-' : ''}{currency}{Math.abs(p.balance)}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Selected Contact Logger Form (Stitch Mobile View) */}
+          {selectedPerson ? (
+            <div className="p-5 rounded-3xl glass-card space-y-4">
+              <div className="flex items-center justify-between pb-2 border-b border-white/10 light:border-slate-200">
+                <h3 className="text-sm font-bold text-white light:text-slate-900">
+                  Log for <span className="text-indigo-400">{selectedPerson}</span>
+                </h3>
+                <button
+                  onClick={handleDeletePerson}
+                  className="text-xs font-semibold text-rose-400 hover:underline"
+                >
+                  Delete Contact
+                </button>
+              </div>
+              <TransactionForm
+                onSubmit={handleSubmitTx}
+                editingTx={editingTx}
+                onCancelEdit={handleCancelEdit}
+                currency={currency}
+              />
+            </div>
+          ) : (
+            <div className="p-6 rounded-3xl bg-white/[0.02] light:bg-slate-100 text-center space-y-2">
+              <p className="text-xs text-slate-400">Select a contact above to log transactions or view history.</p>
+            </div>
+          )}
+
+          {/* Recent Activity List (Stitch Mobile View) */}
+          <div className="space-y-3 pt-2">
+            <h2 className="text-xs font-bold text-slate-400 light:text-slate-500 uppercase tracking-wider">
+              Recent Activity
+            </h2>
+            {allTransactions.length === 0 ? (
+              <p className="text-xs text-slate-500 italic py-4">No recent activity.</p>
+            ) : (
+              allTransactions.slice(0, 8).map((tx) => (
+                <div
+                  key={tx.id}
+                  className="p-3.5 rounded-2xl bg-white/[0.03] light:bg-white border border-white/5 light:border-slate-200 flex items-center justify-between shadow-sm"
+                >
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-200 light:text-slate-800">
+                      {tx.note || (tx.type === 'gave' ? 'Gave money' : 'Received money')}
+                    </h4>
+                    <span className="text-[10px] text-slate-500">
+                      with <strong className="text-slate-400">{tx.personName}</strong>
+                    </span>
+                  </div>
+                  <span className={`text-sm font-bold font-mono ${
+                    tx.type === 'gave' ? 'text-rose-400' : 'text-emerald-400'
+                  }`}>
+                    {tx.type === 'gave' ? '-' : '+'}{currency} {tx.amount.toLocaleString()}
+                  </span>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* Mobile Bottom Navigation Bar (Stitch Design) */}
+        <div className="p-2 bg-[#0A0B12] light:bg-white border-t border-white/10 light:border-slate-200 flex items-center justify-around shrink-0">
+          {[
+            { id: 'home', label: 'Home', icon: HomeIcon },
+            { id: 'people', label: 'People', icon: Users },
+            { id: 'history', label: 'History', icon: History },
+            { id: 'settings', label: 'Settings', icon: SettingsIcon },
+          ].map((tab) => {
+            const Icon = tab.icon;
+            const isAct = mobileTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => {
+                  setMobileTab(tab.id);
+                  if (tab.id === 'settings') setSettingsModalOpen(true);
+                }}
+                className={`flex flex-col items-center gap-1 px-4 py-2 rounded-2xl transition-all ${
+                  isAct ? 'bg-indigo-600/20 text-indigo-400 font-bold' : 'text-slate-500 hover:text-slate-300'
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+                <span className="text-[10px]">{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Auth Modal */}
