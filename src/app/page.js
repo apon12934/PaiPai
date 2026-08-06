@@ -9,7 +9,8 @@ import HistoryPanel from '@/components/layout/HistoryPanel';
 import EmptyState from '@/components/layout/EmptyState';
 import AuthModal from '@/components/auth/AuthModal';
 import SettingsModal from '@/components/settings/SettingsModal';
-import { Eye, LogIn } from 'lucide-react';
+import ConfirmationModal from '@/components/ui/ConfirmationModal';
+import { Eye, LogIn, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function Home() {
   const { user, loading: authLoading } = useAuth();
@@ -19,6 +20,30 @@ export default function Home() {
   const [editingTxId, setEditingTxId] = useState(null);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
+
+  // Toast Banner State (Replaces native alert popups)
+  const [toastMsg, setToastMsg] = useState({ text: '', isError: false });
+
+  const showToast = useCallback((text, isError = false) => {
+    setToastMsg({ text, isError });
+    setTimeout(() => {
+      setToastMsg({ text: '', isError: false });
+    }, 4000);
+  }, []);
+
+  // Confirmation Modal State (Replaces native confirm popups)
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    confirmText: 'Confirm',
+    variant: 'danger',
+    onConfirm: () => {},
+  });
+
+  const closeConfirmModal = useCallback(() => {
+    setConfirmModal((prev) => ({ ...prev, isOpen: false }));
+  }, []);
 
   // Automatically prompt auth modal for unauthenticated visitors
   useEffect(() => {
@@ -86,14 +111,21 @@ export default function Home() {
 
   // Clear all application data
   const handleClearAllData = useCallback(() => {
-    if (confirm('ARE YOU SURE? This will permanently delete ALL people and transactions!')) {
-      saveData({});
-      setSelectedPerson(null);
-      setEditingTxId(null);
-      setSettingsModalOpen(false);
-      alert('All data has been reset.');
-    }
-  }, [saveData]);
+    setConfirmModal({
+      isOpen: true,
+      title: 'Reset All Application Data?',
+      message: 'PERMANENT: This will delete ALL people and transaction history from your account. This action cannot be undone!',
+      confirmText: 'Yes, Reset All Data',
+      variant: 'danger',
+      onConfirm: () => {
+        saveData({});
+        setSelectedPerson(null);
+        setEditingTxId(null);
+        setSettingsModalOpen(false);
+        showToast('All application data has been reset.');
+      },
+    });
+  }, [saveData, showToast]);
 
   // Transaction handlers
   const handleAddPerson = useCallback(
@@ -108,14 +140,23 @@ export default function Home() {
   );
 
   const handleDeletePerson = useCallback(() => {
-    if (selectedPerson && confirm(`Delete ${selectedPerson} and all their history?`)) {
-      const newData = { ...dbState };
-      delete newData[selectedPerson];
-      saveData(newData);
-      setSelectedPerson(null);
-      setEditingTxId(null);
-    }
-  }, [selectedPerson, dbState, saveData]);
+    if (!selectedPerson) return;
+    setConfirmModal({
+      isOpen: true,
+      title: `Delete ${selectedPerson}?`,
+      message: `Are you sure you want to delete ${selectedPerson} and all their transaction history?`,
+      confirmText: 'Delete Person',
+      variant: 'danger',
+      onConfirm: () => {
+        const newData = { ...dbState };
+        delete newData[selectedPerson];
+        saveData(newData);
+        setSelectedPerson(null);
+        setEditingTxId(null);
+        showToast(`${selectedPerson} was deleted.`);
+      },
+    });
+  }, [selectedPerson, dbState, saveData, showToast]);
 
   const handleSubmitTx = useCallback(
     (type, amount, note) => {
@@ -158,13 +199,23 @@ export default function Home() {
 
   const handleDeleteTx = useCallback(
     (id) => {
-      if (!selectedPerson || !confirm('Delete this transaction?')) return;
-      const newData = { ...dbState };
-      newData[selectedPerson] = newData[selectedPerson].filter((tx) => tx.id !== id);
-      saveData(newData);
-      if (editingTxId === id) setEditingTxId(null);
+      if (!selectedPerson) return;
+      setConfirmModal({
+        isOpen: true,
+        title: 'Delete Transaction?',
+        message: 'Are you sure you want to remove this transaction record?',
+        confirmText: 'Delete Transaction',
+        variant: 'danger',
+        onConfirm: () => {
+          const newData = { ...dbState };
+          newData[selectedPerson] = newData[selectedPerson].filter((tx) => tx.id !== id);
+          saveData(newData);
+          if (editingTxId === id) setEditingTxId(null);
+          showToast('Transaction deleted.');
+        },
+      });
     },
-    [selectedPerson, dbState, saveData, editingTxId]
+    [selectedPerson, dbState, saveData, editingTxId, showToast]
   );
 
   const handleCancelEdit = useCallback(() => {
@@ -174,7 +225,7 @@ export default function Home() {
   // Export / Import
   const handleExport = useCallback(() => {
     if (people.length === 0) {
-      alert("You don't have any data to export yet!");
+      showToast("No data available to export yet!", true);
       return;
     }
     const blob = new Blob([JSON.stringify(dbState, null, 2)], { type: 'application/json' });
@@ -184,7 +235,8 @@ export default function Home() {
     a.download = `paipai-backup-${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
-  }, [dbState, people.length]);
+    showToast("JSON backup downloaded successfully!");
+  }, [dbState, people.length, showToast]);
 
   const handleImport = useCallback(
     (event) => {
@@ -198,18 +250,18 @@ export default function Home() {
             saveData(imported);
             setSelectedPerson(null);
             setEditingTxId(null);
-            alert('PaiPai backup restored successfully!');
+            showToast('PaiPai backup restored successfully!');
           } else {
             throw new Error('Invalid format');
           }
         } catch {
-          alert('Invalid backup file.');
+          showToast('Invalid backup JSON file.', true);
         }
       };
       reader.readAsText(file);
       event.target.value = '';
     },
-    [saveData]
+    [saveData, showToast]
   );
 
   // Resizer logic
@@ -255,6 +307,24 @@ export default function Home() {
 
   return (
     <div className="h-screen w-screen flex flex-col items-center justify-center p-3 relative z-10">
+      {/* Toast Notification Banner */}
+      {toastMsg.text && (
+        <div
+          className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-2xl border text-xs font-semibold flex items-center gap-2 shadow-2xl backdrop-blur-xl transition-all animate-slide-up ${
+            toastMsg.isError
+              ? 'bg-rose-500/20 border-rose-500/40 text-rose-300 shadow-rose-500/20'
+              : 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300 shadow-emerald-500/20'
+          }`}
+        >
+          {toastMsg.isError ? (
+            <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
+          ) : (
+            <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
+          )}
+          <span>{toastMsg.text}</span>
+        </div>
+      )}
+
       {/* Guest Mode Warning Banner */}
       {!user && isGuestMode && (
         <div className="w-full max-w-[1600px] mb-2 px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-center justify-between text-xs text-amber-300 backdrop-blur-md animate-fade-in">
@@ -355,6 +425,17 @@ export default function Home() {
         onExport={handleExport}
         onImport={handleImport}
         onClearAllData={handleClearAllData}
+      />
+
+      {/* Global Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={confirmModal.isOpen}
+        onClose={closeConfirmModal}
+        onConfirm={confirmModal.onConfirm}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        confirmText={confirmModal.confirmText}
+        variant={confirmModal.variant}
       />
     </div>
   );

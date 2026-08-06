@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Modal from '../ui/Modal';
+import ConfirmationModal from '../ui/ConfirmationModal';
 import { useAuth } from '@/hooks/useAuth';
 import { uploadImageToCloudinary } from '@/lib/cloudinary';
 import {
@@ -85,6 +86,9 @@ export default function SettingsModal({
   const [securityMsg, setSecurityMsg] = useState({ text: '', isError: false });
   const [linkEmailInput, setLinkEmailInput] = useState('');
   const [linkPassInput, setLinkPassInput] = useState('');
+
+  // Confirmation Modal State for Delete Account
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
 
   // Extract original Google profile photo if available
   const googleProviderData = user?.providerData?.find((p) => p.providerId === 'google.com');
@@ -182,21 +186,14 @@ export default function SettingsModal({
     }
   };
 
-  // Handle Account Deletion
-  const handleDeleteAccount = async () => {
-    if (
-      confirm(
-        'DANGER: Are you sure you want to PERMANENTLY delete your account and all your expense history? This cannot be undone!'
-      )
-    ) {
-      setSecurityMsg({ text: '', isError: false });
-      const res = await deleteUserAccount(currentPassword);
-      if (res.success) {
-        onClose();
-        alert('Your user account and database records have been permanently deleted.');
-      } else {
-        setSecurityMsg({ text: res.error || 'Failed to delete account.', isError: true });
-      }
+  // Execute Account Deletion
+  const executeDeleteAccount = async () => {
+    setSecurityMsg({ text: '', isError: false });
+    const res = await deleteUserAccount(currentPassword);
+    if (res.success) {
+      onClose();
+    } else {
+      setSecurityMsg({ text: res.error || 'Failed to delete account.', isError: true });
     }
   };
 
@@ -231,486 +228,500 @@ export default function SettingsModal({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="App Settings">
-      {/* Settings Navigation Tabs */}
-      <div className="flex border-b border-white/10 mb-6 gap-1 overflow-x-auto pb-1">
-        {[
-          { id: 'general', label: 'General', icon: Settings },
-          { id: 'profile', label: 'Profile', icon: User },
-          { id: 'security', label: 'Security', icon: ShieldCheck },
-          { id: 'data', label: 'Data', icon: Database },
-        ].map((tab) => {
-          const Icon = tab.icon;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
-                activeTab === tab.id
-                  ? 'bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 shadow-md shadow-indigo-600/10'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
-              }`}
-            >
-              <Icon className="w-3.5 h-3.5" />
-              <span>{tab.label}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* TAB 1: GENERAL PREFERENCES */}
-      {activeTab === 'general' && (
-        <div className="space-y-6">
-          {/* Currency Selector */}
-          <div>
-            <label className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2.5">
-              <Coins className="w-3.5 h-3.5 text-indigo-400" />
-              <span>Currency Symbol</span>
-            </label>
-            <div className="grid grid-cols-2 gap-2">
-              {CURRENCIES.map((c) => (
-                <button
-                  key={c.code}
-                  onClick={() => handleCurrencyChange(c.symbol)}
-                  className={`flex items-center justify-between p-2.5 rounded-xl border text-xs font-medium transition-all ${
-                    currency === c.symbol
-                      ? 'bg-indigo-600/20 border-indigo-500 text-white shadow-lg shadow-indigo-500/10'
-                      : 'bg-white/[0.02] border-white/10 text-slate-300 hover:bg-white/5'
-                  }`}
-                >
-                  <span className="truncate">{c.name}</span>
-                  <span className="font-bold text-sm ml-2 text-indigo-300">{c.symbol}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Theme Selector */}
-          <div>
-            <label className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2.5">
-              <Moon className="w-3.5 h-3.5 text-indigo-400" />
-              <span>App Theme</span>
-            </label>
-            <div className="grid grid-cols-2 gap-3">
+    <>
+      <Modal isOpen={isOpen} onClose={onClose} title="App Settings">
+        {/* Settings Navigation Tabs */}
+        <div className="flex border-b border-white/10 mb-6 gap-1 overflow-x-auto pb-1">
+          {[
+            { id: 'general', label: 'General', icon: Settings },
+            { id: 'profile', label: 'Profile', icon: User },
+            { id: 'security', label: 'Security', icon: ShieldCheck },
+            { id: 'data', label: 'Data', icon: Database },
+          ].map((tab) => {
+            const Icon = tab.icon;
+            return (
               <button
-                onClick={() => handleThemeChange('dark')}
-                className={`p-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
-                  theme === 'dark'
-                    ? 'bg-indigo-600/20 border-indigo-500 text-white shadow-md'
-                    : 'bg-white/[0.02] border-white/10 text-slate-400 hover:text-slate-200'
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                  activeTab === tab.id
+                    ? 'bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 shadow-md shadow-indigo-600/10'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
                 }`}
               >
-                <Moon className="w-4 h-4 text-indigo-400" />
-                <span>Dark Glass (Default)</span>
+                <Icon className="w-3.5 h-3.5" />
+                <span>{tab.label}</span>
               </button>
-              <button
-                onClick={() => handleThemeChange('light')}
-                className={`p-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
-                  theme === 'light'
-                    ? 'bg-indigo-600/20 border-indigo-500 text-white shadow-md'
-                    : 'bg-white/[0.02] border-white/10 text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                <Sun className="w-4 h-4 text-amber-400" />
-                <span>Light Theme</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Transaction Sort Order */}
-          <div>
-            <label className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2.5">
-              <ArrowUpDown className="w-3.5 h-3.5 text-indigo-400" />
-              <span>History Sort Order</span>
-            </label>
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                onClick={() => handleSortChange('newest')}
-                className={`p-2.5 rounded-xl border text-xs font-medium transition-all ${
-                  sortOrder === 'newest'
-                    ? 'bg-indigo-600/20 border-indigo-500 text-white'
-                    : 'bg-white/[0.02] border-white/10 text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                Newest First
-              </button>
-              <button
-                onClick={() => handleSortChange('oldest')}
-                className={`p-2.5 rounded-xl border text-xs font-medium transition-all ${
-                  sortOrder === 'oldest'
-                    ? 'bg-indigo-600/20 border-indigo-500 text-white'
-                    : 'bg-white/[0.02] border-white/10 text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                Oldest First
-              </button>
-            </div>
-          </div>
+            );
+          })}
         </div>
-      )}
 
-      {/* TAB 2: PROFILE & AVATAR */}
-      {activeTab === 'profile' && (
-        <div>
-          {user ? (
-            <form onSubmit={handleSaveProfile} className="space-y-5">
-              {profileMsg.text && (
-                <div
-                  className={`text-xs p-3 rounded-xl border flex items-center gap-2 ${
-                    profileMsg.isError
-                      ? 'bg-rose-500/10 border-rose-500/20 text-rose-400'
-                      : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+        {/* TAB 1: GENERAL PREFERENCES */}
+        {activeTab === 'general' && (
+          <div className="space-y-6">
+            {/* Currency Selector */}
+            <div>
+              <label className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2.5">
+                <Coins className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Currency Symbol</span>
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                {CURRENCIES.map((c) => (
+                  <button
+                    key={c.code}
+                    onClick={() => handleCurrencyChange(c.symbol)}
+                    className={`flex items-center justify-between p-2.5 rounded-xl border text-xs font-medium transition-all ${
+                      currency === c.symbol
+                        ? 'bg-indigo-600/20 border-indigo-500 text-white shadow-lg shadow-indigo-500/10'
+                        : 'bg-white/[0.02] border-white/10 text-slate-300 hover:bg-white/5'
+                    }`}
+                  >
+                    <span className="truncate">{c.name}</span>
+                    <span className="font-bold text-sm ml-2 text-indigo-300">{c.symbol}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Theme Selector */}
+            <div>
+              <label className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2.5">
+                <Moon className="w-3.5 h-3.5 text-indigo-400" />
+                <span>App Theme</span>
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => handleThemeChange('dark')}
+                  className={`p-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
+                    theme === 'dark'
+                      ? 'bg-indigo-600/20 border-indigo-500 text-white shadow-md'
+                      : 'bg-white/[0.02] border-white/10 text-slate-400 hover:text-slate-200'
                   }`}
                 >
-                  {profileMsg.isError ? (
-                    <AlertCircle className="w-4 h-4 shrink-0" />
-                  ) : (
-                    <CheckCircle2 className="w-4 h-4 shrink-0" />
-                  )}
-                  <span>{profileMsg.text}</span>
-                </div>
-              )}
+                  <Moon className="w-4 h-4 text-indigo-400" />
+                  <span>Dark Glass (Default)</span>
+                </button>
+                <button
+                  onClick={() => handleThemeChange('light')}
+                  className={`p-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
+                    theme === 'light'
+                      ? 'bg-indigo-600/20 border-indigo-500 text-white shadow-md'
+                      : 'bg-white/[0.02] border-white/10 text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  <Sun className="w-4 h-4 text-amber-400" />
+                  <span>Light Theme</span>
+                </button>
+              </div>
+            </div>
 
-              {/* Current Preview */}
-              <div className="flex items-center gap-4 p-3 bg-white/[0.02] border border-white/10 rounded-2xl">
-                {photoURL ? (
-                  <img
-                    src={photoURL}
-                    alt="Profile Avatar"
-                    className="w-14 h-14 rounded-full object-cover border-2 border-indigo-500 shadow-lg shadow-indigo-500/20"
-                  />
-                ) : (
-                  <div className="w-14 h-14 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-600/30">
-                    {(displayName || user.email || 'U').charAt(0).toUpperCase()}
+            {/* Transaction Sort Order */}
+            <div>
+              <label className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2.5">
+                <ArrowUpDown className="w-3.5 h-3.5 text-indigo-400" />
+                <span>History Sort Order</span>
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => handleSortChange('newest')}
+                  className={`p-2.5 rounded-xl border text-xs font-medium transition-all ${
+                    sortOrder === 'newest'
+                      ? 'bg-indigo-600/20 border-indigo-500 text-white'
+                      : 'bg-white/[0.02] border-white/10 text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  Newest First
+                </button>
+                <button
+                  onClick={() => handleSortChange('oldest')}
+                  className={`p-2.5 rounded-xl border text-xs font-medium transition-all ${
+                    sortOrder === 'oldest'
+                      ? 'bg-indigo-600/20 border-indigo-500 text-white'
+                      : 'bg-white/[0.02] border-white/10 text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  Oldest First
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 2: PROFILE & AVATAR */}
+        {activeTab === 'profile' && (
+          <div>
+            {user ? (
+              <form onSubmit={handleSaveProfile} className="space-y-5">
+                {profileMsg.text && (
+                  <div
+                    className={`text-xs p-3 rounded-xl border flex items-center gap-2 ${
+                      profileMsg.isError
+                        ? 'bg-rose-500/10 border-rose-500/20 text-rose-400'
+                        : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+                    }`}
+                  >
+                    {profileMsg.isError ? (
+                      <AlertCircle className="w-4 h-4 shrink-0" />
+                    ) : (
+                      <CheckCircle2 className="w-4 h-4 shrink-0" />
+                    )}
+                    <span>{profileMsg.text}</span>
                   </div>
                 )}
-                <div>
-                  <h4 className="text-sm font-bold text-white">{displayName || 'User'}</h4>
-                  <p className="text-xs text-slate-400">{user.email}</p>
-                </div>
-              </div>
 
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
-                  Display Name
-                </label>
-                <input
-                  type="text"
-                  value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
-                  placeholder="Your Name"
-                  className="w-full px-3 py-2.5 rounded-xl text-sm"
-                />
-              </div>
-
-              {/* Cloudinary PC Photo Upload */}
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-                  Upload Photo from PC (Cloudinary)
-                </label>
-                <label className="flex items-center justify-center gap-2 w-full p-3 border border-dashed border-indigo-500/40 hover:border-indigo-500 bg-indigo-500/5 hover:bg-indigo-500/10 rounded-xl cursor-pointer transition-all">
-                  {isUploadingPhoto ? (
-                    <Loader2 className="w-4 h-4 text-indigo-400 animate-spin" />
-                  ) : (
-                    <UploadCloud className="w-4 h-4 text-indigo-400" />
-                  )}
-                  <span className="text-xs font-semibold text-indigo-300">
-                    {isUploadingPhoto ? 'Uploading to Cloudinary...' : 'Choose Image File from PC'}
-                  </span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handlePhotoUpload}
-                    disabled={isUploadingPhoto}
-                    className="hidden"
-                  />
-                </label>
-              </div>
-
-              {/* Reset to Google Photo button */}
-              {googlePhotoURL && (
-                <button
-                  type="button"
-                  onClick={handleResetToGooglePhoto}
-                  className="flex items-center justify-center gap-2 w-full bg-white/[0.03] hover:bg-white/[0.07] text-slate-300 text-xs py-2.5 rounded-xl border border-white/10 transition font-medium"
-                >
-                  <RotateCcw className="w-3.5 h-3.5 text-indigo-400" />
-                  <span>Reset to Google Account Profile Picture</span>
-                </button>
-              )}
-
-              {/* Preset Avatars */}
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-                  Or Select Preset Avatar
-                </label>
-                <div className="flex items-center gap-3 mb-3">
-                  {PRESET_AVATARS.map((url, idx) => (
+                {/* Current Preview */}
+                <div className="flex items-center gap-4 p-3 bg-white/[0.02] border border-white/10 rounded-2xl">
+                  {photoURL ? (
                     <img
-                      key={idx}
-                      src={url}
-                      alt="Preset Avatar"
-                      onClick={() => {
-                        setPhotoURL(url);
-                        setCustomPhotoInput('');
-                      }}
-                      className={`w-10 h-10 rounded-full object-cover cursor-pointer border-2 transition-all ${
-                        photoURL === url
-                          ? 'border-indigo-500 scale-110 shadow-lg shadow-indigo-500/30'
-                          : 'border-transparent opacity-60 hover:opacity-100'
-                      }`}
+                      src={photoURL}
+                      alt="Profile Avatar"
+                      className="w-14 h-14 rounded-full object-cover border-2 border-indigo-500 shadow-lg shadow-indigo-500/20"
                     />
-                  ))}
-                </div>
-                <input
-                  type="url"
-                  value={customPhotoInput}
-                  onChange={(e) => {
-                    setCustomPhotoInput(e.target.value);
-                    setPhotoURL(e.target.value);
-                  }}
-                  placeholder="Or paste custom image URL..."
-                  className="w-full px-3 py-2 rounded-xl text-xs"
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={isUploadingPhoto}
-                className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 rounded-xl text-xs transition shadow-lg shadow-indigo-600/20 disabled:opacity-50"
-              >
-                Save Profile Changes
-              </button>
-            </form>
-          ) : (
-            <div className="text-center py-6 text-slate-400 text-xs">
-              Please log in to customize your profile.
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* TAB 3: SECURITY & LINKING */}
-      {activeTab === 'security' && (
-        <div className="space-y-6">
-          {user ? (
-            <>
-              {securityMsg.text && (
-                <div
-                  className={`text-xs p-3 rounded-xl border flex items-center gap-2 ${
-                    securityMsg.isError
-                      ? 'bg-rose-500/10 border-rose-500/20 text-rose-400'
-                      : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-                  }`}
-                >
-                  {securityMsg.isError ? (
-                    <AlertCircle className="w-4 h-4 shrink-0" />
                   ) : (
-                    <CheckCircle2 className="w-4 h-4 shrink-0" />
+                    <div className="w-14 h-14 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-600/30">
+                      {(displayName || user.email || 'U').charAt(0).toUpperCase()}
+                    </div>
                   )}
-                  <span>{securityMsg.text}</span>
-                </div>
-              )}
-
-              {/* Linked Accounts */}
-              <div className="space-y-3">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">
-                  Linked Login Accounts
-                </label>
-
-                {/* Google Provider Status */}
-                <div className="flex items-center justify-between p-3 border border-white/10 rounded-xl bg-white/[0.02]">
-                  <div className="flex items-center gap-2.5">
-                    <svg className="w-4 h-4" viewBox="0 0 24 24">
-                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                    </svg>
-                    <span className="text-xs font-semibold text-slate-200">Google Account</span>
-                    <span
-                      className={`text-[10px] px-2 py-0.5 rounded-full ${
-                        hasGoogle
-                          ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                          : 'bg-slate-700/50 text-slate-400'
-                      }`}
-                    >
-                      {hasGoogle ? 'Linked ✓' : 'Not Linked'}
-                    </span>
+                  <div>
+                    <h4 className="text-sm font-bold text-white">{displayName || 'User'}</h4>
+                    <p className="text-xs text-slate-400">{user.email}</p>
                   </div>
-                  {!hasGoogle && (
-                    <button
-                      onClick={handleLinkGoogle}
-                      className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1 rounded-lg transition font-medium"
-                    >
-                      Link Google
-                    </button>
-                  )}
                 </div>
 
-                {/* Email Provider Status */}
-                <div className="p-3 border border-white/10 rounded-xl bg-white/[0.02] space-y-3">
-                  <div className="flex items-center justify-between">
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
+                    Display Name
+                  </label>
+                  <input
+                    type="text"
+                    value={displayName}
+                    onChange={(e) => setDisplayName(e.target.value)}
+                    placeholder="Your Name"
+                    className="w-full px-3 py-2.5 rounded-xl text-sm"
+                  />
+                </div>
+
+                {/* Cloudinary PC Photo Upload */}
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                    Upload Photo from PC (Cloudinary)
+                  </label>
+                  <label className="flex items-center justify-center gap-2 w-full p-3 border border-dashed border-indigo-500/40 hover:border-indigo-500 bg-indigo-500/5 hover:bg-indigo-500/10 rounded-xl cursor-pointer transition-all">
+                    {isUploadingPhoto ? (
+                      <Loader2 className="w-4 h-4 text-indigo-400 animate-spin" />
+                    ) : (
+                      <UploadCloud className="w-4 h-4 text-indigo-400" />
+                    )}
+                    <span className="text-xs font-semibold text-indigo-300">
+                      {isUploadingPhoto ? 'Uploading to Cloudinary...' : 'Choose Image File from PC'}
+                    </span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handlePhotoUpload}
+                      disabled={isUploadingPhoto}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+
+                {/* Reset to Google Photo button */}
+                {googlePhotoURL && (
+                  <button
+                    type="button"
+                    onClick={handleResetToGooglePhoto}
+                    className="flex items-center justify-center gap-2 w-full bg-white/[0.03] hover:bg-white/[0.07] text-slate-300 text-xs py-2.5 rounded-xl border border-white/10 transition font-medium"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5 text-indigo-400" />
+                    <span>Reset to Google Account Profile Picture</span>
+                  </button>
+                )}
+
+                {/* Preset Avatars */}
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                    Or Select Preset Avatar
+                  </label>
+                  <div className="flex items-center gap-3 mb-3">
+                    {PRESET_AVATARS.map((url, idx) => (
+                      <img
+                        key={idx}
+                        src={url}
+                        alt="Preset Avatar"
+                        onClick={() => {
+                          setPhotoURL(url);
+                          setCustomPhotoInput('');
+                        }}
+                        className={`w-10 h-10 rounded-full object-cover cursor-pointer border-2 transition-all ${
+                          photoURL === url
+                            ? 'border-indigo-500 scale-110 shadow-lg shadow-indigo-500/30'
+                            : 'border-transparent opacity-60 hover:opacity-100'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <input
+                    type="url"
+                    value={customPhotoInput}
+                    onChange={(e) => {
+                      setCustomPhotoInput(e.target.value);
+                      setPhotoURL(e.target.value);
+                    }}
+                    placeholder="Or paste custom image URL..."
+                    className="w-full px-3 py-2 rounded-xl text-xs"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isUploadingPhoto}
+                  className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 rounded-xl text-xs transition shadow-lg shadow-indigo-600/20 disabled:opacity-50"
+                >
+                  Save Profile Changes
+                </button>
+              </form>
+            ) : (
+              <div className="text-center py-6 text-slate-400 text-xs">
+                Please log in to customize your profile.
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* TAB 3: SECURITY & LINKING */}
+        {activeTab === 'security' && (
+          <div className="space-y-6">
+            {user ? (
+              <>
+                {securityMsg.text && (
+                  <div
+                    className={`text-xs p-3 rounded-xl border flex items-center gap-2 ${
+                      securityMsg.isError
+                        ? 'bg-rose-500/10 border-rose-500/20 text-rose-400'
+                        : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+                    }`}
+                  >
+                    {securityMsg.isError ? (
+                      <AlertCircle className="w-4 h-4 shrink-0" />
+                    ) : (
+                      <CheckCircle2 className="w-4 h-4 shrink-0" />
+                    )}
+                    <span>{securityMsg.text}</span>
+                  </div>
+                )}
+
+                {/* Linked Accounts */}
+                <div className="space-y-3">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">
+                    Linked Login Accounts
+                  </label>
+
+                  {/* Google Provider Status */}
+                  <div className="flex items-center justify-between p-3 border border-white/10 rounded-xl bg-white/[0.02]">
                     <div className="flex items-center gap-2.5">
-                      <Mail className="w-4 h-4 text-indigo-400" />
-                      <span className="text-xs font-semibold text-slate-200">Password Login</span>
+                      <svg className="w-4 h-4" viewBox="0 0 24 24">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                      </svg>
+                      <span className="text-xs font-semibold text-slate-200">Google Account</span>
                       <span
                         className={`text-[10px] px-2 py-0.5 rounded-full ${
-                          hasEmail
+                          hasGoogle
                             ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
                             : 'bg-slate-700/50 text-slate-400'
                         }`}
                       >
-                        {hasEmail ? 'Linked ✓' : 'Not Linked'}
+                        {hasGoogle ? 'Linked ✓' : 'Not Linked'}
                       </span>
                     </div>
+                    {!hasGoogle && (
+                      <button
+                        onClick={handleLinkGoogle}
+                        className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1 rounded-lg transition font-medium"
+                      >
+                        Link Google
+                      </button>
+                    )}
                   </div>
 
-                  {!hasEmail && (
-                    <form onSubmit={handleLinkEmail} className="space-y-2.5 pt-2.5 border-t border-white/5">
-                      <p className="text-[11px] text-slate-400">
-                        Attach a password to your account (<span className="text-indigo-300 font-semibold">{user?.email}</span>) to log in with password too:
-                      </p>
-                      <input
-                        type="email"
-                        value={linkEmailInput}
-                        onChange={(e) => setLinkEmailInput(e.target.value)}
-                        required
-                        readOnly={!!user?.email}
-                        placeholder="Email address"
-                        className={`w-full px-3 py-2 rounded-lg text-xs ${
-                          user?.email ? 'opacity-70 bg-white/5 cursor-not-allowed' : ''
-                        }`}
-                      />
-                      <input
-                        type="password"
-                        value={linkPassInput}
-                        onChange={(e) => setLinkPassInput(e.target.value)}
-                        required
-                        minlength="6"
-                        placeholder="Set Password (min 6 chars)"
-                        className="w-full px-3 py-2 rounded-lg text-xs"
-                      />
-                      <button
-                        type="submit"
-                        className="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs py-2 rounded-lg font-semibold transition shadow-md shadow-indigo-600/20"
-                      >
-                        Attach Password Login
-                      </button>
-                    </form>
-                  )}
-                </div>
-              </div>
+                  {/* Email Provider Status */}
+                  <div className="p-3 border border-white/10 rounded-xl bg-white/[0.02] space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2.5">
+                        <Mail className="w-4 h-4 text-indigo-400" />
+                        <span className="text-xs font-semibold text-slate-200">Password Login</span>
+                        <span
+                          className={`text-[10px] px-2 py-0.5 rounded-full ${
+                            hasEmail
+                              ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                              : 'bg-slate-700/50 text-slate-400'
+                          }`}
+                        >
+                          {hasEmail ? 'Linked ✓' : 'Not Linked'}
+                        </span>
+                      </div>
+                    </div>
 
-              {/* Change Password Form */}
-              {hasEmail && (
-                <form onSubmit={handleSavePassword} className="space-y-3 pt-4 border-t border-white/5">
-                  <label className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400">
-                    <Key className="w-3.5 h-3.5 text-indigo-400" />
-                    <span>Change Password</span>
-                  </label>
-                  
-                  <input
-                    type="password"
-                    value={currentPassword}
-                    onChange={(e) => setCurrentPassword(e.target.value)}
-                    required
-                    placeholder="Current Password"
-                    className="w-full px-3 py-2 rounded-xl text-xs"
-                  />
-                  <input
-                    type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    required
-                    minlength="6"
-                    placeholder="New Password (min 6 chars)"
-                    className="w-full px-3 py-2 rounded-xl text-xs"
-                  />
-                  <button
-                    type="submit"
-                    className="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs py-2 rounded-xl font-semibold transition shadow-md shadow-indigo-600/20"
-                  >
-                    Update Password
-                  </button>
-                </form>
-              )}
-
-              {/* Delete Account Danger Box */}
-              <div className="pt-4 border-t border-white/5">
-                <div className="p-4 border border-rose-500/30 rounded-xl bg-rose-500/5 space-y-2">
-                  <h4 className="flex items-center gap-2 text-xs font-semibold text-rose-400 uppercase">
-                    <UserX className="w-4 h-4" />
-                    <span>Delete User Account</span>
-                  </h4>
-                  <p className="text-xs text-slate-400">
-                    Permanently delete your account credentials and wipe all your data from the database.
-                  </p>
-                  <button
-                    onClick={handleDeleteAccount}
-                    className="w-full bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-xs py-2 rounded-lg font-semibold transition border border-rose-500/30 flex items-center justify-center gap-2"
-                  >
-                    <UserX className="w-3.5 h-3.5" />
-                    <span>Permanently Delete My Account</span>
-                  </button>
+                    {!hasEmail && (
+                      <form onSubmit={handleLinkEmail} className="space-y-2.5 pt-2.5 border-t border-white/5">
+                        <p className="text-[11px] text-slate-400">
+                          Attach a password to your account (<span className="text-indigo-300 font-semibold">{user?.email}</span>) to log in with password too:
+                        </p>
+                        <input
+                          type="email"
+                          value={linkEmailInput}
+                          onChange={(e) => setLinkEmailInput(e.target.value)}
+                          required
+                          readOnly={!!user?.email}
+                          placeholder="Email address"
+                          className={`w-full px-3 py-2 rounded-lg text-xs ${
+                            user?.email ? 'opacity-70 bg-white/5 cursor-not-allowed' : ''
+                          }`}
+                        />
+                        <input
+                          type="password"
+                          value={linkPassInput}
+                          onChange={(e) => setLinkPassInput(e.target.value)}
+                          required
+                          minlength="6"
+                          placeholder="Set Password (min 6 chars)"
+                          className="w-full px-3 py-2 rounded-lg text-xs"
+                        />
+                        <button
+                          type="submit"
+                          className="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs py-2 rounded-lg font-semibold transition shadow-md shadow-indigo-600/20"
+                        >
+                          Attach Password Login
+                        </button>
+                      </form>
+                    )}
+                  </div>
                 </div>
+
+                {/* Change Password Form */}
+                {hasEmail && (
+                  <form onSubmit={handleSavePassword} className="space-y-3 pt-4 border-t border-white/5">
+                    <label className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400">
+                      <Key className="w-3.5 h-3.5 text-indigo-400" />
+                      <span>Change Password</span>
+                    </label>
+                    
+                    <input
+                      type="password"
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      required
+                      placeholder="Current Password"
+                      className="w-full px-3 py-2 rounded-xl text-xs"
+                    />
+                    <input
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      required
+                      minlength="6"
+                      placeholder="New Password (min 6 chars)"
+                      className="w-full px-3 py-2 rounded-xl text-xs"
+                    />
+                    <button
+                      type="submit"
+                      className="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs py-2 rounded-xl font-semibold transition shadow-md shadow-indigo-600/20"
+                    >
+                      Update Password
+                    </button>
+                  </form>
+                )}
+
+                {/* Delete Account Danger Box */}
+                <div className="pt-4 border-t border-white/5">
+                  <div className="p-4 border border-rose-500/30 rounded-xl bg-rose-500/5 space-y-2">
+                    <h4 className="flex items-center gap-2 text-xs font-semibold text-rose-400 uppercase">
+                      <UserX className="w-4 h-4" />
+                      <span>Delete User Account</span>
+                    </h4>
+                    <p className="text-xs text-slate-400">
+                      Permanently delete your account credentials and wipe all your data from the database.
+                    </p>
+                    <button
+                      onClick={() => setDeleteConfirmOpen(true)}
+                      className="w-full bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-xs py-2 rounded-lg font-semibold transition border border-rose-500/30 flex items-center justify-center gap-2"
+                    >
+                      <UserX className="w-3.5 h-3.5" />
+                      <span>Permanently Delete My Account</span>
+                    </button>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-6 text-slate-400 text-xs">
+                Please log in to manage security & linked accounts.
               </div>
-            </>
-          ) : (
-            <div className="text-center py-6 text-slate-400 text-xs">
-              Please log in to manage security & linked accounts.
+            )}
+          </div>
+        )}
+
+        {/* TAB 4: DATA & BACKUP */}
+        {activeTab === 'data' && (
+          <div className="space-y-5">
+            <div className="p-4 border border-white/10 rounded-xl bg-white/[0.02]">
+              <h4 className="flex items-center gap-2 text-xs font-semibold text-slate-200 uppercase mb-1">
+                <Download className="w-4 h-4 text-indigo-400" />
+                <span>Export Backup</span>
+              </h4>
+              <p className="text-xs text-slate-400 mb-3">Download a full JSON backup of all your transactions and people records.</p>
+              <button
+                onClick={onExport}
+                className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs py-2 rounded-lg font-medium transition border border-white/10 flex items-center justify-center gap-2"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Export JSON Backup</span>
+              </button>
             </div>
-          )}
-        </div>
-      )}
 
-      {/* TAB 4: DATA & BACKUP */}
-      {activeTab === 'data' && (
-        <div className="space-y-5">
-          <div className="p-4 border border-white/10 rounded-xl bg-white/[0.02]">
-            <h4 className="flex items-center gap-2 text-xs font-semibold text-slate-200 uppercase mb-1">
-              <Download className="w-4 h-4 text-indigo-400" />
-              <span>Export Backup</span>
-            </h4>
-            <p className="text-xs text-slate-400 mb-3">Download a full JSON backup of all your transactions and people records.</p>
-            <button
-              onClick={onExport}
-              className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs py-2 rounded-lg font-medium transition border border-white/10 flex items-center justify-center gap-2"
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span>Export JSON Backup</span>
-            </button>
-          </div>
+            <div className="p-4 border border-white/10 rounded-xl bg-white/[0.02]">
+              <h4 className="flex items-center gap-2 text-xs font-semibold text-slate-200 uppercase mb-1">
+                <Upload className="w-4 h-4 text-indigo-400" />
+                <span>Import Backup</span>
+              </h4>
+              <p className="text-xs text-slate-400 mb-3">Restore your data from a previously exported PaiPai JSON file.</p>
+              <label className="flex items-center justify-center gap-2 w-full text-center bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs py-2 rounded-lg font-medium transition cursor-pointer border border-white/10">
+                <Upload className="w-3.5 h-3.5" />
+                <span>Select JSON File to Restore</span>
+                <input type="file" className="hidden" accept=".json" onChange={onImport} />
+              </label>
+            </div>
 
-          <div className="p-4 border border-white/10 rounded-xl bg-white/[0.02]">
-            <h4 className="flex items-center gap-2 text-xs font-semibold text-slate-200 uppercase mb-1">
-              <Upload className="w-4 h-4 text-indigo-400" />
-              <span>Import Backup</span>
-            </h4>
-            <p className="text-xs text-slate-400 mb-3">Restore your data from a previously exported PaiPai JSON file.</p>
-            <label className="flex items-center justify-center gap-2 w-full text-center bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs py-2 rounded-lg font-medium transition cursor-pointer border border-white/10">
-              <Upload className="w-3.5 h-3.5" />
-              <span>Select JSON File to Restore</span>
-              <input type="file" className="hidden" accept=".json" onChange={onImport} />
-            </label>
+            <div className="p-4 border border-rose-500/20 rounded-xl bg-rose-500/5">
+              <h4 className="flex items-center gap-2 text-xs font-semibold text-rose-400 uppercase mb-1">
+                <Trash2 className="w-4 h-4" />
+                <span>Danger Zone</span>
+              </h4>
+              <p className="text-xs text-slate-400 mb-3">Permanently delete all people and transaction history.</p>
+              <button
+                onClick={onClearAllData}
+                className="w-full bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-xs py-2 rounded-lg font-medium transition border border-rose-500/20 flex items-center justify-center gap-2"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Reset All Application Data</span>
+              </button>
+            </div>
           </div>
+        )}
+      </Modal>
 
-          <div className="p-4 border border-rose-500/20 rounded-xl bg-rose-500/5">
-            <h4 className="flex items-center gap-2 text-xs font-semibold text-rose-400 uppercase mb-1">
-              <Trash2 className="w-4 h-4" />
-              <span>Danger Zone</span>
-            </h4>
-            <p className="text-xs text-slate-400 mb-3">Permanently delete all people and transaction history.</p>
-            <button
-              onClick={onClearAllData}
-              className="w-full bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-xs py-2 rounded-lg font-medium transition border border-rose-500/20 flex items-center justify-center gap-2"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-              <span>Reset All Application Data</span>
-            </button>
-          </div>
-        </div>
-      )}
-    </Modal>
+      {/* Custom Confirmation Modal for Delete Account */}
+      <ConfirmationModal
+        isOpen={deleteConfirmOpen}
+        onClose={() => setDeleteConfirmOpen(false)}
+        onConfirm={executeDeleteAccount}
+        title="Delete Account Permanently?"
+        message="DANGER: Are you sure you want to permanently delete your user account and wipe all your transaction records? This action cannot be undone."
+        confirmText="Yes, Delete Account"
+        cancelText="Keep Account"
+        variant="danger"
+      />
+    </>
   );
 }
