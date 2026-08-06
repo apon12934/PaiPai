@@ -1,95 +1,105 @@
-// Database Sync Module (Firestore Cloud Sync & Local Storage Fallback)
+// Database Sync Module (Firestore Cloud Sync - Isolated per User Account)
 import { db } from './firebase';
 import { doc, onSnapshot, setDoc, getDoc } from 'firebase/firestore';
 
-const LOCAL_STORAGE_KEY = 'paiPaiDB';
-const LEGACY_STORAGE_KEY = 'debtTrackerDB';
+const LOCAL_STORAGE_KEY_PREFIX = 'paiPaiDB_';
 
-// Load local database from localStorage
-export function loadLocalData() {
-  if (typeof window === 'undefined') return {};
-  const data =
-    JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) ||
-    JSON.parse(localStorage.getItem(LEGACY_STORAGE_KEY)) ||
-    {};
-  return data;
+// Load user-scoped local data
+export function loadLocalData(userId) {
+  if (typeof window === 'undefined' || !userId) return {};
+  try {
+    const data = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_PREFIX + userId)) || {};
+    return data;
+  } catch {
+    return {};
+  }
 }
 
-// Save to local storage
-export function saveLocalData(data) {
+// Save user-scoped local data
+export function saveLocalData(userId, data) {
+  if (typeof window === 'undefined' || !userId) return;
+  try {
+    localStorage.setItem(LOCAL_STORAGE_KEY_PREFIX + userId, JSON.stringify(data));
+  } catch (e) {
+    console.warn('Failed to save to localStorage:', e);
+  }
+}
+
+// Clear all legacy and cached local storage on logout
+export function clearAllLocalCache() {
   if (typeof window === 'undefined') return;
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+  try {
+    localStorage.removeItem('paiPaiDB');
+    localStorage.removeItem('debtTrackerDB');
+    Object.keys(localStorage).forEach((key) => {
+      if (key.startsWith('paiPaiDB')) {
+        localStorage.removeItem(key);
+      }
+    });
+  } catch (e) {
+    console.warn('Failed to clear cache:', e);
+  }
 }
 
 // Setup Firestore Real-time Listener for logged-in user
 export function setupCloudSync(user, onData, onError) {
-  if (!user) return null;
+  if (!user || !user.uid) return null;
 
   const userDocRef = doc(db, 'users', user.uid);
 
-  // Auto-migrate local data on first login
-  getDoc(userDocRef)
-    .then((docSnap) => {
-      if (!docSnap.exists()) {
-        const localData = loadLocalData();
-        if (localData && Object.keys(localData).length > 0) {
-          console.log('Migrating local PaiPai data to Cloud Firestore...');
-          setDoc(userDocRef, {
-            trackerData: localData,
-            lastUpdated: new Date().toISOString(),
-          });
-        }
-      }
-    })
-    .catch((err) => {
-      console.warn('Cloud migration check warning:', err);
-    });
-
-  // Real-time Firestore Listener
+  // Real-time Firestore Listener strictly scoped to user.uid
   const unsubscribe = onSnapshot(
     userDocRef,
     (docSnap) => {
       if (docSnap.exists()) {
         const cloudData = docSnap.data().trackerData || {};
-        // Keep local storage in sync as offline backup
-        saveLocalData(cloudData);
+        // Cache locally ONLY for this specific user.uid
+        saveLocalData(user.uid, cloudData);
         onData(cloudData);
       } else {
-        // Document doesn't exist yet — initialize with current local data
-        const localData = loadLocalData();
-        saveCloudData(user, localData);
-        onData(localData);
+        // First time login for this account — initialize empty document
+        const initialData = {};
+        setDoc(
+          userDocRef,
+          {
+            trackerData: initialData,
+            lastUpdated: new Date().toISOString(),
+          },
+          { merge: true }
+        ).catch((err) => console.warn('Init user doc warning:', err));
+        saveLocalData(user.uid, initialData);
+        onData(initialData);
       }
     },
     (error) => {
       console.error('Firestore sync error:', error);
       if (onError) onError(error);
-      // Fallback to local
-      onData(loadLocalData());
+      // Fallback to user-scoped local cache
+      onData(loadLocalData(user.uid));
     }
   );
 
   return unsubscribe;
 }
 
-// Save data to Firestore (and local as immediate cache)
+// Save data strictly to current user's Firestore document
 export async function saveCloudData(user, data) {
-  // Always update local storage immediately
-  saveLocalData(data);
+  if (!user || !user.uid) return;
 
-  if (user) {
-    try {
-      const userDocRef = doc(db, 'users', user.uid);
-      await setDoc(
-        userDocRef,
-        {
-          trackerData: data,
-          lastUpdated: new Date().toISOString(),
-        },
-        { merge: true }
-      );
-    } catch (error) {
-      console.error('Failed to save to Firestore:', error);
-    }
+  // Cache locally only for this user
+  saveLocalData(user.uid, data);
+
+  try {
+    const userDocRef = doc(db, 'users', user.uid);
+    await setDoc(
+      userDocRef,
+      {
+        trackerData: data,
+        lastUpdated: new Date().toISOString(),
+      },
+      { merge: true }
+    );
+  } catch (error) {
+    console.error('Failed to save to Firestore:', error);
   }
 }
