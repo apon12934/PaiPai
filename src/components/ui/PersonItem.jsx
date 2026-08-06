@@ -12,32 +12,30 @@ export default function PersonItem({ name, balance = 0, isSelected, onClick, cur
     maximumFractionDigits: 2,
   });
 
-  let balanceColor = 'text-slate-500 dark:text-slate-400';
+  let balanceColor = 'text-slate-400 light:text-slate-500';
   let balancePrefix = '';
   
   if (isPositive) {
-    balanceColor = isSelected ? 'text-emerald-200' : 'text-emerald-600 dark:text-emerald-400';
+    balanceColor = 'text-emerald-400 light:text-emerald-600';
     balancePrefix = '+';
   } else if (isNegative) {
-    balanceColor = isSelected ? 'text-rose-200' : 'text-rose-600 dark:text-rose-400';
+    balanceColor = 'text-rose-400 light:text-rose-600';
     balancePrefix = '-';
-  } else if (isSelected) {
-    balanceColor = 'text-indigo-200';
   }
 
-  const baseClasses = 'w-full flex items-center justify-between rounded-xl p-3 text-sm transition-all duration-200 cursor-pointer';
-  const selectedClasses = 'bg-indigo-600 border border-indigo-500 text-white font-bold shadow-md shadow-indigo-600/20';
-  const defaultClasses = 'bg-transparent border border-transparent hover:bg-slate-200/70 dark:hover:bg-white/5 text-slate-800 dark:text-slate-200 font-medium';
+  const baseClasses = 'w-full flex items-center justify-between rounded-xl px-3 py-2.5 text-sm transition-all duration-150 cursor-pointer border';
+  const selectedClasses = 'bg-indigo-600/15 border-indigo-500/30 text-white light:bg-indigo-50 light:border-indigo-200 light:text-indigo-950 font-semibold shadow-sm';
+  const defaultClasses = 'bg-transparent border-transparent hover:bg-white/5 light:hover:bg-slate-100 text-slate-300 light:text-slate-700 font-medium';
 
   return (
     <div 
       onClick={onClick}
       className={`${baseClasses} ${isSelected ? selectedClasses : defaultClasses}`}
     >
-      <div className="truncate pr-4 font-semibold">
+      <div className="truncate pr-4 font-medium">
         {name}
       </div>
-      <div className={`whitespace-nowrap font-extrabold ${balanceColor}`}>
+      <div className={`whitespace-nowrap text-xs font-semibold ${balanceColor}`}>
         {isZero ? 'Settled' : `${balancePrefix}${currency}${displayBalance}`}
       </div>
     </div>

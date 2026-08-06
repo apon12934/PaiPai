@@ -14,25 +14,25 @@ export default function MainPanel({
 }) {
   return (
     <div className="h-full overflow-y-auto bg-transparent">
-      <div className="max-w-3xl mx-auto p-6 md:p-8 space-y-8">
+      <div className="max-w-3xl mx-auto p-6 md:p-8 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between animate-fade-in">
-          <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">{person}</h2>
+          <h2 className="text-2xl font-bold text-slate-100 light:text-slate-900 tracking-tight">{person}</h2>
           <button
             onClick={onDelete}
-            className="px-3.5 py-1.5 bg-rose-500/15 text-rose-700 dark:text-rose-300 text-xs font-bold rounded-xl hover:bg-rose-500/25 transition-all duration-200 border border-rose-500/30 shadow-sm"
+            className="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 light:bg-rose-50 light:text-rose-700 text-xs font-medium rounded-xl transition-all border border-rose-500/20 light:border-rose-200"
           >
             Delete Person
           </button>
         </div>
 
-        {/* Balance */}
-        <div className="animate-slide-up">
+        {/* Balance Card */}
+        <div className="animate-fade-in">
           <BalanceCard amount={balance} size="lg" currency={currency} />
         </div>
 
         {/* Transaction Form */}
-        <div className="animate-slide-up" style={{ animationDelay: '50ms' }}>
+        <div className="animate-fade-in">
           <TransactionForm
             onSubmit={onSubmitTx}
             editingTx={editingTx}
