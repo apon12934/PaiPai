@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { useAuth } from './useAuth';
-import { setupCloudSync, loadLocalData, saveLocalData, saveCloudData } from '@/lib/db';
+import { setupCloudSync, saveCloudData } from '@/lib/db';
 
 const DatabaseContext = createContext(null);
 
@@ -10,12 +10,14 @@ export function DatabaseProvider({ children }) {
   const { user, loading: authLoading } = useAuth();
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
+  const [isGuestMode, setIsGuestMode] = useState(false);
 
   useEffect(() => {
     if (authLoading) return;
 
     if (user) {
-      // Cloud sync mode
+      // Logged In: Real-time Cloud Sync with Firestore
+      setIsGuestMode(false);
       const unsubscribe = setupCloudSync(
         user,
         (cloudData) => {
@@ -23,8 +25,7 @@ export function DatabaseProvider({ children }) {
           setLoading(false);
         },
         (error) => {
-          console.warn('Cloud sync error, using local:', error);
-          setData(loadLocalData());
+          console.warn('Cloud sync error:', error);
           setLoading(false);
         }
       );
@@ -32,8 +33,8 @@ export function DatabaseProvider({ children }) {
         if (unsubscribe) unsubscribe();
       };
     } else {
-      // Local-only mode
-      setData(loadLocalData());
+      // Logged Out / Guest Mode: In-memory temporary state (NOT saved to browser)
+      setData({});
       setLoading(false);
     }
   }, [user, authLoading]);
@@ -42,15 +43,31 @@ export function DatabaseProvider({ children }) {
     (newData) => {
       setData(newData);
       if (user) {
+        // Only save persistent data to Firebase Cloud Account
         saveCloudData(user, newData);
-      } else {
-        saveLocalData(newData);
       }
+      // If logged out / guest mode, data remains strictly in-memory (never written to localStorage)
     },
     [user]
   );
 
-  const value = { data, saveData, loading };
+  const enableGuestMode = useCallback(() => {
+    setIsGuestMode(true);
+    // Initialize sample guest demo data
+    setData({
+      "Sample Alex": [
+        {
+          id: "demo-1",
+          date: new Date().toISOString(),
+          amount: 500,
+          type: "gave",
+          note: "Lunch tab"
+        }
+      ]
+    });
+  }, []);
+
+  const value = { data, saveData, loading, isGuestMode, enableGuestMode };
 
   return <DatabaseContext.Provider value={value}>{children}</DatabaseContext.Provider>;
 }

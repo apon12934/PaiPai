@@ -9,15 +9,23 @@ import HistoryPanel from '@/components/layout/HistoryPanel';
 import EmptyState from '@/components/layout/EmptyState';
 import AuthModal from '@/components/auth/AuthModal';
 import SettingsModal from '@/components/settings/SettingsModal';
+import { Eye, LogIn } from 'lucide-react';
 
 export default function Home() {
-  const { user } = useAuth();
-  const { data: dbState, saveData } = useDatabase();
+  const { user, loading: authLoading } = useAuth();
+  const { data: dbState, saveData, isGuestMode } = useDatabase();
 
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [editingTxId, setEditingTxId] = useState(null);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
+
+  // Automatically prompt auth modal for unauthenticated visitors
+  useEffect(() => {
+    if (!authLoading && !user && !isGuestMode) {
+      setAuthModalOpen(true);
+    }
+  }, [authLoading, user, isGuestMode]);
 
   // Settings state from dbState or default
   const appSettings = dbState._settings || {
@@ -246,7 +254,26 @@ export default function Home() {
       : null;
 
   return (
-    <div className="h-screen w-screen flex items-center justify-center p-3 relative z-10">
+    <div className="h-screen w-screen flex flex-col items-center justify-center p-3 relative z-10">
+      {/* Guest Mode Warning Banner */}
+      {!user && isGuestMode && (
+        <div className="w-full max-w-[1600px] mb-2 px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-center justify-between text-xs text-amber-300 backdrop-blur-md animate-fade-in">
+          <div className="flex items-center gap-2">
+            <Eye className="w-4 h-4 text-amber-400 shrink-0" />
+            <span>
+              <strong>Guest Mode:</strong> You are exploring in preview mode. Data is NOT saved to browser storage.
+            </span>
+          </div>
+          <button
+            onClick={() => setAuthModalOpen(true)}
+            className="flex items-center gap-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 font-semibold px-3 py-1 rounded-lg border border-amber-500/30 transition-all"
+          >
+            <LogIn className="w-3.5 h-3.5" />
+            <span>Sign In to Save Account Data</span>
+          </button>
+        </div>
+      )}
+
       <div
         ref={containerRef}
         className="flex w-full max-w-[1600px] h-full max-h-[92vh] glass-prominent rounded-2xl overflow-hidden"

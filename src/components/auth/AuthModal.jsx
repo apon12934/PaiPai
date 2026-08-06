@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import Modal from '../ui/Modal';
 import Button from '../ui/Button';
 import { useAuth } from '@/hooks/useAuth';
+import { useDatabase } from '@/hooks/useDatabase';
+import { Eye } from 'lucide-react';
 
 export default function AuthModal({ isOpen, onClose }) {
   const [isLogin, setIsLogin] = useState(true);
@@ -12,6 +14,7 @@ export default function AuthModal({ isOpen, onClose }) {
   const [error, setError] = useState(null);
   
   const { loginWithGoogle, signUpWithEmail, loginWithEmail, loading } = useAuth();
+  const { enableGuestMode } = useDatabase();
 
   const handleGoogle = async () => {
     setError(null);
@@ -41,12 +44,17 @@ export default function AuthModal({ isOpen, onClose }) {
     }
   };
 
+  const handleExploreGuest = () => {
+    enableGuestMode();
+    onClose();
+  };
+
   return (
     <Modal 
       isOpen={isOpen} 
       onClose={onClose}
       title={isLogin ? 'Welcome Back' : 'Create an Account'}
-      subtitle={isLogin ? 'Log in to continue managing your expenses' : 'Sign up to get started'}
+      subtitle={isLogin ? 'Log in to save & sync your expenses to your account' : 'Sign up to get started'}
     >
       <div className="flex flex-col gap-4">
         <Button 
@@ -64,13 +72,13 @@ export default function AuthModal({ isOpen, onClose }) {
           Continue with Google
         </Button>
 
-        <div className="relative flex items-center py-2">
+        <div className="relative flex items-center py-1">
           <div className="flex-grow border-t border-white/10"></div>
-          <span className="flex-shrink-0 mx-4 text-slate-500 text-sm">Or email</span>
+          <span className="flex-shrink-0 mx-4 text-slate-500 text-xs">Or email</span>
           <div className="flex-grow border-t border-white/10"></div>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div>
             <input 
               type="email" 
@@ -103,13 +111,22 @@ export default function AuthModal({ isOpen, onClose }) {
           </Button>
         </form>
 
-        <div className="mt-4 text-center">
+        <div className="mt-2 text-center flex flex-col gap-3 border-t border-white/5 pt-3">
           <button 
             type="button" 
             onClick={() => { setIsLogin(!isLogin); setError(null); }}
-            className="text-slate-400 hover:text-indigo-400 text-sm transition-colors"
+            className="text-slate-400 hover:text-indigo-400 text-xs transition-colors"
           >
             {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Log In"}
+          </button>
+
+          <button
+            type="button"
+            onClick={handleExploreGuest}
+            className="flex items-center justify-center gap-1.5 text-xs text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 py-2 px-3 rounded-xl border border-white/10 transition-all"
+          >
+            <Eye className="w-3.5 h-3.5 text-amber-400" />
+            <span>Explore as Guest (No saving)</span>
           </button>
         </div>
       </div>
