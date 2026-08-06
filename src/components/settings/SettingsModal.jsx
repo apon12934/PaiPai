@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Modal from '../ui/Modal';
 import { useAuth } from '@/hooks/useAuth';
+import { uploadImageToCloudinary } from '@/lib/cloudinary';
 import {
   Settings,
   User,
@@ -14,6 +15,8 @@ import {
   Key,
   Download,
   Upload,
+  UploadCloud,
+  Loader2,
   Trash2,
   CheckCircle2,
   AlertCircle,
@@ -70,6 +73,7 @@ export default function SettingsModal({
   const [displayName, setDisplayName] = useState('');
   const [photoURL, setPhotoURL] = useState('');
   const [customPhotoInput, setCustomPhotoInput] = useState('');
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
   const [profileMsg, setProfileMsg] = useState({ text: '', isError: false });
 
   // Security State
@@ -109,6 +113,26 @@ export default function SettingsModal({
   const handleSortChange = (so) => {
     setSortOrder(so);
     onUpdateSettings({ ...settings, sortOrder: so });
+  };
+
+  // Upload photo from PC to Cloudinary
+  const handlePhotoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setIsUploadingPhoto(true);
+    setProfileMsg({ text: '', isError: false });
+
+    try {
+      const cloudinaryUrl = await uploadImageToCloudinary(file);
+      setPhotoURL(cloudinaryUrl);
+      setCustomPhotoInput('');
+      setProfileMsg({ text: 'Image uploaded to Cloudinary! Click Save Profile Changes.', isError: false });
+    } catch (err) {
+      setProfileMsg({ text: err.message || 'Failed to upload photo to Cloudinary.', isError: true });
+    } finally {
+      setIsUploadingPhoto(false);
+    }
   };
 
   // Handle Profile Update
@@ -313,6 +337,25 @@ export default function SettingsModal({
                 </div>
               )}
 
+              {/* Current Preview */}
+              <div className="flex items-center gap-4 p-3 bg-white/[0.02] border border-white/10 rounded-2xl">
+                {photoURL ? (
+                  <img
+                    src={photoURL}
+                    alt="Profile Avatar"
+                    className="w-14 h-14 rounded-full object-cover border-2 border-indigo-500 shadow-lg shadow-indigo-500/20"
+                  />
+                ) : (
+                  <div className="w-14 h-14 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-600/30">
+                    {(displayName || user.email || 'U').charAt(0).toUpperCase()}
+                  </div>
+                )}
+                <div>
+                  <h4 className="text-sm font-bold text-white">{displayName || 'User'}</h4>
+                  <p className="text-xs text-slate-400">{user.email}</p>
+                </div>
+              </div>
+
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
                   Display Name
@@ -326,10 +369,34 @@ export default function SettingsModal({
                 />
               </div>
 
-              {/* Avatar Selector */}
+              {/* Cloudinary PC Photo Upload */}
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-                  Choose Profile Picture
+                  Upload Photo from PC (Cloudinary)
+                </label>
+                <label className="flex items-center justify-center gap-2 w-full p-3 border border-dashed border-indigo-500/40 hover:border-indigo-500 bg-indigo-500/5 hover:bg-indigo-500/10 rounded-xl cursor-pointer transition-all">
+                  {isUploadingPhoto ? (
+                    <Loader2 className="w-4 h-4 text-indigo-400 animate-spin" />
+                  ) : (
+                    <UploadCloud className="w-4 h-4 text-indigo-400" />
+                  )}
+                  <span className="text-xs font-semibold text-indigo-300">
+                    {isUploadingPhoto ? 'Uploading to Cloudinary...' : 'Choose Image File from PC'}
+                  </span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handlePhotoUpload}
+                    disabled={isUploadingPhoto}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+
+              {/* Preset Avatars */}
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                  Or Select Preset Avatar
                 </label>
                 <div className="flex items-center gap-3 mb-3">
                   {PRESET_AVATARS.map((url, idx) => (
@@ -363,7 +430,8 @@ export default function SettingsModal({
 
               <button
                 type="submit"
-                className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 rounded-xl text-xs transition shadow-lg shadow-indigo-600/20"
+                disabled={isUploadingPhoto}
+                className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 rounded-xl text-xs transition shadow-lg shadow-indigo-600/20 disabled:opacity-50"
               >
                 Save Profile Changes
               </button>
