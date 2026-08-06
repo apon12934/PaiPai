@@ -58,8 +58,8 @@ export function AuthProvider({ children }) {
     return result;
   };
 
-  const updateUserPassword = async (newPassword) => {
-    return await _updateUserPassword(newPassword);
+  const updateUserPassword = async (currentPassword, newPassword) => {
+    return await _updateUserPassword(currentPassword, newPassword);
   };
 
   const getLinkedProviders = () => {

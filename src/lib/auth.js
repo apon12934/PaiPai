@@ -9,6 +9,7 @@ import {
   signInWithEmailAndPassword,
   linkWithPopup,
   linkWithCredential,
+  reauthenticateWithCredential,
   EmailAuthProvider,
   updateProfile,
   updatePassword,
@@ -17,7 +18,6 @@ import {
 
 // Observe Auth State & Handle Redirect Result
 export function observeAuthState(callback) {
-  // Check for pending redirect result first
   getRedirectResult(auth)
     .then((result) => {
       if (result?.user) {
@@ -31,13 +31,12 @@ export function observeAuthState(callback) {
   return onAuthStateChanged(auth, callback);
 }
 
-// Sign In with Google (Popup with automatic Redirect fallback)
+// Sign In with Google
 export async function loginWithGoogle() {
   try {
     const result = await signInWithPopup(auth, googleProvider);
     return { success: true, user: result.user };
   } catch (error) {
-    // Fallback to redirect if popup is blocked or closed unexpectedly
     if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
       try {
         await signInWithRedirect(auth, googleProvider);
@@ -107,10 +106,14 @@ export async function updateUserProfile(displayName, photoURL) {
   }
 }
 
-// Update User Password
-export async function updateUserPassword(newPassword) {
+// Update User Password with Current Password Re-authentication
+export async function updateUserPassword(currentPassword, newPassword) {
   if (!auth.currentUser) return { success: false, error: 'No user logged in.' };
   try {
+    if (currentPassword) {
+      const credential = EmailAuthProvider.credential(auth.currentUser.email, currentPassword);
+      await reauthenticateWithCredential(auth.currentUser, credential);
+    }
     await updatePassword(auth.currentUser, newPassword);
     return { success: true };
   } catch (error) {
@@ -146,8 +149,8 @@ function friendlyError(error) {
     'auth/invalid-email': 'Please enter a valid email address.',
     'auth/weak-password': 'Password must be at least 6 characters.',
     'auth/user-not-found': 'No account found with this email.',
-    'auth/wrong-password': 'Incorrect password. Please try again.',
-    'auth/invalid-credential': 'Incorrect email or password. Please try again.',
+    'auth/wrong-password': 'Current password is incorrect.',
+    'auth/invalid-credential': 'Current password is incorrect.',
     'auth/too-many-requests': 'Too many attempts. Please wait a moment.',
     'auth/popup-closed-by-user': 'Sign-in popup closed. Please try again.',
     'auth/provider-already-linked': 'This provider is already linked to your account.',

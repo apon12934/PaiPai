@@ -16,6 +16,7 @@ import {
   Upload,
   Trash2,
   CheckCircle2,
+  AlertCircle,
   ArrowUpDown,
   Coins,
 } from 'lucide-react';
@@ -72,6 +73,7 @@ export default function SettingsModal({
   const [profileMsg, setProfileMsg] = useState({ text: '', isError: false });
 
   // Security State
+  const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [securityMsg, setSecurityMsg] = useState({ text: '', isError: false });
   const [linkEmailInput, setLinkEmailInput] = useState('');
@@ -127,15 +129,16 @@ export default function SettingsModal({
     e.preventDefault();
     setSecurityMsg({ text: '', isError: false });
     if (newPassword.length < 6) {
-      setSecurityMsg({ text: 'Password must be at least 6 characters.', isError: true });
+      setSecurityMsg({ text: 'New password must be at least 6 characters.', isError: true });
       return;
     }
-    const res = await updateUserPassword(newPassword);
+    const res = await updateUserPassword(currentPassword, newPassword);
     if (res.success) {
-      setSecurityMsg({ text: 'Password changed successfully!', isError: false });
+      setSecurityMsg({ text: 'Password updated successfully!', isError: false });
+      setCurrentPassword('');
       setNewPassword('');
     } else {
-      setSecurityMsg({ text: res.error || 'Failed to change password.', isError: true });
+      setSecurityMsg({ text: res.error || 'Failed to update password.', isError: true });
     }
   };
 
@@ -143,27 +146,29 @@ export default function SettingsModal({
   const { hasGoogle, hasEmail } = getLinkedProviders();
 
   const handleLinkGoogle = async () => {
+    setSecurityMsg({ text: '', isError: false });
     const res = await linkGoogleAccount();
     if (res.success) {
-      alert('Google account linked successfully!');
+      setSecurityMsg({ text: 'Google account linked successfully!', isError: false });
     } else {
-      alert('Linking failed: ' + res.error);
+      setSecurityMsg({ text: 'Google linking failed: ' + res.error, isError: true });
     }
   };
 
   const handleLinkEmail = async (e) => {
     e.preventDefault();
+    setSecurityMsg({ text: '', isError: false });
     const emailToUse = linkEmailInput.trim() || user?.email;
     if (!emailToUse) {
-      alert('Please enter a valid email address.');
+      setSecurityMsg({ text: 'Please enter a valid email address.', isError: true });
       return;
     }
     const res = await linkEmailAccount(emailToUse, linkPassInput);
     if (res.success) {
-      alert('Email/Password account linked successfully!');
+      setSecurityMsg({ text: 'Password login attached successfully!', isError: false });
       setLinkPassInput('');
     } else {
-      alert('Linking failed: ' + res.error);
+      setSecurityMsg({ text: 'Linking failed: ' + res.error, isError: true });
     }
   };
 
@@ -299,7 +304,11 @@ export default function SettingsModal({
                       : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
                   }`}
                 >
-                  <CheckCircle2 className="w-4 h-4 shrink-0" />
+                  {profileMsg.isError ? (
+                    <AlertCircle className="w-4 h-4 shrink-0" />
+                  ) : (
+                    <CheckCircle2 className="w-4 h-4 shrink-0" />
+                  )}
                   <span>{profileMsg.text}</span>
                 </div>
               )}
@@ -372,6 +381,23 @@ export default function SettingsModal({
         <div className="space-y-6">
           {user ? (
             <>
+              {securityMsg.text && (
+                <div
+                  className={`text-xs p-3 rounded-xl border flex items-center gap-2 ${
+                    securityMsg.isError
+                      ? 'bg-rose-500/10 border-rose-500/20 text-rose-400'
+                      : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+                  }`}
+                >
+                  {securityMsg.isError ? (
+                    <AlertCircle className="w-4 h-4 shrink-0" />
+                  ) : (
+                    <CheckCircle2 className="w-4 h-4 shrink-0" />
+                  )}
+                  <span>{securityMsg.text}</span>
+                </div>
+              )}
+
               {/* Linked Accounts */}
               <div className="space-y-3">
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">
@@ -429,7 +455,7 @@ export default function SettingsModal({
                   {!hasEmail && (
                     <form onSubmit={handleLinkEmail} className="space-y-2.5 pt-2.5 border-t border-white/5">
                       <p className="text-[11px] text-slate-400">
-                        Attach a password to your Google account (<span className="text-indigo-300 font-semibold">{user?.email}</span>) to log in with password too:
+                        Attach a password to your account (<span className="text-indigo-300 font-semibold">{user?.email}</span>) to log in with password too:
                       </p>
                       <input
                         type="email"
@@ -462,24 +488,22 @@ export default function SettingsModal({
                 </div>
               </div>
 
-              {/* Change Password Form (if email linked) */}
+              {/* Change Password Form */}
               {hasEmail && (
                 <form onSubmit={handleSavePassword} className="space-y-3 pt-4 border-t border-white/5">
                   <label className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400">
                     <Key className="w-3.5 h-3.5 text-indigo-400" />
                     <span>Change Password</span>
                   </label>
-                  {securityMsg.text && (
-                    <div
-                      className={`text-xs p-3 rounded-xl border ${
-                        securityMsg.isError
-                          ? 'bg-rose-500/10 border-rose-500/20 text-rose-400'
-                          : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-                      }`}
-                    >
-                      {securityMsg.text}
-                    </div>
-                  )}
+                  
+                  <input
+                    type="password"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    required
+                    placeholder="Current Password"
+                    className="w-full px-3 py-2 rounded-xl text-xs"
+                  />
                   <input
                     type="password"
                     value={newPassword}
@@ -491,7 +515,7 @@ export default function SettingsModal({
                   />
                   <button
                     type="submit"
-                    className="w-full bg-slate-800 hover:bg-slate-700 text-white text-xs py-2 rounded-xl font-medium transition"
+                    className="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs py-2 rounded-xl font-semibold transition shadow-md shadow-indigo-600/20"
                   >
                     Update Password
                   </button>
