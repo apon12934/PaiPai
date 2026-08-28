@@ -44,6 +44,30 @@ input[type="number"] {
   animation: custom-modal-pop 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+@keyframes custom-overlay-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes custom-modal-pop-out {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+}
+
+.animate-modal-overlay-out {
+  animation: custom-overlay-fade-out 0.15s ease-in forwards;
+}
+
+.animate-modal-pop-out {
+  animation: custom-modal-pop-out 0.15s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
 /* BASE BODY STYLES */
 html, body {
   font-family: var(--font-sans);

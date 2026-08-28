@@ -1,28 +1,44 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import GlassCard from './GlassCard';
 
 export default function Modal({ isOpen, onClose, children, title, subtitle }) {
+  const [shouldRender, setShouldRender] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRender(true);
+      setIsClosing(false);
+    } else if (shouldRender) {
+      setIsClosing(true);
+      const timer = setTimeout(() => {
+        setShouldRender(false);
+        setIsClosing(false);
+      }, 150); // Matches the exit animation duration
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, shouldRender]);
+
   useEffect(() => {
     const handleEsc = (e) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape' && !isClosing) onClose();
     };
-    if (isOpen) {
+    if (isOpen && !isClosing) {
       window.addEventListener('keydown', handleEsc);
     }
     return () => window.removeEventListener('keydown', handleEsc);
-  }, [isOpen, onClose]);
+  }, [isOpen, isClosing, onClose]);
 
-  if (!isOpen) return null;
+  if (!shouldRender) return null;
 
   return (
-    <div className="fixed inset-0 bg-slate-900/40 dark:bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-modal-overlay">
+    <div className={`fixed inset-0 bg-slate-900/40 dark:bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 ${isClosing ? 'animate-modal-overlay-out' : 'animate-modal-overlay'}`}>
       <div 
         className="absolute inset-0" 
         onClick={onClose}
         aria-hidden="true"
-      />
-      <div className="relative z-10 w-full max-w-md animate-modal-pop">
+      <div className={`relative z-10 w-full max-w-md ${isClosing ? 'animate-modal-pop-out' : 'animate-modal-pop'}`}>
         <GlassCard variant="prominent" className="w-full flex flex-col relative overflow-hidden bg-white dark:bg-[#151624] text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 shadow-2xl">
           <button 
             onClick={onClose}
