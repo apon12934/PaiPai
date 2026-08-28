@@ -473,36 +473,37 @@ export default function Home() {
       <div className="flex md:hidden flex-col w-full h-full bg-[#07080D] light:bg-[#F8F9FE] overflow-hidden">
         {/* Mobile Top Header */}
         <div className="p-4 flex items-center justify-between border-b border-white/5 light:border-slate-200 shrink-0">
-          <div className="flex items-center gap-2">
-            {user?.photoURL ? (
-              <img
-                src={user.photoURL}
-                alt="Avatar"
-                onClick={() => setSettingsModalOpen(true)}
-                className="w-8 h-8 rounded-full object-cover border border-indigo-500 cursor-pointer"
-              />
-            ) : (
-              <div
-                onClick={() => setSettingsModalOpen(true)}
-                className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-xs cursor-pointer shadow-md shadow-indigo-600/30"
-              >
-                {(user?.displayName || user?.email || 'P').charAt(0).toUpperCase()}
-              </div>
-            )}
+          <div className="flex items-center">
             <img src="/logo.svg" alt="PaiPai Logo" className="h-7 w-auto object-contain" />
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <button
               onClick={() => setSettingsModalOpen(true)}
-              className="p-2 text-slate-400 hover:text-slate-200 bg-white/5 light:bg-slate-100 rounded-lg"
+              className="p-2 text-slate-400 hover:text-slate-200 bg-white/5 light:bg-slate-100 rounded-lg shrink-0"
               title="Settings"
             >
               <SettingsIcon className="w-4 h-4" />
             </button>
-            {!user && (
+            {user ? (
+              user.photoURL ? (
+                <img
+                  src={user.photoURL}
+                  alt="Avatar"
+                  onClick={() => setSettingsModalOpen(true)}
+                  className="w-8 h-8 rounded-full object-cover border border-indigo-500 cursor-pointer shadow-md shrink-0"
+                />
+              ) : (
+                <div
+                  onClick={() => setSettingsModalOpen(true)}
+                  className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-xs cursor-pointer shadow-md shadow-indigo-600/30 shrink-0"
+                >
+                  {(user.displayName || user.email || 'U').charAt(0).toUpperCase()}
+                </div>
+              )
+            ) : (
               <button
                 onClick={() => setAuthModalOpen(true)}
-                className="flex items-center gap-1.5 text-xs font-medium text-slate-700 light:text-slate-900 dark:text-slate-300 dark:hover:text-white bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 px-3 py-1.5 rounded-lg transition-all border border-slate-300 dark:border-white/5 whitespace-nowrap"
+                className="flex items-center gap-1.5 text-xs font-medium text-slate-700 light:text-slate-900 dark:text-slate-300 dark:hover:text-white bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 px-3 py-1.5 rounded-lg transition-all border border-slate-300 dark:border-white/5 whitespace-nowrap shrink-0"
               >
                 <LogIn className="w-3.5 h-3.5" />
                 <span>Log In</span>
