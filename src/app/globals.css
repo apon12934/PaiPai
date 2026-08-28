@@ -80,12 +80,17 @@ html.light .text-slate-800 {
 button.bg-indigo-600,
 button.bg-indigo-600 *,
 .bg-indigo-600,
-.bg-indigo-600 *,
+.bg-indigo-600 *:not(.text-indigo-600),
 .btn-gave-solid,
 .btn-gave-solid *,
 .btn-received-solid,
 .btn-received-solid * {
   color: #FFFFFF !important;
+}
+
+/* Explicitly allow the avatar circle to have indigo text when selected */
+.bg-indigo-600 .text-indigo-600 {
+  color: #4F46E5 !important;
 }
 
 /* Solid Action Buttons */
