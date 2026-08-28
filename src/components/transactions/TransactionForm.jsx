@@ -50,7 +50,7 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
   return (
     <div className="w-full space-y-4">
       <div className="flex items-center justify-between mb-1">
-        <h3 className="text-xs font-black text-slate-900 dark:text-slate-200 uppercase tracking-widest">
+        <h3 className="text-xs font-bold text-slate-900 dark:text-slate-200 uppercase tracking-widest">
           {editingTx ? 'Edit Transaction' : 'LOG TRANSACTION'}
         </h3>
         {editingTx && (

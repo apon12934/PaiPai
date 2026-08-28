@@ -53,7 +53,7 @@ export default function ConfirmationModal({
           {styles.icon}
         </div>
 
-        <h3 className="text-lg font-black text-slate-900 dark:text-white mb-1.5">{title}</h3>
+        <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1.5">{title}</h3>
         <p className="text-xs text-slate-600 dark:text-slate-400 mb-6 max-w-xs leading-relaxed font-medium">{message}</p>
 
         <div className="flex items-center gap-3 w-full">

@@ -37,11 +37,11 @@ export default function MainPanel({
       {/* Header Bar */}
       <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-white/5">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-black text-base shadow-md shadow-indigo-600/30">
+          <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-base shadow-md shadow-indigo-600/30">
             {initial}
           </div>
           <div>
-            <h2 className="text-2xl font-black text-slate-900 dark:text-slate-100 tracking-tight">{person}</h2>
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">{person}</h2>
             <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Personal Debt & Expense Ledger</span>
           </div>
         </div>
