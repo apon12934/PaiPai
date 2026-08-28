@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
 /* ===== FINTECH DESIGN SYSTEM (Dark & Light Mode) ===== */
+@theme {
+  --font-sans: var(--font-poppins), var(--font-anek-bangla), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
 :root {
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-poppins), var(--font-anek-bangla), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 /* HIDE NUMBER INPUT SPINNERS */
