@@ -19,6 +19,31 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
+/* MODAL POP ANIMATIONS */
+@keyframes custom-overlay-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes custom-modal-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-modal-overlay {
+  animation: custom-overlay-fade 0.15s ease-out forwards;
+}
+
+.animate-modal-pop {
+  animation: custom-modal-pop 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* BASE BODY STYLES */
 html, body {
   font-family: var(--font-sans);

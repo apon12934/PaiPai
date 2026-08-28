@@ -16,13 +16,13 @@ export default function Modal({ isOpen, onClose, children, title, subtitle }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-slate-900/40 dark:bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-slate-900/40 dark:bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-modal-overlay">
       <div 
         className="absolute inset-0" 
         onClick={onClose}
         aria-hidden="true"
       />
-      <div className="relative z-10 w-full max-w-md animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative z-10 w-full max-w-md animate-modal-pop">
         <GlassCard variant="prominent" className="w-full flex flex-col relative overflow-hidden bg-white dark:bg-[#151624] text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 shadow-2xl">
           <button 
             onClick={onClose}
