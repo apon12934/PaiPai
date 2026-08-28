@@ -254,8 +254,8 @@ export default function Home() {
   }, []);
 
   const handleDeleteTx = useCallback(
-    (id) => {
-      if (!selectedPerson) return;
+    (id, personName = selectedPerson) => {
+      if (!personName) return;
       setConfirmModal({
         isOpen: true,
         title: 'Delete Transaction?',
@@ -264,7 +264,7 @@ export default function Home() {
         variant: 'danger',
         onConfirm: () => {
           const newData = { ...dbState };
-          newData[selectedPerson] = newData[selectedPerson].filter((tx) => tx.id !== id);
+          newData[personName] = newData[personName].filter((tx) => tx.id !== id);
           saveData(newData);
           if (editingTxId === id) setEditingTxId(null);
           showToast('Transaction deleted.');
@@ -622,32 +622,60 @@ export default function Home() {
           {/* Recent Activity List */}
           <div className="space-y-3 pt-2 pb-6">
             <h2 className="text-xs font-bold text-slate-400 light:text-slate-500 uppercase tracking-wider">
-              Recent Activity
+              {selectedPerson ? `History with ${selectedPerson}` : 'Recent Activity'}
             </h2>
-            {allTransactions.length === 0 ? (
-              <p className="text-xs text-slate-500 italic py-4">No recent activity.</p>
-            ) : (
-              allTransactions.slice(0, 10).map((tx) => (
+            {(() => {
+              const mobileTx = selectedPerson 
+                ? allTransactions.filter(tx => tx.personName === selectedPerson) 
+                : allTransactions;
+              
+              if (mobileTx.length === 0) {
+                return <p className="text-xs text-slate-500 italic py-4">No {selectedPerson ? 'history' : 'recent activity'}.</p>;
+              }
+
+              return mobileTx.slice(0, 10).map((tx) => (
                 <div
                   key={tx.id}
-                  className="p-3.5 rounded-xl bg-white/[0.03] light:bg-white border border-white/5 light:border-slate-200 flex items-center justify-between shadow-sm"
+                  className="p-3.5 rounded-xl bg-white/[0.03] light:bg-white border border-white/5 light:border-slate-200 flex items-center justify-between shadow-sm relative"
                 >
                   <div>
                     <h4 className="text-xs font-bold text-slate-200 light:text-slate-800">
                       {tx.note || (tx.type === 'gave' ? 'Gave money' : 'Received money')}
                     </h4>
-                    <span className="text-[10px] text-slate-500">
-                      with <strong className="text-slate-400">{tx.personName}</strong>
-                    </span>
+                    {!selectedPerson && (
+                      <span className="text-[10px] text-slate-500">
+                        with <strong className="text-slate-400">{tx.personName}</strong>
+                      </span>
+                    )}
                   </div>
-                  <span className={`text-sm font-bold font-mono ${
-                    tx.type === 'gave' ? 'text-rose-400' : 'text-emerald-400'
-                  }`}>
-                    {tx.type === 'gave' ? '-' : '+'}{currency} {tx.amount.toLocaleString()}
-                  </span>
+                  <div className="flex flex-col items-end gap-1">
+                    <span className={`text-sm font-bold font-mono ${
+                      tx.type === 'gave' ? 'text-rose-400' : 'text-emerald-400'
+                    }`}>
+                      {tx.type === 'gave' ? '-' : '+'}{currency} {tx.amount.toLocaleString()}
+                    </span>
+                    {/* Tiny Edit/Delete buttons on mobile */}
+                    <div className="flex gap-2 mt-1">
+                      <button
+                        onClick={() => {
+                          setSelectedPerson(tx.personName);
+                          handleEditTx(tx);
+                        }}
+                        className="text-[10px] text-indigo-400 font-semibold uppercase tracking-wider"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteTx(tx.id, tx.personName)}
+                        className="text-[10px] text-rose-400 font-semibold uppercase tracking-wider"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              ))
-            )}
+              ));
+            })()}
           </div>
         </div>
       </div>
