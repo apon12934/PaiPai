@@ -491,13 +491,24 @@ export default function Home() {
             )}
             <h1 className="text-lg font-bold text-slate-100 light:text-slate-900 tracking-tight">PaiPai</h1>
           </div>
-          <button
-            onClick={() => setSettingsModalOpen(true)}
-            className="p-2 text-slate-400 hover:text-slate-200 bg-white/5 light:bg-slate-100 rounded-lg"
-            title="Settings"
-          >
-            <SettingsIcon className="w-4 h-4" />
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setSettingsModalOpen(true)}
+              className="p-2 text-slate-400 hover:text-slate-200 bg-white/5 light:bg-slate-100 rounded-lg"
+              title="Settings"
+            >
+              <SettingsIcon className="w-4 h-4" />
+            </button>
+            {!user && (
+              <button
+                onClick={() => setAuthModalOpen(true)}
+                className="flex items-center gap-1.5 text-xs font-medium text-slate-700 light:text-slate-900 dark:text-slate-300 dark:hover:text-white bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 px-3 py-1.5 rounded-lg transition-all border border-slate-300 dark:border-white/5 whitespace-nowrap"
+              >
+                <LogIn className="w-3.5 h-3.5" />
+                <span>Log In</span>
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Mobile Body Content Stack */}
