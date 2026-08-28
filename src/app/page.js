@@ -489,7 +489,7 @@ export default function Home() {
                 {(user?.displayName || user?.email || 'P').charAt(0).toUpperCase()}
               </div>
             )}
-            <h1 className="text-lg font-bold text-slate-100 light:text-slate-900 tracking-tight">PaiPai</h1>
+            <img src="/logo.svg" alt="PaiPai Logo" className="h-7 w-auto object-contain" />
           </div>
           <div className="flex items-center gap-2">
             <button

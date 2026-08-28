@@ -41,15 +41,11 @@ export default function Sidebar({
         {/* Brand Header */}
         <div className="p-4 border-b border-slate-200 dark:border-white/5 flex items-center justify-between">
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-indigo-600/30 shrink-0">
-              {currency}
-            </div>
-            <div className="min-w-0">
-              <h1 className="text-base font-bold text-slate-900 dark:text-slate-100 tracking-tight leading-none truncate">PaiPai</h1>
-              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-medium truncate block">
-                পাই পাই করে হিসাব নিব
-              </span>
-            </div>
+            <img 
+              src="/logo.svg" 
+              alt="PaiPai Logo" 
+              className="h-10 w-auto object-contain shrink-0"
+            />
           </div>
           {!user && (
             <div className="flex items-center gap-1 shrink-0 ml-2">
