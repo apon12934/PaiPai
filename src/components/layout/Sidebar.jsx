@@ -40,31 +40,31 @@ export default function Sidebar({
       <div className="flex flex-col flex-1 overflow-hidden">
         {/* Brand Header */}
         <div className="p-4 border-b border-slate-200 dark:border-white/5 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-indigo-600/30">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-indigo-600/30 shrink-0">
               {currency}
             </div>
-            <div>
-              <h1 className="text-base font-bold text-slate-900 dark:text-slate-100 tracking-tight leading-none">PaiPai</h1>
-              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-medium">
+            <div className="min-w-0">
+              <h1 className="text-base font-bold text-slate-900 dark:text-slate-100 tracking-tight leading-none truncate">PaiPai</h1>
+              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-medium truncate block">
                 পাই পাই করে হিসাব নিব
               </span>
             </div>
           </div>
           {!user && (
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 shrink-0 ml-2">
               <button
                 onClick={onOpenSettings}
-                className="p-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 rounded-lg transition-all border border-slate-300 dark:border-white/5"
+                className="p-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 rounded-lg transition-all border border-slate-300 dark:border-white/5 shrink-0"
                 title="Settings"
               >
                 <Settings className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={onOpenLogin}
-                className="flex items-center gap-1 text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 px-2.5 py-1 rounded-lg transition-all border border-slate-300 dark:border-white/5"
+                className="flex items-center gap-1 text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 px-2.5 py-1.5 rounded-lg transition-all border border-slate-300 dark:border-white/5 whitespace-nowrap shrink-0"
               >
-                <LogIn className="w-3.5 h-3.5" />
+                <LogIn className="w-3.5 h-3.5 shrink-0" />
                 <span>Log In</span>
               </button>
             </div>
