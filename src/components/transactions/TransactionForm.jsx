@@ -93,29 +93,29 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
       </div>
 
       {/* Side by Side Action Buttons */}
-      <div className="grid grid-cols-2 gap-4 pt-2">
+      <div className="grid grid-cols-2 gap-3 pt-2">
         <button
           onClick={() => handleSubmit('gave')}
           disabled={!parseFloat(amount)}
-          className="btn-gave-solid flex flex-col items-center justify-center p-4 rounded-xl font-bold shadow-lg shadow-rose-600/30 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 group cursor-pointer"
+          className="btn-gave-solid flex flex-col items-center justify-center py-4 px-2 rounded-xl font-bold shadow-lg shadow-rose-600/30 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 group cursor-pointer"
         >
-          <div className="flex items-center gap-2 text-base font-extrabold mb-0.5 text-white">
-            <ArrowUpRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-white" />
+          <div className="flex items-center gap-1.5 text-sm font-extrabold mb-0.5 text-white whitespace-nowrap">
+            <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-white shrink-0" />
             <span className="text-white">I Gave {currency}</span>
           </div>
-          <span className="text-[10px] text-white/80 font-mono font-medium">Press Enter</span>
+          <span className="text-[10px] text-white/80 font-mono font-medium whitespace-nowrap">Press Enter</span>
         </button>
         
         <button
           onClick={() => handleSubmit('received')}
           disabled={!parseFloat(amount)}
-          className="btn-received-solid flex flex-col items-center justify-center p-4 rounded-xl font-bold shadow-lg shadow-emerald-600/30 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 group cursor-pointer"
+          className="btn-received-solid flex flex-col items-center justify-center py-4 px-2 rounded-xl font-bold shadow-lg shadow-emerald-600/30 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 group cursor-pointer"
         >
-          <div className="flex items-center gap-2 text-base font-extrabold mb-0.5 text-white">
-            <ArrowDownLeft className="w-5 h-5 transition-transform group-hover:-translate-x-0.5 group-hover:translate-y-0.5 text-white" />
+          <div className="flex items-center gap-1.5 text-sm font-extrabold mb-0.5 text-white whitespace-nowrap">
+            <ArrowDownLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5 group-hover:translate-y-0.5 text-white shrink-0" />
             <span className="text-white">I Received {currency}</span>
           </div>
-          <span className="text-[10px] text-white/80 font-mono font-medium">Shift + Enter</span>
+          <span className="text-[10px] text-white/80 font-mono font-medium whitespace-nowrap">Shift + Enter</span>
         </button>
       </div>
     </div>
