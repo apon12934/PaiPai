@@ -561,7 +561,7 @@ export default function Home() {
               </form>
             )}
 
-            <div className="flex gap-3 overflow-x-auto pb-2">
+            <div className="flex gap-3 overflow-x-auto pt-3 pb-4 px-1 -mx-1">
               {people.map((p) => {
                 const initial = (p.name || 'P').charAt(0).toUpperCase();
                 const isSel = selectedPerson === p.name;
