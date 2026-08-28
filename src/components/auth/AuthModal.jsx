@@ -85,7 +85,7 @@ export default function AuthModal({ isOpen, onClose }) {
               placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-2.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-sm"
+              className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-2.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-sm"
               required
             />
           </div>
@@ -95,13 +95,13 @@ export default function AuthModal({ isOpen, onClose }) {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-2.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-sm"
+              className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-2.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-sm"
               required
             />
           </div>
           
           {error && (
-            <div className="text-rose-400 text-xs p-3 bg-rose-500/10 rounded-xl border border-rose-500/20 leading-relaxed">
+            <div className="text-rose-400 text-xs p-3 bg-rose-500/10 rounded-lg border border-rose-500/20 leading-relaxed">
               {error}
             </div>
           )}
@@ -123,7 +123,7 @@ export default function AuthModal({ isOpen, onClose }) {
           <button
             type="button"
             onClick={handleExploreGuest}
-            className="flex items-center justify-center gap-1.5 text-xs text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 py-2 px-3 rounded-xl border border-white/10 transition-all"
+            className="flex items-center justify-center gap-1.5 text-xs text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 py-2 px-3 rounded-lg border border-white/10 transition-all"
           >
             <Eye className="w-3.5 h-3.5 text-amber-400" />
             <span>Explore as Guest (No saving)</span>

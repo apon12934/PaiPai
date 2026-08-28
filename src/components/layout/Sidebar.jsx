@@ -41,7 +41,7 @@ export default function Sidebar({
         {/* Brand Header */}
         <div className="p-4 border-b border-slate-200 dark:border-white/5 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-indigo-600/30">
+            <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-indigo-600/30">
               {currency}
             </div>
             <div>
@@ -80,7 +80,7 @@ export default function Sidebar({
 
         {/* Total Net Position Card */}
         <div className="p-4">
-          <div className="p-3.5 rounded-2xl bg-slate-100/70 dark:bg-white/[0.03] border border-slate-200 dark:border-white/5 shadow-sm">
+          <div className="p-3.5 rounded-xl bg-slate-100/70 dark:bg-white/[0.03] border border-slate-200 dark:border-white/5 shadow-sm">
             <span className="text-[10px] font-extrabold text-slate-700 dark:text-slate-400 uppercase tracking-widest block mb-1">
               Total Net Position
             </span>
@@ -127,12 +127,12 @@ export default function Sidebar({
               placeholder="Contact name..."
               value={newPersonName}
               onChange={(e) => setNewPersonName(e.target.value)}
-              className="flex-1 bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-indigo-500"
+              className="flex-1 bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 rounded-lg px-3 py-2 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-indigo-500"
             />
             <button
               type="submit"
               disabled={!newPersonName.trim()}
-              className="px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-xl shadow-md shadow-indigo-600/20 disabled:opacity-40"
+              className="px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg shadow-md shadow-indigo-600/20 disabled:opacity-40"
             >
               Add
             </button>
@@ -147,7 +147,7 @@ export default function Sidebar({
         ) : (
           <button
             onClick={() => setShowAddForm(true)}
-            className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/[0.03] dark:hover:bg-white/[0.07] border border-slate-200 dark:border-white/10 text-slate-900 dark:text-slate-200 text-xs font-bold transition-all cursor-pointer shadow-sm"
+            className="w-full flex items-center justify-center gap-2 p-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-white/[0.03] dark:hover:bg-white/[0.07] border border-slate-200 dark:border-white/10 text-slate-900 dark:text-slate-200 text-xs font-bold transition-all cursor-pointer shadow-sm"
           >
             <UserPlus className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
             <span>Add New Contact</span>
@@ -157,12 +157,12 @@ export default function Sidebar({
         <div className="flex gap-2 pt-1">
           <button
             onClick={onExport}
-            className="flex-1 flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200 dark:border-white/5 rounded-xl py-1.5 text-[11px] font-semibold text-slate-700 dark:text-slate-300 transition-all"
+            className="flex-1 flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200 dark:border-white/5 rounded-lg py-1.5 text-[11px] font-semibold text-slate-700 dark:text-slate-300 transition-all"
           >
             <Download className="w-3 h-3 text-slate-500 dark:text-slate-400" />
             <span>Export</span>
           </button>
-          <label className="flex-1 flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200 dark:border-white/5 rounded-xl py-1.5 text-[11px] font-semibold text-slate-700 dark:text-slate-300 transition-all cursor-pointer text-center">
+          <label className="flex-1 flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200 dark:border-white/5 rounded-lg py-1.5 text-[11px] font-semibold text-slate-700 dark:text-slate-300 transition-all cursor-pointer text-center">
             <Upload className="w-3 h-3 text-slate-500 dark:text-slate-400" />
             <span>Import</span>
             <input type="file" className="hidden" accept=".json" onChange={onImport} />

@@ -63,7 +63,7 @@ export default function AccountLinkModal({ isOpen, onClose }) {
     >
       <div className="flex flex-col gap-4">
         {error && (
-          <div className="text-rose-400 text-sm p-3 bg-rose-500/10 rounded-xl border border-rose-500/20">
+          <div className="text-rose-400 text-sm p-3 bg-rose-500/10 rounded-lg border border-rose-500/20">
             {error}
           </div>
         )}

@@ -75,7 +75,7 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
           onChange={(e) => setAmount(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="0.00"
-          className="w-full bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/10 rounded-2xl py-3.5 pl-12 pr-4 text-3xl font-extrabold text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-all outline-none focus:outline-none"
+          className="w-full bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-3xl font-extrabold text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-all outline-none focus:outline-none"
         />
       </div>
 
@@ -88,7 +88,7 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
           onChange={(e) => setNote(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Add a note (e.g. Dinner, Rent, Tuition)..."
-          className="w-full bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/10 rounded-2xl py-3.5 pl-11 pr-4 text-sm font-semibold text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 transition-all outline-none focus:outline-none"
+          className="w-full bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/10 rounded-xl py-3.5 pl-11 pr-4 text-sm font-semibold text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 transition-all outline-none focus:outline-none"
         />
       </div>
 
@@ -97,7 +97,7 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
         <button
           onClick={() => handleSubmit('gave')}
           disabled={!parseFloat(amount)}
-          className="btn-gave-solid flex flex-col items-center justify-center p-4 rounded-2xl font-bold shadow-lg shadow-rose-600/30 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 group cursor-pointer"
+          className="btn-gave-solid flex flex-col items-center justify-center p-4 rounded-xl font-bold shadow-lg shadow-rose-600/30 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 group cursor-pointer"
         >
           <div className="flex items-center gap-2 text-base font-extrabold mb-0.5 text-white">
             <ArrowUpRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-white" />
@@ -109,7 +109,7 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
         <button
           onClick={() => handleSubmit('received')}
           disabled={!parseFloat(amount)}
-          className="btn-received-solid flex flex-col items-center justify-center p-4 rounded-2xl font-bold shadow-lg shadow-emerald-600/30 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 group cursor-pointer"
+          className="btn-received-solid flex flex-col items-center justify-center p-4 rounded-xl font-bold shadow-lg shadow-emerald-600/30 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 group cursor-pointer"
         >
           <div className="flex items-center gap-2 text-base font-extrabold mb-0.5 text-white">
             <ArrowDownLeft className="w-5 h-5 transition-transform group-hover:-translate-x-0.5 group-hover:translate-y-0.5 text-white" />

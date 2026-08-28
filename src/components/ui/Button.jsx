@@ -11,7 +11,7 @@ const variants = {
 };
 
 export default function Button({ children, variant = 'primary', className = '', ...rest }) {
-  const baseClasses = 'rounded-xl px-4 py-2.5 text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2';
+  const baseClasses = 'rounded-lg px-4 py-2.5 text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2';
   const variantClass = variants[variant] || variants.primary;
 
   return (

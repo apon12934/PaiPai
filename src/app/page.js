@@ -365,7 +365,7 @@ export default function Home() {
       {/* Toast Notification Banner */}
       {toastMsg.text && (
         <div
-          className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-2xl border text-xs font-semibold flex items-center gap-2 shadow-2xl backdrop-blur-xl transition-all animate-pop-in ${
+          className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-xl border text-xs font-semibold flex items-center gap-2 shadow-2xl backdrop-blur-xl transition-all animate-pop-in ${
             toastMsg.isError
               ? 'bg-rose-500/20 border-rose-500/40 text-rose-300 shadow-rose-500/20'
               : 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300 shadow-emerald-500/20'
@@ -382,7 +382,7 @@ export default function Home() {
 
       {/* Guest Mode Warning Banner */}
       {!user && isGuestMode && (
-        <div className="w-full max-w-[1600px] mb-2 px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-center justify-between text-xs text-amber-300 backdrop-blur-md animate-pop-in">
+        <div className="w-full max-w-[1600px] mb-2 px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-lg flex items-center justify-between text-xs text-amber-300 backdrop-blur-md animate-pop-in">
           <div className="flex items-center gap-2">
             <Eye className="w-4 h-4 text-amber-400 shrink-0" />
             <span>
@@ -402,7 +402,7 @@ export default function Home() {
       {/* DESKTOP VIEW (≥ 768px Width): 3-Panel Split View */}
       <div
         ref={containerRef}
-        className="hidden md:flex w-full max-w-[1600px] h-full max-h-[92vh] glass-prominent rounded-3xl overflow-hidden"
+        className="hidden md:flex w-full max-w-[1600px] h-full max-h-[92vh] glass-prominent rounded-2xl overflow-hidden"
       >
         {/* Left Sidebar */}
         <div style={{ width: leftWidth, minWidth: 220 }} className="flex-shrink-0">
@@ -493,7 +493,7 @@ export default function Home() {
           </div>
           <button
             onClick={() => setSettingsModalOpen(true)}
-            className="p-2 text-slate-400 hover:text-slate-200 bg-white/5 light:bg-slate-100 rounded-xl"
+            className="p-2 text-slate-400 hover:text-slate-200 bg-white/5 light:bg-slate-100 rounded-lg"
             title="Settings"
           >
             <SettingsIcon className="w-4 h-4" />
@@ -503,7 +503,7 @@ export default function Home() {
         {/* Mobile Body Content Stack */}
         <div className="flex-1 overflow-y-auto p-4 space-y-6">
           {/* Total Net Position Card */}
-          <div className="p-6 rounded-3xl bg-white/[0.03] light:bg-white border border-white/5 light:border-slate-200 shadow-xl text-center space-y-2">
+          <div className="p-6 rounded-2xl bg-white/[0.03] light:bg-white border border-white/5 light:border-slate-200 shadow-xl text-center space-y-2">
             <span className="text-[10px] font-extrabold text-indigo-400 uppercase tracking-widest block">
               Total Net Position
             </span>
@@ -538,12 +538,12 @@ export default function Home() {
                   placeholder="New contact name..."
                   value={newMobilePersonName}
                   onChange={(e) => setNewMobilePersonName(e.target.value)}
-                  className="flex-1 bg-white/5 light:bg-white border border-white/10 light:border-slate-300 rounded-xl px-3 py-2 text-xs text-white light:text-slate-900 focus:outline-none"
+                  className="flex-1 bg-white/5 light:bg-white border border-white/10 light:border-slate-300 rounded-lg px-3 py-2 text-xs text-white light:text-slate-900 focus:outline-none"
                 />
                 <button
                   type="submit"
                   disabled={!newMobilePersonName.trim()}
-                  className="px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl disabled:opacity-40"
+                  className="px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-lg disabled:opacity-40"
                 >
                   Save
                 </button>
@@ -558,7 +558,7 @@ export default function Home() {
                   <div
                     key={p.name}
                     onClick={() => setSelectedPerson(p.name)}
-                    className={`flex flex-col items-center p-3.5 rounded-2xl border min-w-[110px] transition-all cursor-pointer ${
+                    className={`flex flex-col items-center p-3.5 rounded-xl border min-w-[110px] transition-all cursor-pointer ${
                       isSel
                         ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-600/30 scale-105'
                         : 'bg-white/[0.03] light:bg-white border-white/5 light:border-slate-200 text-slate-300 light:text-slate-800'
@@ -583,7 +583,7 @@ export default function Home() {
 
           {/* Selected Contact Logger Form */}
           {selectedPerson ? (
-            <div className="p-5 rounded-3xl glass-card space-y-4">
+            <div className="p-5 rounded-2xl glass-card space-y-4">
               <div className="flex items-center justify-between pb-2 border-b border-white/10 light:border-slate-200">
                 <h3 className="text-sm font-bold text-white light:text-slate-900">
                   Log for <span className="text-indigo-400">{selectedPerson}</span>
@@ -603,7 +603,7 @@ export default function Home() {
               />
             </div>
           ) : (
-            <div className="p-6 rounded-3xl bg-white/[0.02] light:bg-slate-100 text-center space-y-2">
+            <div className="p-6 rounded-2xl bg-white/[0.02] light:bg-slate-100 text-center space-y-2">
               <p className="text-xs text-slate-400">Select a contact above to log transactions or view history.</p>
             </div>
           )}
@@ -619,7 +619,7 @@ export default function Home() {
               allTransactions.slice(0, 10).map((tx) => (
                 <div
                   key={tx.id}
-                  className="p-3.5 rounded-2xl bg-white/[0.03] light:bg-white border border-white/5 light:border-slate-200 flex items-center justify-between shadow-sm"
+                  className="p-3.5 rounded-xl bg-white/[0.03] light:bg-white border border-white/5 light:border-slate-200 flex items-center justify-between shadow-sm"
                 >
                   <div>
                     <h4 className="text-xs font-bold text-slate-200 light:text-slate-800">

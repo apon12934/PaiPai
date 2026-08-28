@@ -15,7 +15,7 @@ export default function TransactionCard({ transaction, onEdit, onDelete, isEditi
   return (
     <GlassCard 
       variant="subtle" 
-      className={`p-3.5 group relative overflow-hidden transition-all duration-150 rounded-2xl ${
+      className={`p-3.5 group relative overflow-hidden transition-all duration-150 rounded-xl ${
         isGave ? 'history-card-gave' : 'history-card-received'
       } ${
         isEditing ? 'border-indigo-500 bg-indigo-500/10' : 'hover:border-white/15 light:hover:border-slate-300'

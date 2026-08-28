@@ -47,7 +47,7 @@ export default function MainPanel({
         </div>
         <button
           onClick={onDelete}
-          className="flex items-center gap-1.5 px-3.5 py-1.5 bg-rose-50 hover:bg-rose-100 dark:bg-rose-500/10 dark:hover:bg-rose-500/20 text-rose-700 dark:text-rose-400 text-xs font-bold rounded-xl transition-all border border-rose-200 dark:border-rose-500/20 cursor-pointer shadow-sm"
+          className="flex items-center gap-1.5 px-3.5 py-1.5 bg-rose-50 hover:bg-rose-100 dark:bg-rose-500/10 dark:hover:bg-rose-500/20 text-rose-700 dark:text-rose-400 text-xs font-bold rounded-lg transition-all border border-rose-200 dark:border-rose-500/20 cursor-pointer shadow-sm"
         >
           <Trash2 className="w-3.5 h-3.5" />
           <span>Delete Person</span>
@@ -55,7 +55,7 @@ export default function MainPanel({
       </div>
 
       {/* Hero Balance Card */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#151624] border border-slate-200 dark:border-indigo-500/20 shadow-lg dark:shadow-xl flex flex-col items-center justify-center text-center space-y-2 animate-fade-in">
+      <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-[#151624] border border-slate-200 dark:border-indigo-500/20 shadow-lg dark:shadow-xl flex flex-col items-center justify-center text-center space-y-2 animate-fade-in">
         <span className={`text-[10px] font-extrabold tracking-widest px-3.5 py-1 rounded-full border ${badgeStyle}`}>
           {defaultLabel}
         </span>
@@ -67,7 +67,7 @@ export default function MainPanel({
       </div>
 
       {/* Transaction Logger Form Card */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#151624] border border-slate-200 dark:border-white/10 shadow-lg dark:shadow-xl animate-fade-in">
+      <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-[#151624] border border-slate-200 dark:border-white/10 shadow-lg dark:shadow-xl animate-fade-in">
         <TransactionForm
           onSubmit={onSubmitTx}
           editingTx={editingTx}
