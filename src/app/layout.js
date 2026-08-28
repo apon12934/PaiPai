@@ -18,7 +18,7 @@ const anekBangla = Anek_Bangla({
 });
 
 export const metadata = {
-  title: 'PaiPai — Debt & Expense Tracker',
+  title: 'PaiPai',
   description:
     'PaiPai (পাই পাই) — Track every penny. A modern debt and expense tab tracker with real-time cloud sync across all your devices.',
   keywords: ['debt tracker', 'expense tracker', 'paipai', 'পাই পাই', 'taka', 'finance'],
