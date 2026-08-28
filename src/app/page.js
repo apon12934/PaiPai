@@ -620,7 +620,7 @@ export default function Home() {
           )}
 
           {/* Recent Activity List */}
-          <div className="space-y-3 pt-2 pb-6">
+          <div className="space-y-3 pt-2 pb-32">
             <h2 className="text-xs font-bold text-slate-400 light:text-slate-500 uppercase tracking-wider">
               {selectedPerson ? `History with ${selectedPerson}` : 'Recent Activity'}
             </h2>
