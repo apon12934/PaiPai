@@ -47,6 +47,7 @@ export default function SettingsModal({
     user,
     updateUserProfile,
     linkGoogleAccount,
+    linkEmailAccount,
     getLinkedProviders,
     deleteUserAccount,
   } = useAuth();
@@ -66,6 +67,8 @@ export default function SettingsModal({
 
   // Link status states
   const [linkMsg, setLinkMsg] = useState({ text: '', isError: false });
+  const [linkEmail, setLinkEmail] = useState('');
+  const [linkPassword, setLinkPassword] = useState('');
 
   // Delete Account Confirmation Modal inside Settings
   const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
@@ -168,38 +171,51 @@ export default function SettingsModal({
   const handleSaveProfile = async (e) => {
     e.preventDefault();
     setProfileMsg({ text: '', isError: false });
-    try {
-      await updateUserProfile(displayName, photoURL);
+    const res = await updateUserProfile(displayName, photoURL);
+    if (!res.success) {
+      setProfileMsg({ text: res.error || 'Update failed', isError: true });
+    } else {
       setProfileMsg({ text: 'Profile updated successfully!', isError: false });
-    } catch (err) {
-      setProfileMsg({ text: err.message, isError: true });
     }
   };
 
   const handleLinkGoogle = async () => {
     setLinkMsg({ text: '', isError: false });
-    try {
-      await linkGoogleAccount();
+    const res = await linkGoogleAccount();
+    if (!res.success) {
+      setLinkMsg({ text: res.error || 'Linking failed', isError: true });
+    } else {
       setLinkMsg({ text: 'Google account linked successfully!', isError: false });
-    } catch (err) {
-      setLinkMsg({ text: err.message, isError: true });
+    }
+  };
+
+  const handleLinkEmail = async (e) => {
+    e.preventDefault();
+    setLinkMsg({ text: '', isError: false });
+    const res = await linkEmailAccount(linkEmail, linkPassword);
+    if (!res.success) {
+      setLinkMsg({ text: res.error || 'Email linking failed', isError: true });
+    } else {
+      setLinkMsg({ text: 'Email/Password login added successfully!', isError: false });
+      setLinkEmail('');
+      setLinkPassword('');
     }
   };
 
   const handleDeleteAccountConfirm = async () => {
     setDeleteAccountMsg('');
-    try {
-      await deleteUserAccount();
+    const res = await deleteUserAccount();
+    if (!res.success) {
+      setDeleteAccountMsg(res.error || 'Failed to delete account');
+    } else {
       setShowDeleteAccountModal(false);
       onClose();
-    } catch (err) {
-      setDeleteAccountMsg(err.message);
     }
   };
 
-  const rawProviders = getLinkedProviders ? getLinkedProviders() : [];
-  const linkedProviders = Array.isArray(rawProviders) ? rawProviders : [];
-  const isGoogleLinked = linkedProviders.includes('google.com');
+  const providers = getLinkedProviders ? getLinkedProviders() : { hasGoogle: false, hasEmail: false };
+  const isGoogleLinked = providers.hasGoogle;
+  const isEmailLinked = providers.hasEmail;
   const googlePhotoURL = user?.providerData?.find(
     (p) => p.providerId === 'google.com'
   )?.photoURL;
@@ -506,6 +522,59 @@ export default function SettingsModal({
                     >
                       Link Google
                     </button>
+                  )}
+                </div>
+
+                {/* Email/Password Link Card */}
+                <div className="p-3.5 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex flex-col gap-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-lg bg-slate-200 dark:bg-white/10 flex items-center justify-center">
+                        <svg className="w-4 h-4 text-slate-600 dark:text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-black text-black dark:text-white">Email / Password</h4>
+                        <p className="text-[10px] font-black text-black dark:text-slate-400">
+                          {isEmailLinked ? 'Linked ✓' : 'Not linked'}
+                        </p>
+                      </div>
+                    </div>
+                    {isEmailLinked ? (
+                      <span className="flex items-center gap-1 text-[11px] font-black text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-300 dark:border-emerald-500/20">
+                        <Check className="w-3.5 h-3.5" /> Linked
+                      </span>
+                    ) : null}
+                  </div>
+                  
+                  {!isEmailLinked && (
+                    <form onSubmit={handleLinkEmail} className="flex flex-col gap-2 mt-1">
+                      <input 
+                        type="email" 
+                        placeholder="Email Address"
+                        value={linkEmail}
+                        onChange={(e) => setLinkEmail(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg text-sm bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-black dark:text-white font-black"
+                        required
+                      />
+                      <input 
+                        type="password" 
+                        placeholder="Create Password"
+                        value={linkPassword}
+                        onChange={(e) => setLinkPassword(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg text-sm bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-black dark:text-white font-black"
+                        required
+                        minLength={6}
+                      />
+                      <button
+                        type="submit"
+                        className="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs py-2 rounded-lg transition font-black shadow-sm mt-1"
+                      >
+                        Attach Email & Password
+                      </button>
+                    </form>
                   )}
                 </div>
 
