@@ -38,6 +38,7 @@ export default function Modal({ isOpen, onClose, children, title, subtitle }) {
         className="absolute inset-0" 
         onClick={onClose}
         aria-hidden="true"
+      />
       <div className={`relative z-10 w-full max-w-md ${isClosing ? 'animate-modal-pop-out' : 'animate-modal-pop'}`}>
         <GlassCard variant="prominent" className="w-full flex flex-col relative overflow-hidden bg-white dark:bg-[#151624] text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 shadow-2xl">
           <button 
