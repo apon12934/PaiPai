@@ -334,7 +334,7 @@ export default function Home() {
 
       if (resizingRef.current === 'left') {
         const newWidth = e.clientX - rect.left;
-        if (newWidth > 220 && newWidth < 450) setLeftWidth(newWidth);
+        if (newWidth > 280 && newWidth < 450) setLeftWidth(newWidth);
       } else if (resizingRef.current === 'right') {
         const newWidth = rect.right - e.clientX;
         if (newWidth > 250 && newWidth < 500) setRightWidth(newWidth);
@@ -405,7 +405,7 @@ export default function Home() {
         className="hidden md:flex w-full max-w-[1600px] h-full max-h-[92vh] glass-prominent rounded-2xl overflow-hidden"
       >
         {/* Left Sidebar */}
-        <div style={{ width: leftWidth, minWidth: 220 }} className="flex-shrink-0">
+        <div style={{ width: leftWidth, minWidth: 280 }} className="flex-shrink-0">
           <Sidebar
             people={people}
             grandTotal={grandTotal}
