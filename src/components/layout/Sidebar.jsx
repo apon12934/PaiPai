@@ -41,10 +41,17 @@ export default function Sidebar({
         {/* Brand Header */}
         <div className="p-4 border-b border-slate-200 dark:border-white/5 flex items-center justify-between">
           <div className="flex items-center gap-2.5 min-w-0">
+            {/* Dark Mode Logo */}
             <img 
               src="/logo.svg" 
               alt="PaiPai Logo" 
-              className="h-10 w-auto object-contain shrink-0"
+              className="hidden dark:block h-10 w-auto object-contain shrink-0"
+            />
+            {/* Light Mode Logo */}
+            <img 
+              src="/logo-light.svg" 
+              alt="PaiPai Logo" 
+              className="block dark:hidden h-10 w-auto object-contain shrink-0"
             />
           </div>
           {!user && (

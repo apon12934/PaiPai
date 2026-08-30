@@ -479,7 +479,10 @@ export default function Home() {
         {/* Mobile Top Header */}
         <div className="p-4 flex items-center justify-between border-b border-white/5 light:border-slate-200 shrink-0">
           <div className="flex items-center">
-            <img src="/logo.svg" alt="PaiPai Logo" className="h-7 w-auto object-contain" />
+            {/* Dark Mode Logo */}
+            <img src="/logo.svg" alt="PaiPai Logo" className="hidden dark:block h-7 w-auto object-contain" />
+            {/* Light Mode Logo */}
+            <img src="/logo-light.svg" alt="PaiPai Logo" className="block dark:hidden h-7 w-auto object-contain" />
           </div>
           <div className="flex items-center gap-3">
             <button
