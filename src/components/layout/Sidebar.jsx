@@ -40,7 +40,9 @@ export default function Sidebar({
       {/* Top Container */}
       <div className="flex flex-col flex-1 overflow-hidden">
         {/* Brand Header */}
-        <div className="p-4 border-b border-slate-200 dark:border-white/5 flex items-center justify-between">
+        <div className="p-4 border-b border-slate-200 dark:border-white/5 flex flex-col gap-1.5">
+          <div className="flex items-center justify-between">
+            
           <div className="flex items-center gap-2.5 min-w-0">
             {/* Dark Mode Logo */}
             <img 
@@ -73,12 +75,14 @@ export default function Sidebar({
               </button>
             </div>
           )}
+        
+          </div>
+          {/* Slogan Ticker */}
+          <BouncingText 
+            text="পাই পাই করে হিসাব নিবো"
+            className="h-[14px] opacity-60 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest px-0"
+          />
         </div>
-        {/* Slogan Ticker */}
-        <BouncingText 
-          text="পাই পাই করে হিসাব নিবো" 
-          className="h-[14px] opacity-60 bg-slate-50 dark:bg-[#141414] text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest px-1"
-        />
 
         {/* User Profile Status Bar */}
         {user && (
