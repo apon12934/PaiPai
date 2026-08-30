@@ -12,6 +12,7 @@ import AuthModal from '@/components/auth/AuthModal';
 import SettingsModal from '@/components/settings/SettingsModal';
 import HelpModal from '@/components/ui/HelpModal';
 import ConfirmationModal from '@/components/ui/ConfirmationModal';
+import BouncingText from '@/components/ui/BouncingText';
 import TransactionForm from '@/components/transactions/TransactionForm';
 import {
   Settings as SettingsIcon,
@@ -558,11 +559,10 @@ export default function Home() {
           </div>
           
           {/* Mobile Slogan Ticker */}
-          <div className="overflow-hidden w-full h-[12px] relative opacity-50 mt-0.5">
-            <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 absolute w-full animate-marquee whitespace-nowrap uppercase tracking-widest">
-              পাই পাই করে হিসাব নিবো • Pai Pai Kore Hishab Nibo • পাই পাই করে হিসাব নিবো
-            </p>
-          </div>
+          <BouncingText 
+            text="পাই পাই করে হিসাব নিবো" 
+            className="h-[12px] opacity-50 mt-0.5 text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest px-1"
+          />
         </div>
 
         {/* Mobile Body Content Stack */}

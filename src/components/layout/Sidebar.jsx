@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import UserProfileBar from '../auth/UserProfileBar';
 import PersonItem from '../ui/PersonItem';
+import BouncingText from '../ui/BouncingText';
 import { Settings, LogIn, UserPlus, Download, Upload } from 'lucide-react';
 
 export default function Sidebar({
@@ -74,11 +75,10 @@ export default function Sidebar({
           )}
         </div>
         {/* Slogan Ticker */}
-        <div className="overflow-hidden w-full h-[14px] relative opacity-60 bg-slate-50 dark:bg-[#141414]">
-          <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 absolute w-full animate-marquee uppercase tracking-widest whitespace-nowrap">
-            পাই পাই করে হিসাব নিবো • Pai Pai Kore Hishab Nibo • পাই পাই করে হিসাব নিবো
-          </p>
-        </div>
+        <BouncingText 
+          text="পাই পাই করে হিসাব নিবো" 
+          className="h-[14px] opacity-60 bg-slate-50 dark:bg-[#141414] text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest px-1"
+        />
 
         {/* User Profile Status Bar */}
         {user && (
