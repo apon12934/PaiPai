@@ -65,6 +65,7 @@ input[type="number"] {
 
 .animate-modal-overlay-out {
   animation: custom-overlay-fade-out 0.15s ease-in forwards;
+}
 
 .animate-modal-pop-out {
   animation: custom-modal-pop-out 0.15s cubic-bezier(0.4, 0, 1, 1) forwards;
