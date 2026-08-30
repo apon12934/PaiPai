@@ -55,7 +55,7 @@ export default function MainPanel({
       </div>
 
       {/* Hero Balance Card */}
-      <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-[#151624] border border-slate-200 dark:border-slate-900 dark:border-slate-100/20 shadow-lg dark:shadow-xl flex flex-col items-center justify-center text-center space-y-2 animate-fade-in">
+      <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-[#141414] border border-slate-200 dark:border-slate-900 dark:border-slate-100/20 shadow-lg dark:shadow-xl flex flex-col items-center justify-center text-center space-y-2 animate-fade-in">
         <span className={`text-[10px] font-extrabold tracking-widest px-3.5 py-1 rounded-full border ${badgeStyle}`}>
           {defaultLabel}
         </span>
@@ -67,7 +67,7 @@ export default function MainPanel({
       </div>
 
       {/* Transaction Logger Form Card */}
-      <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-[#151624] border border-slate-200 dark:border-white/10 shadow-lg dark:shadow-xl animate-fade-in">
+      <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-[#141414] border border-slate-200 dark:border-white/10 shadow-lg dark:shadow-xl animate-fade-in">
         <TransactionForm
           onSubmit={onSubmitTx}
           editingTx={editingTx}

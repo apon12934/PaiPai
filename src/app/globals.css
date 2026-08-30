@@ -65,7 +65,6 @@ input[type="number"] {
 
 .animate-modal-overlay-out {
   animation: custom-overlay-fade-out 0.15s ease-in forwards;
-}
 
 .animate-modal-pop-out {
   animation: custom-modal-pop-out 0.15s cubic-bezier(0.4, 0, 1, 1) forwards;
@@ -74,7 +73,7 @@ input[type="number"] {
 /* BASE BODY STYLES */
 html, body {
   font-family: var(--font-sans);
-  background-color: #07080D;
+  background-color: #0A0A0A;
   color: #F8FAFC;
   margin: 0;
   padding: 0;
@@ -170,4 +169,42 @@ html.light .resizer:hover, html.light .resizer.active {
 .no-select {
   user-select: none;
   -webkit-user-select: none;
+}
+/* ===== SOLID ACTION BUTTONS ===== */
+.btn-gave-solid {
+  background-color: #E11D48 !important;
+  color: #FFFFFF !important;
+}
+.btn-gave-solid:hover {
+  background-color: #F43F5E !important;
+}
+
+.btn-received-solid {
+  background-color: #059669 !important;
+  color: #FFFFFF !important;
+}
+.btn-received-solid:hover {
+  background-color: #10B981 !important;
+}
+
+/* ===== CUSTOM SLIM SCROLLBAR ===== */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.5);
+}
+html.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
 }
