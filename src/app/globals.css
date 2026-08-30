@@ -124,8 +124,16 @@ input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="password"]:focus,
 input[type="number"]:focus {
-  border-color: #6366F1 !important;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1) !important;
+}
+
+html.light input[type="text"]:focus,
+html.light input[type="email"]:focus,
+html.light input[type="password"]:focus,
+html.light input[type="number"]:focus {
+  border-color: #0F172A !important;
+  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.15) !important;
 }
 
 /* ANIMATIONS */
@@ -152,8 +160,11 @@ html.light .resizer {
   background: #E2E8F0;
 }
 .resizer:hover, .resizer.active {
-  background: #6366F1;
+  background: #FFFFFF;
   width: 2px;
+}
+html.light .resizer:hover, html.light .resizer.active {
+  background: #0F172A;
 }
 
 .no-select {

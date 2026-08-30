@@ -18,18 +18,18 @@ export default function PersonItem({ name, balance = 0, isSelected, onClick, cur
   let balancePrefix = '';
 
   if (isPositive) {
-    balanceColor = isSelected ? 'text-white' : 'text-emerald-600 dark:text-emerald-400 font-bold';
+    balanceColor = isSelected ? 'text-white dark:text-slate-900' : 'text-emerald-600 dark:text-emerald-400 font-bold';
     balancePrefix = '+';
   } else if (isNegative) {
-    balanceColor = isSelected ? 'text-white' : 'text-rose-600 dark:text-rose-400 font-bold';
+    balanceColor = isSelected ? 'text-white dark:text-slate-900' : 'text-rose-600 dark:text-rose-400 font-bold';
     balancePrefix = '-';
   } else if (isSelected) {
-    balanceColor = 'text-white';
+    balanceColor = 'text-white dark:text-slate-900';
   }
 
   // Selected item classes: Solid Indigo background with pure white text in both light and dark mode!
   const baseClasses = 'w-full relative flex items-center justify-between rounded-lg px-3 py-2.5 text-sm transition-all duration-150 cursor-pointer overflow-hidden';
-  const selectedClasses = 'bg-indigo-600 text-white font-bold shadow-md shadow-indigo-600/30';
+  const selectedClasses = 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-bold shadow-md shadow-black/20 dark:shadow-white/20';
   const defaultClasses = 'bg-transparent hover:bg-slate-200/60 dark:hover:bg-white/[0.04] text-slate-900 dark:text-slate-200 font-medium';
 
   return (
@@ -41,12 +41,12 @@ export default function PersonItem({ name, balance = 0, isSelected, onClick, cur
         {/* Contact Initial Circle Avatar */}
         <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${
           isSelected 
-            ? 'bg-white text-indigo-600 shadow-md' 
-            : 'bg-indigo-600 text-white shadow-sm'
+            ? 'bg-white text-slate-900 dark:text-slate-100 shadow-md' 
+            : 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 shadow-sm'
         }`}>
           {initial}
         </div>
-        <span className={`truncate font-bold ${isSelected ? 'text-white' : 'text-slate-900 dark:text-slate-100'}`}>{name}</span>
+        <span className={`truncate font-bold ${isSelected ? 'text-white dark:text-slate-900' : 'text-slate-900 dark:text-slate-100'}`}>{name}</span>
       </div>
 
       <div className={`whitespace-nowrap text-xs font-mono tracking-tight ${balanceColor}`}>

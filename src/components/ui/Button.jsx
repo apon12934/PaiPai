@@ -2,7 +2,7 @@
 import React from 'react';
 
 const variants = {
-  primary: 'bg-indigo-600 hover:bg-indigo-500 text-white',
+  primary: 'bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900',
   danger: 'bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20',
   ghost: 'bg-transparent hover:bg-white/5 text-slate-400',
   glass: 'bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300',

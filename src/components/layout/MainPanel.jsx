@@ -37,7 +37,7 @@ export default function MainPanel({
       {/* Header Bar */}
       <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-white/5">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-base shadow-md shadow-indigo-600/30">
+          <div className="w-10 h-10 rounded-full bg-slate-900 dark:bg-slate-100 flex items-center justify-center text-white dark:text-slate-900 font-bold text-base shadow-md shadow-black/20 dark:shadow-white/20">
             {initial}
           </div>
           <div>
@@ -55,7 +55,7 @@ export default function MainPanel({
       </div>
 
       {/* Hero Balance Card */}
-      <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-[#151624] border border-slate-200 dark:border-indigo-500/20 shadow-lg dark:shadow-xl flex flex-col items-center justify-center text-center space-y-2 animate-fade-in">
+      <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-[#151624] border border-slate-200 dark:border-slate-900 dark:border-slate-100/20 shadow-lg dark:shadow-xl flex flex-col items-center justify-center text-center space-y-2 animate-fade-in">
         <span className={`text-[10px] font-extrabold tracking-widest px-3.5 py-1 rounded-full border ${badgeStyle}`}>
           {defaultLabel}
         </span>

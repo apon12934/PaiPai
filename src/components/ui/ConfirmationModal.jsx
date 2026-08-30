@@ -37,9 +37,9 @@ export default function ConfirmationModal({
         };
       default:
         return {
-          icon: <Check className="w-6 h-6 text-indigo-500" />,
-          iconBg: 'bg-indigo-100 dark:bg-indigo-500/10 border-indigo-200 dark:border-indigo-500/20',
-          button: 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/20 font-bold',
+          icon: <Check className="w-6 h-6 text-slate-800 dark:text-slate-200" />,
+          iconBg: 'bg-slate-200 dark:bg-slate-800 dark:bg-slate-100 dark:bg-slate-9000/10 border-slate-300 dark:border-slate-700 dark:border-slate-900 dark:border-slate-100/20',
+          button: 'bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900 shadow-lg shadow-black/20 dark:shadow-white/20 font-bold',
         };
     }
   };

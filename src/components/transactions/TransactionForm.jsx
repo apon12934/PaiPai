@@ -66,7 +66,7 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
 
       {/* Clean Amount Input (No Spinners) */}
       <div className="relative">
-        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-indigo-600 dark:text-indigo-400">{currency}</span>
+        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-slate-900 dark:text-slate-300">{currency}</span>
         <input
           ref={amountInputRef}
           type="number"

@@ -45,13 +45,13 @@ export default function Sidebar({
             <img 
               src="/logo.svg" 
               alt="PaiPai Logo" 
-              className="hidden dark:block h-10 w-auto object-contain shrink-0"
+              className="hidden dark:block h-10 w-auto object-contain shrink-0 grayscale"
             />
             {/* Light Mode Logo */}
             <img 
               src="/logo-light.svg" 
               alt="PaiPai Logo" 
-              className="block dark:hidden h-10 w-auto object-contain shrink-0"
+              className="block dark:hidden h-10 w-auto object-contain shrink-0 grayscale"
             />
           </div>
           {!user && (
@@ -130,12 +130,12 @@ export default function Sidebar({
               placeholder="Contact name..."
               value={newPersonName}
               onChange={(e) => setNewPersonName(e.target.value)}
-              className="flex-1 bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 rounded-lg px-3 py-2 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-indigo-500"
+              className="flex-1 bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 rounded-lg px-3 py-2 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-slate-900 dark:border-slate-100"
             />
             <button
               type="submit"
               disabled={!newPersonName.trim()}
-              className="px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg shadow-md shadow-indigo-600/20 disabled:opacity-40"
+              className="px-3 py-2 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900 text-xs font-semibold rounded-lg shadow-md shadow-black/20 dark:shadow-white/20 disabled:opacity-40"
             >
               Add
             </button>
@@ -152,7 +152,7 @@ export default function Sidebar({
             onClick={() => setShowAddForm(true)}
             className="w-full flex items-center justify-center gap-2 p-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-white/[0.03] dark:hover:bg-white/[0.07] border border-slate-200 dark:border-white/10 text-slate-900 dark:text-slate-200 text-xs font-bold transition-all cursor-pointer shadow-sm"
           >
-            <UserPlus className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+            <UserPlus className="w-4 h-4 text-slate-900 dark:text-slate-300" />
             <span>Add New Contact</span>
           </button>
         )}

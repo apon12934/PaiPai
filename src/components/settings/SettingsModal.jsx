@@ -239,11 +239,11 @@ export default function SettingsModal({
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
                   isAct
-                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+                    ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 shadow-md shadow-black/20 dark:shadow-white/20'
                     : 'bg-slate-100 dark:bg-white/5 text-black dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-white/10'
                 }`}
               >
-                <Icon className={`w-3.5 h-3.5 ${isAct ? 'text-white' : 'text-slate-700 dark:text-slate-300'}`} />
+                <Icon className={`w-3.5 h-3.5 ${isAct ? 'text-white dark:text-slate-900' : 'text-slate-700 dark:text-slate-300'}`} />
                 <span className={isAct ? 'text-white font-bold' : 'text-black dark:text-slate-100 font-bold'}>
                   {tab.label}
                 </span>
@@ -258,7 +258,7 @@ export default function SettingsModal({
             {/* Currency Selector */}
             <div>
               <label className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-black dark:text-slate-300 mb-2.5">
-                <Coins className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                <Coins className="w-3.5 h-3.5 text-slate-900 dark:text-slate-300" />
                 <span>Currency Symbol</span>
               </label>
               <div className="grid grid-cols-2 gap-2">
@@ -270,14 +270,14 @@ export default function SettingsModal({
                       onClick={() => handleCurrencyChange(c.symbol)}
                       className={`flex items-center justify-between p-3 rounded-lg border text-xs font-bold transition-all ${
                         isSel
-                          ? 'bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-600/20'
+                          ? 'bg-slate-900 dark:bg-slate-100 border-slate-900 dark:border-slate-100 text-white dark:text-slate-900 shadow-md shadow-black/20 dark:shadow-white/20'
                           : 'bg-slate-100 dark:bg-white/5 border-slate-300 dark:border-white/10 hover:bg-slate-200 dark:hover:bg-white/10'
                       }`}
                     >
-                      <span className={`truncate font-bold ${isSel ? 'text-white' : 'text-black dark:text-slate-100'}`}>
+                      <span className={`truncate font-bold ${isSel ? 'text-white dark:text-slate-900' : 'text-black dark:text-slate-100'}`}>
                         {c.name}
                       </span>
-                      <span className={`font-bold text-sm ml-2 ${isSel ? 'text-white' : 'text-indigo-600 dark:text-indigo-400'}`}>
+                      <span className={`font-bold text-sm ml-2 ${isSel ? 'text-white dark:text-slate-900' : 'text-slate-900 dark:text-slate-300'}`}>
                         {c.symbol}
                       </span>
                     </button>
@@ -289,12 +289,12 @@ export default function SettingsModal({
             {/* Theme Selector (Dark, Light, Auto System) */}
             <div>
               <label className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-black dark:text-slate-300 mb-2.5">
-                <Moon className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                <Moon className="w-3.5 h-3.5 text-slate-900 dark:text-slate-300" />
                 <span>App Theme</span>
               </label>
               <div className="grid grid-cols-3 gap-2">
                 {[
-                  { id: 'dark', label: 'Dark', icon: Moon, color: 'text-indigo-600 dark:text-indigo-400' },
+                  { id: 'dark', label: 'Dark', icon: Moon, color: 'text-slate-900 dark:text-slate-300' },
                   { id: 'light', label: 'Light', icon: Sun, color: 'text-amber-500' },
                   { id: 'system', label: 'Auto (Device)', icon: Laptop, color: 'text-emerald-600 dark:text-emerald-400' },
                 ].map((th) => {
@@ -306,11 +306,11 @@ export default function SettingsModal({
                       onClick={() => handleThemeChange(th.id)}
                       className={`p-3 rounded-lg border text-xs font-bold flex flex-col items-center justify-center gap-1.5 transition-all ${
                         isSel
-                          ? 'bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-600/20'
+                          ? 'bg-slate-900 dark:bg-slate-100 border-slate-900 dark:border-slate-100 text-white dark:text-slate-900 shadow-md shadow-black/20 dark:shadow-white/20'
                           : 'bg-slate-100 dark:bg-white/5 border-slate-300 dark:border-white/10 hover:bg-slate-200 dark:hover:bg-white/10'
                       }`}
                     >
-                      <Icon className={`w-4 h-4 ${isSel ? 'text-white' : th.color}`} />
+                      <Icon className={`w-4 h-4 ${isSel ? 'text-white dark:text-slate-900' : th.color}`} />
                       <span className={isSel ? 'text-white font-bold' : 'text-black dark:text-slate-100 font-bold'}>
                         {th.label}
                       </span>
@@ -323,7 +323,7 @@ export default function SettingsModal({
             {/* Transaction Sort Order */}
             <div>
               <label className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-black dark:text-slate-300 mb-2.5">
-                <ArrowUpDown className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                <ArrowUpDown className="w-3.5 h-3.5 text-slate-900 dark:text-slate-300" />
                 <span>History Sort Order</span>
               </label>
               <div className="grid grid-cols-2 gap-3">
@@ -338,7 +338,7 @@ export default function SettingsModal({
                       onClick={() => handleSortChange(so.id)}
                       className={`p-3 rounded-lg border text-xs font-bold transition-all ${
                         isSel
-                          ? 'bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-600/20'
+                          ? 'bg-slate-900 dark:bg-slate-100 border-slate-900 dark:border-slate-100 text-white dark:text-slate-900 shadow-md shadow-black/20 dark:shadow-white/20'
                           : 'bg-slate-100 dark:bg-white/5 border-slate-300 dark:border-white/10 hover:bg-slate-200 dark:hover:bg-white/10'
                       }`}
                     >
@@ -381,10 +381,10 @@ export default function SettingsModal({
                     <img
                       src={photoURL}
                       alt="Profile Avatar"
-                      className="w-14 h-14 rounded-full object-cover border-2 border-indigo-500 shadow-lg shadow-indigo-500/20"
+                      className="w-14 h-14 rounded-full object-cover border-2 border-slate-900 dark:border-slate-100 shadow-lg shadow-black/20 dark:shadow-white/20"
                     />
                   ) : (
-                    <div className="w-14 h-14 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-600/30">
+                    <div className="w-14 h-14 rounded-full bg-slate-900 dark:bg-slate-100 flex items-center justify-center text-white dark:text-slate-900 font-bold text-xl shadow-lg shadow-black/20 dark:shadow-white/20">
                       {(displayName || user.email || 'U').charAt(0).toUpperCase()}
                     </div>
                   )}
@@ -412,13 +412,13 @@ export default function SettingsModal({
                   <label className="block text-xs font-bold uppercase tracking-wider text-black dark:text-slate-300 mb-2">
                     Upload Photo from PC (Cloudinary)
                   </label>
-                  <label className="flex items-center justify-center gap-2 w-full p-3 border border-dashed border-indigo-500/40 hover:border-indigo-500 bg-indigo-50 dark:bg-indigo-500/5 hover:bg-indigo-100 dark:hover:bg-indigo-500/10 rounded-lg cursor-pointer transition-all">
+                  <label className="flex items-center justify-center gap-2 w-full p-3 border border-dashed border-slate-900 dark:border-slate-100/40 hover:border-slate-900 dark:border-slate-100 bg-slate-100 dark:bg-slate-900 dark:bg-slate-100 dark:bg-slate-9000/5 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-800 dark:hover:bg-white/10 rounded-lg cursor-pointer transition-all">
                     {isUploadingPhoto ? (
-                      <Loader2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400 animate-spin" />
+                      <Loader2 className="w-4 h-4 text-slate-900 dark:text-slate-300 animate-spin" />
                     ) : (
-                      <UploadCloud className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                      <UploadCloud className="w-4 h-4 text-slate-900 dark:text-slate-300" />
                     )}
-                    <span className="text-xs font-bold text-indigo-700 dark:text-indigo-300">
+                    <span className="text-xs font-bold text-slate-900 dark:text-slate-300">
                       {isUploadingPhoto ? 'Uploading to Cloudinary...' : 'Choose Image File from PC'}
                     </span>
                     <input
@@ -438,7 +438,7 @@ export default function SettingsModal({
                     onClick={handleResetToGooglePhoto}
                     className="flex items-center justify-center gap-2 w-full bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-black dark:text-slate-300 text-xs py-2.5 rounded-lg border border-slate-300 dark:border-white/10 transition font-bold"
                   >
-                    <RotateCcw className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                    <RotateCcw className="w-3.5 h-3.5 text-slate-900 dark:text-slate-300" />
                     <span>Reset to Google Profile Picture</span>
                   </button>
                 )}
@@ -446,7 +446,7 @@ export default function SettingsModal({
                 <button
                   type="submit"
                   disabled={isUploadingPhoto}
-                  className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-lg text-xs transition shadow-lg shadow-indigo-600/20 disabled:opacity-50"
+                  className="w-full bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900 font-bold py-2.5 rounded-lg text-xs transition shadow-lg shadow-black/20 dark:shadow-white/20 disabled:opacity-50"
                 >
                   Save Profile Changes
                 </button>
@@ -518,7 +518,7 @@ export default function SettingsModal({
                   ) : (
                     <button
                       onClick={handleLinkGoogle}
-                      className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-lg transition font-bold shadow-sm"
+                      className="bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900 text-xs px-3 py-1.5 rounded-lg transition font-bold shadow-sm"
                     >
                       Link Google
                     </button>
@@ -570,7 +570,7 @@ export default function SettingsModal({
                       />
                       <button
                         type="submit"
-                        className="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs py-2 rounded-lg transition font-bold shadow-sm mt-1"
+                        className="w-full bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900 text-xs py-2 rounded-lg transition font-bold shadow-sm mt-1"
                       >
                         Attach Email & Password
                       </button>
@@ -619,7 +619,7 @@ export default function SettingsModal({
               </p>
               <button
                 onClick={onExport}
-                className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs py-2.5 rounded-lg font-bold transition shadow-md shadow-indigo-600/20"
+                className="w-full flex items-center justify-center gap-2 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900 text-xs py-2.5 rounded-lg font-bold transition shadow-md shadow-black/20 dark:shadow-white/20"
               >
                 <Download className="w-3.5 h-3.5 text-white" />
                 <span className="text-white font-bold">Download JSON Backup</span>

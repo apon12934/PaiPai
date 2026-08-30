@@ -18,7 +18,7 @@ export default function TransactionCard({ transaction, onEdit, onDelete, isEditi
       className={`p-3.5 group relative overflow-hidden transition-all duration-150 rounded-xl ${
         isGave ? 'history-card-gave' : 'history-card-received'
       } ${
-        isEditing ? 'border-indigo-500 bg-indigo-500/10' : 'hover:border-white/15 light:hover:border-slate-300'
+        isEditing ? 'border-slate-900 dark:border-slate-100 bg-slate-100 dark:bg-slate-9000/10' : 'hover:border-white/15 light:hover:border-slate-300'
       }`}
     >
       {/* Top Row: Type Pill + Date */}
@@ -47,7 +47,7 @@ export default function TransactionCard({ transaction, onEdit, onDelete, isEditi
       <div className="absolute top-2.5 right-2.5 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900/90 light:bg-white/90 backdrop-blur-sm p-1 rounded-lg border border-white/10 light:border-slate-200 shadow-md">
         <button
           onClick={onEdit}
-          className="p-1 text-slate-400 hover:text-indigo-400 light:hover:text-indigo-600 hover:bg-white/10 rounded transition-colors"
+          className="p-1 text-slate-400 hover:text-slate-700 dark:text-slate-300 light:hover:text-slate-900 dark:text-slate-100 hover:bg-white/10 rounded transition-colors"
           title="Edit"
         >
           <Pencil className="w-3.5 h-3.5" />

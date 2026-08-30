@@ -501,12 +501,12 @@ export default function Home() {
                   src={user.photoURL}
                   alt="Avatar"
                   onClick={() => setSettingsModalOpen(true)}
-                  className="w-8 h-8 rounded-full object-cover border border-indigo-500 cursor-pointer shadow-md shrink-0"
+                  className="w-8 h-8 rounded-full object-cover border border-slate-900 dark:border-slate-100 cursor-pointer shadow-md shrink-0"
                 />
               ) : (
                 <div
                   onClick={() => setSettingsModalOpen(true)}
-                  className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-xs cursor-pointer shadow-md shadow-indigo-600/30 shrink-0"
+                  className="w-8 h-8 rounded-full bg-slate-900 dark:bg-slate-100 flex items-center justify-center text-white dark:text-slate-900 font-bold text-xs cursor-pointer shadow-md shadow-black/20 dark:shadow-white/20 shrink-0"
                 >
                   {(user.displayName || user.email || 'U').charAt(0).toUpperCase()}
                 </div>
@@ -527,7 +527,7 @@ export default function Home() {
         <div className="flex-1 overflow-y-auto p-4 space-y-6">
           {/* Total Net Position Card */}
           <div className="p-6 rounded-2xl bg-white/[0.03] light:bg-white border border-white/5 light:border-slate-200 shadow-xl text-center space-y-2">
-            <span className="text-[10px] font-extrabold text-indigo-400 uppercase tracking-widest block">
+            <span className="text-[10px] font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-widest block">
               Total Net Position
             </span>
             <div className={`text-4xl font-black font-mono tracking-tight ${
@@ -545,7 +545,7 @@ export default function Home() {
               </h2>
               <button
                 onClick={() => setShowMobileAddForm(!showMobileAddForm)}
-                className="flex items-center gap-1 text-xs font-bold text-indigo-400 hover:underline"
+                className="flex items-center gap-1 text-xs font-bold text-slate-700 dark:text-slate-300 hover:underline"
               >
                 <UserPlus className="w-3.5 h-3.5" />
                 <span>+ Add</span>
@@ -566,7 +566,7 @@ export default function Home() {
                 <button
                   type="submit"
                   disabled={!newMobilePersonName.trim()}
-                  className="px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-lg disabled:opacity-40"
+                  className="px-3 py-2 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900 text-xs font-bold rounded-lg disabled:opacity-40"
                 >
                   Save
                 </button>
@@ -583,12 +583,12 @@ export default function Home() {
                     onClick={() => setSelectedPerson(p.name)}
                     className={`flex flex-col items-center p-3.5 rounded-xl border min-w-[110px] transition-all cursor-pointer ${
                       isSel
-                        ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-600/30 scale-105'
+                        ? 'bg-slate-900 dark:bg-slate-100 border-slate-900 dark:border-slate-100 text-white dark:text-slate-900 shadow-lg shadow-black/20 dark:shadow-white/20 scale-105'
                         : 'bg-white/[0.03] light:bg-white border-white/5 light:border-slate-200 text-slate-300 light:text-slate-800'
                     }`}
                   >
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm mb-2 ${
-                      isSel ? 'bg-white text-indigo-600' : 'bg-white/10 light:bg-slate-200 text-slate-300 light:text-slate-700'
+                      isSel ? 'bg-white text-slate-900 dark:text-slate-100' : 'bg-white/10 light:bg-slate-200 text-slate-300 light:text-slate-700'
                     }`}>
                       {initial}
                     </div>
@@ -609,7 +609,7 @@ export default function Home() {
             <div className="p-5 rounded-2xl glass-card space-y-4">
               <div className="flex items-center justify-between pb-2 border-b border-white/10 light:border-slate-200">
                 <h3 className="text-sm font-bold text-white light:text-slate-900">
-                  Log for <span className="text-indigo-400">{selectedPerson}</span>
+                  Log for <span className="text-slate-700 dark:text-slate-300">{selectedPerson}</span>
                 </h3>
                 <button
                   onClick={handleDeletePerson}
@@ -673,7 +673,7 @@ export default function Home() {
                           setSelectedPerson(tx.personName);
                           handleEditTx(tx);
                         }}
-                        className="text-[10px] text-indigo-400 font-semibold uppercase tracking-wider"
+                        className="text-[10px] text-slate-700 dark:text-slate-300 font-semibold uppercase tracking-wider"
                       >
                         Edit
                       </button>

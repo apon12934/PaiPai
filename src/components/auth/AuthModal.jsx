@@ -85,7 +85,7 @@ export default function AuthModal({ isOpen, onClose }) {
               placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-2.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-sm"
+              className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-2.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:border-slate-100 focus:ring-1 focus:ring-slate-900 dark:ring-slate-100 transition-all text-sm"
               required
             />
           </div>
@@ -95,7 +95,7 @@ export default function AuthModal({ isOpen, onClose }) {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-2.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-sm"
+              className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-2.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:border-slate-100 focus:ring-1 focus:ring-slate-900 dark:ring-slate-100 transition-all text-sm"
               required
             />
           </div>
@@ -115,7 +115,7 @@ export default function AuthModal({ isOpen, onClose }) {
           <button 
             type="button" 
             onClick={() => { setIsLogin(!isLogin); setError(null); }}
-            className="text-slate-400 hover:text-indigo-400 text-xs transition-colors"
+            className="text-slate-400 hover:text-slate-700 dark:text-slate-300 text-xs transition-colors"
           >
             {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Log In"}
           </button>

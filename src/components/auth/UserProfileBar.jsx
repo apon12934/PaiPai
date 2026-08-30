@@ -22,7 +22,7 @@ export default function UserProfileBar({ onOpenSettings }) {
             className="w-8 h-8 rounded-full object-cover border border-slate-300 dark:border-white/10 flex-shrink-0 shadow-sm"
           />
         ) : (
-          <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-xs flex-shrink-0 shadow-lg shadow-indigo-600/20">
+          <div className="w-8 h-8 rounded-full bg-slate-900 dark:bg-slate-100 flex items-center justify-center text-white dark:text-slate-900 font-bold text-xs flex-shrink-0 shadow-lg shadow-black/20 dark:shadow-white/20">
             {initial}
           </div>
         )}
@@ -36,7 +36,7 @@ export default function UserProfileBar({ onOpenSettings }) {
         {onOpenSettings && (
           <button
             onClick={onOpenSettings}
-            className="p-1.5 text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 hover:bg-slate-200 dark:hover:bg-white/5 rounded-lg transition-all"
+            className="p-1.5 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/5 rounded-lg transition-all"
             title="Settings & Accounts"
           >
             <Settings className="w-3.5 h-3.5" />
