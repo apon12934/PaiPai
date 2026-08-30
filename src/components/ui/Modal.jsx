@@ -40,7 +40,7 @@ export default function Modal({ isOpen, onClose, children, title, subtitle }) {
         aria-hidden="true"
       />
       <div className={`relative z-10 w-full max-w-md ${isClosing ? 'animate-modal-pop-out' : 'animate-modal-pop'}`}>
-        <GlassCard variant="prominent" className="w-full flex flex-col relative overflow-hidden bg-white dark:bg-[#151624] text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 shadow-2xl">
+        <GlassCard variant="prominent" className="w-full flex flex-col relative overflow-hidden bg-white dark:bg-[#141414] text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 shadow-2xl">
           <button 
             onClick={onClose}
             className="absolute top-4 right-4 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors p-1"
