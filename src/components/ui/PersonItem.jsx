@@ -41,7 +41,7 @@ export default function PersonItem({ name, balance = 0, isSelected, onClick, cur
         {/* Contact Initial Circle Avatar */}
         <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${
           isSelected 
-            ? 'bg-white text-slate-900 dark:text-slate-100 shadow-md' 
+            ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-md' 
             : 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 shadow-sm'
         }`}>
           {initial}
