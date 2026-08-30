@@ -1,8 +1,19 @@
-# PaiPai (পাই পাই) - Debt & Tab Tracker
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="public/logo.svg">
+    <source media="(prefers-color-scheme: light)" srcset="public/logo-light.svg">
+    <img alt="PaiPai Logo" src="public/logo.svg" height="80">
+  </picture>
 
-A modern, highly-polished debt and expense tracking web app with real-time cloud sync across all your devices.
+  <h1>PaiPai (পাই পাই)</h1>
+  <p><strong>A modern, highly-polished debt and expense tracking web app with real-time cloud sync across all your devices.</strong></p>
 
-![Next.js](https://img.shields.io/badge/Next.js-16-black) ![Firebase](https://img.shields.io/badge/Firebase-Auth%20%2B%20Firestore-orange) ![Vercel](https://img.shields.io/badge/Deploy-Vercel-black)
+  <p>
+    <img src="https://img.shields.io/badge/Next.js-16-black" alt="Next.js" />
+    <img src="https://img.shields.io/badge/Firebase-Auth%20%2B%20Firestore-orange" alt="Firebase" />
+    <img src="https://img.shields.io/badge/Deploy-Vercel-black" alt="Vercel" />
+  </p>
+</div>
 
 ## Features
 
