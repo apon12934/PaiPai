@@ -255,6 +255,7 @@ export default function Home() {
 
   const handleEditTx = useCallback((id) => {
     setEditingTxId(id);
+    setMobileTab('home');
   }, []);
 
   const handleDeleteTx = useCallback(
@@ -671,7 +672,7 @@ export default function Home() {
                       <button
                         onClick={() => {
                           setSelectedPerson(tx.personName);
-                          handleEditTx(tx);
+                          handleEditTx(tx.id);
                         }}
                         className="text-[10px] text-slate-700 dark:text-slate-300 font-semibold uppercase tracking-wider"
                       >
