@@ -7,6 +7,7 @@ import Sidebar from '@/components/layout/Sidebar';
 import MainPanel from '@/components/layout/MainPanel';
 import HistoryPanel from '@/components/layout/HistoryPanel';
 import EmptyState from '@/components/layout/EmptyState';
+import SkeletonApp from '@/components/layout/SkeletonApp';
 import AuthModal from '@/components/auth/AuthModal';
 import SettingsModal from '@/components/settings/SettingsModal';
 import ConfirmationModal from '@/components/ui/ConfirmationModal';
@@ -22,7 +23,7 @@ import {
 
 export default function Home() {
   const { user, loading: authLoading } = useAuth();
-  const { data: dbState, saveData, isGuestMode } = useDatabase();
+  const { data: dbState, saveData, loading: dbLoading, isGuestMode } = useDatabase();
 
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [editingTxId, setEditingTxId] = useState(null);
@@ -399,8 +400,12 @@ export default function Home() {
         </div>
       )}
 
-      {/* DESKTOP VIEW (≥ 768px Width): 3-Panel Split View */}
-      <div
+      { (authLoading || (user && dbLoading)) ? (
+        <SkeletonApp />
+      ) : (
+        <>
+          {/* DESKTOP VIEW (≥ 768px Width): 3-Panel Split View */}
+          <div
         ref={containerRef}
         className="hidden md:flex w-full max-w-[1600px] h-full max-h-[92vh] glass-prominent rounded-2xl overflow-hidden"
       >
@@ -680,6 +685,8 @@ export default function Home() {
           </div>
         </div>
       </div>
+      </>
+      )}
 
       {/* Auth Modal */}
       <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} />
