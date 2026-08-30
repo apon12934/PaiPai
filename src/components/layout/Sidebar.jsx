@@ -90,7 +90,7 @@ export default function Sidebar({
             <div className={`text-xl font-extrabold font-mono tracking-tight ${
               isGrandTotalPositive ? 'text-emerald-600 dark:text-emerald-400' : isGrandTotalNegative ? 'text-rose-600 dark:text-rose-400' : 'text-slate-900 dark:text-slate-300'
             }`}>
-              {isGrandTotalPositive ? '+' : isGrandTotalNegative ? '-' : ''}{currency} {Math.abs(grandTotal).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+              {isGrandTotalPositive ? '+' : isGrandTotalNegative ? '-' : ''}{currency} {Math.abs(grandTotal).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
             </div>
           </div>
         </div>

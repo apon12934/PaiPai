@@ -40,13 +40,14 @@ export function DatabaseProvider({ children }) {
   }, [user, authLoading]);
 
   const saveData = useCallback(
-    (newData) => {
-      setData(newData);
-      if (user) {
-        // Only save persistent data to Firebase Cloud Account
-        saveCloudData(user, newData);
-      }
-      // If logged out / guest mode, data remains strictly in-memory (never written to localStorage)
+    (newDataOrUpdater) => {
+      setData((prevData) => {
+        const newData = typeof newDataOrUpdater === 'function' ? newDataOrUpdater(prevData) : newDataOrUpdater;
+        if (user) {
+          saveCloudData(user, newData);
+        }
+        return newData;
+      });
     },
     [user]
   );

@@ -75,15 +75,15 @@ export default function SettingsModal({
   const [deleteAccountMsg, setDeleteAccountMsg] = useState('');
 
   const handleCurrencyChange = (newCurrency) => {
-    onUpdateSettings({ ...settings, currency: newCurrency });
+    onUpdateSettings({ currency: newCurrency });
   };
 
   const handleThemeChange = (newTheme) => {
-    onUpdateSettings({ ...settings, theme: newTheme });
+    onUpdateSettings({ theme: newTheme });
   };
 
   const handleSortChange = (newSort) => {
-    onUpdateSettings({ ...settings, sortOrder: newSort });
+    onUpdateSettings({ sortOrder: newSort });
   };
 
   const handlePhotoUpload = async (e) => {

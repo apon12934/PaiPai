@@ -9,7 +9,7 @@ export default function PersonItem({ name, balance = 0, isSelected, onClick, cur
 
   const displayBalance = Math.abs(balance).toLocaleString(undefined, {
     minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
+    maximumFractionDigits: 2,
   });
 
   const initial = (name || 'P').charAt(0).toUpperCase();

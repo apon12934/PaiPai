@@ -154,13 +154,16 @@ export default function Home() {
 
   // Settings update handler
   const handleUpdateSettings = useCallback(
-    (newSettings) => {
-      saveData({
-        ...dbState,
-        _settings: newSettings,
+    (partialSettings) => {
+      saveData((prev) => {
+        const currentSettings = prev._settings || {};
+        return {
+          ...prev,
+          _settings: { ...currentSettings, ...partialSettings },
+        };
       });
     },
-    [dbState, saveData]
+    [saveData]
   );
 
   // Clear all application data
@@ -184,13 +187,21 @@ export default function Home() {
   // Transaction handlers
   const handleAddPerson = useCallback(
     (name) => {
-      if (name && !dbState[name]) {
-        const newData = { ...dbState, [name]: [] };
-        saveData(newData);
-        setSelectedPerson(name);
+      if (!name) return;
+      const normalizedName = name.trim();
+      const existingNames = Object.keys(dbState).filter(k => !k.startsWith('_'));
+      const duplicate = existingNames.find(k => k.toLowerCase() === normalizedName.toLowerCase());
+      
+      if (duplicate) {
+        showToast(`Contact "${duplicate}" already exists!`, true);
+        return;
       }
+      
+      const newData = { ...dbState, [normalizedName]: [] };
+      saveData(newData);
+      setSelectedPerson(normalizedName);
     },
-    [dbState, saveData]
+    [dbState, saveData, showToast]
   );
 
   const handleMobileAddPerson = (e) => {
@@ -316,7 +327,13 @@ export default function Home() {
       reader.onload = (e) => {
         try {
           const imported = JSON.parse(e.target.result);
-          if (typeof imported === 'object' && imported !== null) {
+          if (typeof imported === 'object' && imported !== null && !Array.isArray(imported)) {
+            for (const key of Object.keys(imported)) {
+              if (key === '_settings') continue;
+              if (!Array.isArray(imported[key])) {
+                throw new Error('Invalid backup data format for contact: ' + key);
+              }
+            }
             saveData(imported);
             setSelectedPerson(null);
             setEditingTxId(null);
@@ -543,7 +560,7 @@ export default function Home() {
             <div className={`text-4xl font-black font-mono tracking-tight ${
               grandTotal > 0 ? 'text-emerald-400 light:text-emerald-600' : grandTotal < 0 ? 'text-rose-400 light:text-rose-600' : 'text-slate-200 light:text-slate-800'
             }`}>
-              {grandTotal > 0 ? '+' : grandTotal < 0 ? '-' : ''}{currency} {Math.abs(grandTotal).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+              {grandTotal > 0 ? '+' : grandTotal < 0 ? '-' : ''}{currency} {Math.abs(grandTotal).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
             </div>
           </div>
 
@@ -606,7 +623,7 @@ export default function Home() {
                     <span className={`text-[10px] font-mono font-bold mt-0.5 ${
                       p.balance > 0 ? (isSel ? 'text-emerald-400 dark:text-emerald-600' : 'text-emerald-600 dark:text-emerald-400') : p.balance < 0 ? (isSel ? 'text-rose-400 dark:text-rose-600' : 'text-rose-600 dark:text-rose-400') : 'text-slate-500 dark:text-slate-400'
                     }`}>
-                      {p.balance > 0 ? '+' : p.balance < 0 ? '-' : ''}{currency}{Math.abs(p.balance)}
+                      {p.balance > 0 ? '+' : p.balance < 0 ? '-' : ''}{currency}{Math.abs(p.balance).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                     </span>
                   </div>
                 );
