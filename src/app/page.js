@@ -76,6 +76,9 @@ export default function Home() {
 
   // Dynamic Theme Effect (Dark, Light, or Auto System Device Preference)
   useEffect(() => {
+    // Mirror the database theme to global localStorage for the blocking anti-flash script
+    localStorage.setItem('theme', theme);
+
     const applyTheme = () => {
       const isDark =
         theme === 'dark' ||

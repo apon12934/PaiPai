@@ -32,13 +32,9 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{
             __html: `
               try {
-                let theme = 'dark';
-                let localData = localStorage.getItem('paiPaiDB');
-                if (localData) {
-                  let db = JSON.parse(localData);
-                  if (db._settings && db._settings.theme) {
-                    theme = db._settings.theme;
-                  }
+                let theme = localStorage.getItem('theme');
+                if (!theme) {
+                  theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
                 }
                 if (theme === 'system') {
                   theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
