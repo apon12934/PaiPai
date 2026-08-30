@@ -45,13 +45,13 @@ export default function Sidebar({
             <img 
               src="/logo.svg" 
               alt="PaiPai Logo" 
-              className="hidden dark:block h-10 w-auto object-contain shrink-0 grayscale"
+              className="hidden dark:block h-10 w-auto object-contain shrink-0"
             />
             {/* Light Mode Logo */}
             <img 
               src="/logo-light.svg" 
               alt="PaiPai Logo" 
-              className="block dark:hidden h-10 w-auto object-contain shrink-0 grayscale"
+              className="block dark:hidden h-10 w-auto object-contain shrink-0"
             />
           </div>
           {!user && (
