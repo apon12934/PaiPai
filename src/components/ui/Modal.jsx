@@ -8,9 +8,11 @@ export default function Modal({ isOpen, onClose, children, title, subtitle }) {
 
   useEffect(() => {
     if (isOpen) {
+      document.body.style.overflow = 'hidden';
       setShouldRender(true);
       setIsClosing(false);
     } else if (shouldRender) {
+      document.body.style.overflow = '';
       setIsClosing(true);
       const timer = setTimeout(() => {
         setShouldRender(false);
@@ -18,6 +20,11 @@ export default function Modal({ isOpen, onClose, children, title, subtitle }) {
       }, 150); // Matches the exit animation duration
       return () => clearTimeout(timer);
     }
+    
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [isOpen, shouldRender]);
 
   useEffect(() => {

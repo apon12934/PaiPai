@@ -189,6 +189,12 @@ export default function Home() {
     (name) => {
       if (!name) return;
       const normalizedName = name.trim();
+      
+      if (normalizedName.startsWith('_')) {
+        showToast('Contact names cannot start with an underscore.', true);
+        return;
+      }
+
       const existingNames = Object.keys(dbState).filter(k => !k.startsWith('_'));
       const duplicate = existingNames.find(k => k.toLowerCase() === normalizedName.toLowerCase());
       

@@ -1,7 +1,7 @@
 // Firebase Configuration & Initialization
 import { initializeApp, getApps } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, EmailAuthProvider } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -15,7 +15,18 @@ const firebaseConfig = {
 // Initialize Firebase (prevent duplicate initialization in dev)
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 const auth = getAuth(app);
-const db = getFirestore(app);
+
+// Initialize Firestore with Offline Persistence Support
+let db;
+try {
+  db = initializeFirestore(app, {
+    localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
+  });
+} catch (e) {
+  // Fallback for Next.js HMR if Firestore is already initialized
+  db = getFirestore(app);
+}
+
 const googleProvider = new GoogleAuthProvider();
 const emailProvider = new EmailAuthProvider();
 
