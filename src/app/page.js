@@ -513,13 +513,14 @@ export default function Home() {
       {/* MOBILE VIEW (< 768px Width): Clean Single-Page View */}
       <div className="flex md:hidden flex-col w-full h-full bg-[#07080D] light:bg-[#F8F9FE] overflow-hidden">
         {/* Mobile Top Header */}
-        <div className="p-4 flex items-center justify-between border-b border-white/5 light:border-slate-200 shrink-0">
-          <div className="flex items-center">
-            {/* Dark Mode Logo */}
-            <img src="/logo.svg" alt="PaiPai Logo" className="hidden dark:block h-7 w-auto object-contain" />
-            {/* Light Mode Logo */}
-            <img src="/logo-light.svg" alt="PaiPai Logo" className="block dark:hidden h-7 w-auto object-contain" />
-          </div>
+        <div className="p-3 flex flex-col gap-1 border-b border-white/5 light:border-slate-200 shrink-0 relative">
+          <div className="flex items-center justify-between z-10 bg-[#07080D] light:bg-[#F8F9FE]">
+            <div className="flex items-center pr-2">
+              {/* Dark Mode Logo */}
+              <img src="/logo.svg" alt="PaiPai Logo" className="hidden dark:block h-7 w-auto object-contain" />
+              {/* Light Mode Logo */}
+              <img src="/logo-light.svg" alt="PaiPai Logo" className="block dark:hidden h-7 w-auto object-contain" />
+            </div>
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSettingsModalOpen(true)}
@@ -553,6 +554,14 @@ export default function Home() {
                 <span>Log In</span>
               </button>
             )}
+          </div>
+          </div>
+          
+          {/* Mobile Slogan Ticker */}
+          <div className="overflow-hidden w-full h-[12px] relative opacity-50 mt-0.5">
+            <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 absolute w-full animate-marquee whitespace-nowrap uppercase tracking-widest">
+              পাই পাই করে হিসাব নিবো • Pai Pai Kore Hishab Nibo • পাই পাই করে হিসাব নিবো
+            </p>
           </div>
         </div>
 

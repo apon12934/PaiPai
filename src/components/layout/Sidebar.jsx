@@ -55,7 +55,7 @@ export default function Sidebar({
             />
           </div>
           {!user && (
-            <div className="flex items-center gap-1 shrink-0 ml-2">
+            <div className="flex items-center gap-1 shrink-0 ml-2 bg-slate-50 dark:bg-[#141414] z-10 pl-2">
               <button
                 onClick={onOpenSettings}
                 className="p-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 rounded-lg transition-all border border-slate-300 dark:border-white/5 shrink-0"
@@ -72,6 +72,12 @@ export default function Sidebar({
               </button>
             </div>
           )}
+        </div>
+        {/* Slogan Ticker */}
+        <div className="overflow-hidden w-full h-[14px] relative opacity-60 bg-slate-50 dark:bg-[#141414]">
+          <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 absolute w-full animate-marquee uppercase tracking-widest whitespace-nowrap">
+            পাই পাই করে হিসাব নিবো • Pai Pai Kore Hishab Nibo • পাই পাই করে হিসাব নিবো
+          </p>
         </div>
 
         {/* User Profile Status Bar */}
