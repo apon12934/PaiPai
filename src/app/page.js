@@ -19,6 +19,8 @@ import {
   CheckCircle2,
   AlertCircle,
   UserPlus,
+  
+  HelpCircle,
 } from 'lucide-react';
 
 export default function Home() {
@@ -724,6 +726,17 @@ export default function Home() {
         confirmText={confirmModal.confirmText}
         variant={confirmModal.variant}
       />
+
+      {/* GitHub Repo Floating Help Button */}
+      <a
+        href="https://github.com/apon12934/PaiPai"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-5 right-5 md:bottom-8 md:right-8 w-10 h-10 md:w-12 md:h-12 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900 rounded-full flex items-center justify-center shadow-lg shadow-black/30 dark:shadow-white/30 transition-all hover:scale-110 active:scale-95 z-50"
+        title="Help & Source Code"
+      >
+        <HelpCircle className="w-4 h-4 md:w-5 md:h-5" />
+      </a>
     </div>
   );
 }
