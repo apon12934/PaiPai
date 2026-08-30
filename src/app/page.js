@@ -588,13 +588,13 @@ export default function Home() {
                     }`}
                   >
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm mb-2 ${
-                      isSel ? 'bg-white text-slate-900 dark:text-slate-100' : 'bg-white/10 light:bg-slate-200 text-slate-300 light:text-slate-700'
+                      isSel ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white' : 'bg-white/10 light:bg-slate-200 text-slate-300 light:text-slate-700'
                     }`}>
                       {initial}
                     </div>
                     <span className="text-xs font-bold truncate max-w-[90px]">{p.name}</span>
                     <span className={`text-[10px] font-mono font-bold mt-0.5 ${
-                      p.balance > 0 ? (isSel ? 'text-emerald-200' : 'text-emerald-400') : p.balance < 0 ? (isSel ? 'text-rose-200' : 'text-rose-400') : 'text-slate-400'
+                      p.balance > 0 ? (isSel ? 'text-emerald-400 dark:text-emerald-600' : 'text-emerald-600 dark:text-emerald-400') : p.balance < 0 ? (isSel ? 'text-rose-400 dark:text-rose-600' : 'text-rose-600 dark:text-rose-400') : 'text-slate-500 dark:text-slate-400'
                     }`}>
                       {p.balance > 0 ? '+' : p.balance < 0 ? '-' : ''}{currency}{Math.abs(p.balance)}
                     </span>
