@@ -48,7 +48,7 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body className="font-sans antialiased bg-[#0B1120] text-slate-100 h-screen overflow-hidden bg-gradient-blobs">
+      <body className="font-sans antialiased h-screen overflow-hidden bg-gradient-blobs">
         <AuthProvider>
           <DatabaseProvider>{children}</DatabaseProvider>
         </AuthProvider>
