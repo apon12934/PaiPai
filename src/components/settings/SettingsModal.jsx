@@ -244,7 +244,7 @@ export default function SettingsModal({
                 }`}
               >
                 <Icon className={`w-3.5 h-3.5 ${isAct ? 'text-white dark:text-slate-900' : 'text-slate-700 dark:text-slate-300'}`} />
-                <span className={isAct ? 'text-white font-bold' : 'text-black dark:text-slate-100 font-bold'}>
+                <span className={isAct ? 'text-white dark:text-slate-900 font-bold' : 'text-black dark:text-slate-100 font-bold'}>
                   {tab.label}
                 </span>
               </button>
@@ -311,7 +311,7 @@ export default function SettingsModal({
                       }`}
                     >
                       <Icon className={`w-4 h-4 ${isSel ? 'text-white dark:text-slate-900' : th.color}`} />
-                      <span className={isSel ? 'text-white font-bold' : 'text-black dark:text-slate-100 font-bold'}>
+                      <span className={isSel ? 'text-white dark:text-slate-900 font-bold' : 'text-black dark:text-slate-100 font-bold'}>
                         {th.label}
                       </span>
                     </button>
@@ -342,7 +342,7 @@ export default function SettingsModal({
                           : 'bg-slate-100 dark:bg-white/5 border-slate-300 dark:border-white/10 hover:bg-slate-200 dark:hover:bg-white/10'
                       }`}
                     >
-                      <span className={isSel ? 'text-white font-bold' : 'text-black dark:text-slate-100 font-bold'}>
+                      <span className={isSel ? 'text-white dark:text-slate-900 font-bold' : 'text-black dark:text-slate-100 font-bold'}>
                         {so.label}
                       </span>
                     </button>
@@ -621,8 +621,8 @@ export default function SettingsModal({
                 onClick={onExport}
                 className="w-full flex items-center justify-center gap-2 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900 text-xs py-2.5 rounded-lg font-bold transition shadow-md shadow-black/20 dark:shadow-white/20"
               >
-                <Download className="w-3.5 h-3.5 text-white" />
-                <span className="text-white font-bold">Download JSON Backup</span>
+                <Download className="w-3.5 h-3.5 text-white dark:text-slate-900" />
+                <span className="text-white dark:text-slate-900 font-bold">Download JSON Backup</span>
               </button>
             </div>
 
@@ -647,8 +647,8 @@ export default function SettingsModal({
                 onClick={onClearAllData}
                 className="w-full flex items-center justify-center gap-2 bg-rose-600 hover:bg-rose-500 text-white text-xs py-2.5 rounded-lg font-bold transition shadow-md shadow-rose-600/20"
               >
-                <Trash2 className="w-3.5 h-3.5 text-white" />
-                <span className="text-white font-bold">Reset All Data</span>
+                <Trash2 className="w-3.5 h-3.5 text-white dark:text-slate-900" />
+                <span className="text-white dark:text-slate-900 font-bold">Reset All Data</span>
               </button>
             </div>
           </div>
