@@ -26,14 +26,21 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${poppins.variable} ${anekBangla.variable} dark`} suppressHydrationWarning>
+    <html lang="en" className={`${poppins.variable} ${anekBangla.variable}`} suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
             __html: `
               try {
-                let theme = localStorage.getItem('theme');
-                if (!theme) {
+                let theme = 'dark';
+                let localData = localStorage.getItem('paiPaiDB');
+                if (localData) {
+                  let db = JSON.parse(localData);
+                  if (db._settings && db._settings.theme) {
+                    theme = db._settings.theme;
+                  }
+                }
+                if (theme === 'system') {
                   theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
                 }
                 if (theme === 'light') {
