@@ -255,7 +255,12 @@ export default function Home() {
 
   const handleEditTx = useCallback((id) => {
     setEditingTxId(id);
-    setMobileTab('home');
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      const scrollArea = document.getElementById('mobile-scroll-area');
+      if (scrollArea) {
+        scrollArea.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
   }, []);
 
   const handleDeleteTx = useCallback(
@@ -525,7 +530,7 @@ export default function Home() {
         </div>
 
         {/* Mobile Body Content Stack */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-6">
+        <div id="mobile-scroll-area" className="flex-1 overflow-y-auto p-4 space-y-6">
           {/* Total Net Position Card */}
           <div className="p-6 rounded-2xl bg-white/[0.03] light:bg-white border border-white/5 light:border-slate-200 shadow-xl text-center space-y-2">
             <span className="text-[10px] font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-widest block">
