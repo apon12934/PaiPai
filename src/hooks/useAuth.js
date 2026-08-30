@@ -14,7 +14,7 @@ import {
   getLinkedProviders as _getLinkedProviders,
   logoutUser as _logoutUser,
 } from '@/lib/auth';
-import { clearAllLocalCache } from '@/lib/db';
+
 
 const AuthContext = createContext(null);
 
@@ -75,7 +75,7 @@ export function AuthProvider({ children }) {
   };
 
   const logout = async () => {
-    clearAllLocalCache();
+
     return await _logoutUser();
   };
 

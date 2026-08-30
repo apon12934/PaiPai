@@ -17,7 +17,7 @@ import {
   signOut,
 } from 'firebase/auth';
 import { doc, deleteDoc } from 'firebase/firestore';
-import { clearAllLocalCache } from './db';
+
 
 // Observe Auth State & Handle Redirect Result
 export function observeAuthState(callback) {
@@ -151,8 +151,8 @@ export async function deleteUserAccount(currentPassword) {
     // 3. Delete user account from Firebase Auth
     await deleteUser(user);
 
-    // 4. Clear local cache
-    clearAllLocalCache();
+
+
 
     return { success: true };
   } catch (error) {
