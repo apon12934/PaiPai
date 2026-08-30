@@ -84,6 +84,20 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+html.light, html.light body {
+  background-color: #F8F9FE;
+  color: #0F172A;
+}
+
+html.light .glass-prominent,
+html.light .glass-card,
+html.light .glass-sidebar,
+html.light .glass-history {
+  background-color: #FFFFFF;
+  border-color: #E2E8F0;
+  box-shadow: 0 4px 25px rgba(15, 23, 42, 0.05);
+}
+
 /* INPUT STYLES FOR LIGHT AND DARK MODES */
 input[type="text"],
 input[type="email"],
