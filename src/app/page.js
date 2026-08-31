@@ -133,11 +133,11 @@ export default function Home() {
         if (tx.type === 'gave') gave += tx.amount;
         if (tx.type === 'received') received += tx.amount;
       });
-      return { name, balance: gave - received };
+      return { name, balance: Math.round((gave - received) * 100) / 100 };
     });
 
   // Compute grand total
-  const grandTotal = people.reduce((sum, p) => sum + p.balance, 0);
+  const grandTotal = Math.round(people.reduce((sum, p) => sum + p.balance, 0) * 100) / 100;
 
   // Compute selected person balance
   const selectedBalance = selectedPerson
