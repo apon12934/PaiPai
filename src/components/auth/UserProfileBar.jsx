@@ -45,8 +45,8 @@ export default function UserProfileBar({ onOpenSettings }) {
 
         <button
           onClick={logout}
-          className="p-1.5 text-slate-500 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-400 hover:bg-slate-200 dark:hover:bg-white/5 rounded-lg transition-all"
-          title="Logout"
+          className="p-1.5 text-rose-600 dark:text-rose-500 hover:text-rose-700 dark:hover:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-500/10 rounded-lg transition-all shrink-0"
+          title="Log Out"
         >
           <LogOut className="w-3.5 h-3.5" />
         </button>

@@ -574,7 +574,7 @@ export default function Home() {
                     await logout();
                     setSettingsModalOpen(false);
                   }}
-                  className="p-1.5 text-rose-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg shrink-0 transition-all"
+                  className="p-1.5 text-rose-600 dark:text-rose-500 hover:text-rose-700 dark:hover:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-500/10 rounded-lg transition-all shrink-0"
                   title="Log Out"
                 >
                   <LogOut className="w-4 h-4" />
