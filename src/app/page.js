@@ -1,4 +1,5 @@
 'use client';
+import DOMPurify from 'dompurify';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
@@ -234,7 +235,8 @@ export default function Home() {
       confirmText: 'Delete Person',
       variant: 'danger',
       onConfirm: () => {
-        const newData = { ...dbState };
+        const sanitizedNote = note ? DOMPurify.sanitize(note, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] }).substring(0, 100) : '';
+      const newData = { ...dbState };
         delete newData[selectedPerson];
         saveData(newData);
         setSelectedPerson(null);
