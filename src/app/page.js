@@ -18,6 +18,7 @@ import {
   Settings as SettingsIcon,
   Eye,
   LogIn,
+  LogOut,
   CheckCircle2,
   AlertCircle,
   UserPlus,
@@ -26,7 +27,7 @@ import {
 } from 'lucide-react';
 
 export default function Home() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, logout } = useAuth();
   const { data: dbState, saveData, loading: dbLoading, isGuestMode } = useDatabase();
 
   const [selectedPerson, setSelectedPerson] = useState(null);
@@ -565,21 +566,33 @@ export default function Home() {
               <SettingsIcon className="w-4 h-4" />
             </button>
             {user ? (
-              user.photoURL ? (
-                <img
-                  src={user.photoURL}
-                  alt="Avatar"
-                  onClick={() => setSettingsModalOpen(true)}
-                  className="w-8 h-8 rounded-full object-cover border border-slate-900 dark:border-slate-100 cursor-pointer shadow-md shrink-0"
-                />
-              ) : (
-                <div
-                  onClick={() => setSettingsModalOpen(true)}
-                  className="w-8 h-8 rounded-full bg-slate-900 dark:bg-slate-100 flex items-center justify-center text-white dark:text-slate-900 font-bold text-xs cursor-pointer shadow-md shadow-black/20 dark:shadow-white/20 shrink-0"
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={async () => {
+                    await logout();
+                    setSettingsModalOpen(false);
+                  }}
+                  className="p-1.5 text-rose-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg shrink-0 transition-all"
+                  title="Log Out"
                 >
-                  {(user.displayName || user.email || 'U').charAt(0).toUpperCase()}
-                </div>
-              )
+                  <LogOut className="w-4 h-4" />
+                </button>
+                {user.photoURL ? (
+                  <img
+                    src={user.photoURL}
+                    alt="Avatar"
+                    onClick={() => setSettingsModalOpen(true)}
+                    className="w-8 h-8 rounded-full object-cover border border-slate-900 dark:border-slate-100 cursor-pointer shadow-md shrink-0"
+                  />
+                ) : (
+                  <div
+                    onClick={() => setSettingsModalOpen(true)}
+                    className="w-8 h-8 rounded-full bg-slate-900 dark:bg-slate-100 flex items-center justify-center text-white dark:text-slate-900 font-bold text-xs cursor-pointer shadow-md shadow-black/20 dark:shadow-white/20 shrink-0"
+                  >
+                    {(user.displayName || user.email || 'U').charAt(0).toUpperCase()}
+                  </div>
+                )}
+              </div>
             ) : (
               <button
                 onClick={() => setAuthModalOpen(true)}
