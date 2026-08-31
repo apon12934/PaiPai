@@ -64,6 +64,7 @@ export default function SettingsModal({
   const [photoURL, setPhotoURL] = useState(user?.photoURL || '');
   const [profileMsg, setProfileMsg] = useState({ text: '', isError: false });
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
 
   // Link status states
   const [linkMsg, setLinkMsg] = useState({ text: '', isError: false });
@@ -445,10 +446,17 @@ export default function SettingsModal({
 
                 <button
                   type="submit"
-                  disabled={isUploadingPhoto}
-                  className="w-full bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900 font-bold py-2.5 rounded-lg text-xs transition shadow-lg shadow-black/20 dark:shadow-white/20 disabled:opacity-50"
+                  disabled={isUploadingPhoto || isSavingProfile}
+                  className="w-full bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900 font-bold py-2.5 rounded-lg text-xs transition shadow-lg shadow-black/20 dark:shadow-white/20 disabled:opacity-50 flex items-center justify-center gap-2"
                 >
-                  Save Profile Changes
+                  {isSavingProfile ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Saving...</span>
+                    </>
+                  ) : (
+                    'Save Profile Changes'
+                  )}
                 </button>
               </form>
             ) : (
