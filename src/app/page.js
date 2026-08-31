@@ -442,16 +442,16 @@ export default function Home() {
 
       {/* Guest Mode Warning Banner */}
       {!user && isGuestMode && (
-        <div className="w-full max-w-[1600px] mb-2 px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-lg flex items-center justify-between text-xs text-amber-300 backdrop-blur-md animate-pop-in">
+        <div className="w-full max-w-[1600px] mb-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-amber-500/10 border border-amber-500/20 rounded-lg flex sm:flex-row items-center justify-between gap-3 text-[10px] sm:text-xs text-amber-300 backdrop-blur-md animate-pop-in">
           <div className="flex items-center gap-2">
-            <Eye className="w-4 h-4 text-amber-400 shrink-0" />
-            <span>
-              <strong>Guest Mode:</strong> Previewing live app. Data is NOT saved.
+            <Eye className="w-4 h-4 text-amber-400 shrink-0 hidden sm:block" />
+            <span className="leading-tight">
+              <strong>Guest Mode:</strong> Temporary session. Data is permanently deleted on refresh.
             </span>
           </div>
           <button
             onClick={() => setAuthModalOpen(true)}
-            className="flex items-center gap-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 font-semibold px-3 py-1 rounded-lg border border-amber-500/30 transition-all"
+            className="flex items-center justify-center gap-1.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 font-bold px-3 py-1.5 rounded-md border border-amber-500/30 transition-all shrink-0 whitespace-nowrap"
           >
             <LogIn className="w-3.5 h-3.5" />
             <span>Sign In</span>
