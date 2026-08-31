@@ -5,7 +5,7 @@ const variants = {
   primary: 'bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900',
   danger: 'bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20',
   ghost: 'bg-transparent hover:bg-white/5 text-slate-400',
-  glass: 'bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300',
+  glass: 'bg-white/5 light:bg-slate-100 hover:bg-white/10 light:hover:bg-slate-200 border border-white/10 light:border-slate-300 text-slate-300 light:text-slate-800 font-bold',
   gave: 'bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20',
   received: 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20'
 };

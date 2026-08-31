@@ -111,7 +111,7 @@ export default function AccountLinkModal({ isOpen, onClose }) {
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:border-slate-100 focus:ring-1 focus:ring-slate-900 dark:ring-slate-100 transition-all text-sm"
+                className="w-full bg-black/20 light:bg-white border border-white/10 light:border-slate-300 rounded-lg px-3 py-2 text-slate-200 light:text-slate-900 placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:focus:border-slate-100 focus:ring-1 focus:ring-slate-900 dark:focus:ring-slate-100 transition-all text-sm"
                 required
               />
               <input 
@@ -119,7 +119,7 @@ export default function AccountLinkModal({ isOpen, onClose }) {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:border-slate-100 focus:ring-1 focus:ring-slate-900 dark:ring-slate-100 transition-all text-sm"
+                className="w-full bg-black/20 light:bg-white border border-white/10 light:border-slate-300 rounded-lg px-3 py-2 text-slate-200 light:text-slate-900 placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:focus:border-slate-100 focus:ring-1 focus:ring-slate-900 dark:focus:ring-slate-100 transition-all text-sm"
                 required
               />
               <Button type="submit" variant="glass" className="w-full text-xs" disabled={loading}>

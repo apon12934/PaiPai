@@ -61,7 +61,7 @@ export default function AuthModal({ isOpen, onClose }) {
           variant="glass" 
           onClick={handleGoogle}
           disabled={loading}
-          className="w-full relative justify-center bg-white/5 hover:bg-white/10"
+          className="w-full relative justify-center"
         >
           <svg className="w-5 h-5 absolute left-4" viewBox="0 0 24 24">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -73,9 +73,9 @@ export default function AuthModal({ isOpen, onClose }) {
         </Button>
 
         <div className="relative flex items-center py-1">
-          <div className="flex-grow border-t border-white/10"></div>
+          <div className="flex-grow border-t border-white/10 light:border-slate-300"></div>
           <span className="flex-shrink-0 mx-4 text-slate-500 text-xs">Or email</span>
-          <div className="flex-grow border-t border-white/10"></div>
+          <div className="flex-grow border-t border-white/10 light:border-slate-300"></div>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
@@ -85,7 +85,7 @@ export default function AuthModal({ isOpen, onClose }) {
               placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-2.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:border-slate-100 focus:ring-1 focus:ring-slate-900 dark:ring-slate-100 transition-all text-sm"
+              className="w-full bg-black/20 light:bg-white border border-white/10 light:border-slate-300 rounded-lg px-4 py-2.5 text-slate-200 light:text-slate-900 placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:focus:border-slate-100 focus:ring-1 focus:ring-slate-900 dark:focus:ring-slate-100 transition-all text-sm"
               required
             />
           </div>
@@ -95,7 +95,7 @@ export default function AuthModal({ isOpen, onClose }) {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-2.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:border-slate-100 focus:ring-1 focus:ring-slate-900 dark:ring-slate-100 transition-all text-sm"
+              className="w-full bg-black/20 light:bg-white border border-white/10 light:border-slate-300 rounded-lg px-4 py-2.5 text-slate-200 light:text-slate-900 placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:focus:border-slate-100 focus:ring-1 focus:ring-slate-900 dark:focus:ring-slate-100 transition-all text-sm"
               required
             />
           </div>
@@ -111,7 +111,7 @@ export default function AuthModal({ isOpen, onClose }) {
           </Button>
         </form>
 
-        <div className="mt-2 text-center flex flex-col gap-3 border-t border-white/5 pt-3">
+        <div className="mt-2 text-center flex flex-col gap-3 border-t border-white/5 light:border-slate-200 pt-3">
           <button 
             type="button" 
             onClick={() => { setIsLogin(!isLogin); setError(null); }}
