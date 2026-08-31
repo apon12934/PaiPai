@@ -235,8 +235,7 @@ export default function Home() {
       confirmText: 'Delete Person',
       variant: 'danger',
       onConfirm: () => {
-        const sanitizedNote = note ? DOMPurify.sanitize(note, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] }).substring(0, 100) : '';
-      const newData = { ...dbState };
+        const newData = { ...dbState };
         delete newData[selectedPerson];
         saveData(newData);
         setSelectedPerson(null);
@@ -249,6 +248,7 @@ export default function Home() {
   const handleSubmitTx = useCallback(
     (type, amount, note) => {
       if (!selectedPerson) return;
+      const sanitizedNote = note ? DOMPurify.sanitize(note, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] }).substring(0, 100) : '';
       const newData = { ...dbState };
       if (!newData[selectedPerson]) newData[selectedPerson] = [];
 
