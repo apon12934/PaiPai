@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import Modal from '../ui/Modal';
 import {
@@ -65,6 +65,15 @@ export default function SettingsModal({
   const [profileMsg, setProfileMsg] = useState({ text: '', isError: false });
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
   const [isSavingProfile, setIsSavingProfile] = useState(false);
+
+  // Sync state when modal opens or user auth state changes
+  useEffect(() => {
+    if (isOpen && user) {
+      setDisplayName(user.displayName || '');
+      setPhotoURL(user.photoURL || '');
+    }
+  }, [isOpen, user]);
+
 
   // Link status states
   const [linkMsg, setLinkMsg] = useState({ text: '', isError: false });
