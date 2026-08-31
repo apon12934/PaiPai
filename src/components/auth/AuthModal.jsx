@@ -20,7 +20,9 @@ export default function AuthModal({ isOpen, onClose }) {
     setError(null);
     const res = await loginWithGoogle();
     if (res.success) {
-      if (!res.redirecting) {
+      if (res.redirecting) {
+        setError("Browser blocked popup. Redirecting to secure login...");
+      } else {
         onClose();
       }
     } else if (res.error) {
