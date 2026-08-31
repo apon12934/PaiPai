@@ -47,14 +47,14 @@ export default function TransactionCard({ transaction, onEdit, onDelete, isEditi
       <div className="absolute top-2.5 right-2.5 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity bg-slate-900/90 light:bg-white/90 backdrop-blur-sm p-1 rounded-lg border border-white/10 light:border-slate-200 shadow-md">
         <button
           onClick={onEdit}
-          className="p-1 text-slate-400 hover:text-slate-700 dark:text-slate-300 light:hover:text-slate-900 dark:text-slate-100 hover:bg-white/10 rounded transition-colors"
+          className="p-1 text-slate-400 light:text-slate-500 hover:text-slate-200 light:hover:text-slate-900 hover:bg-white/10 light:hover:bg-slate-200 rounded transition-colors"
           title="Edit"
         >
           <Pencil className="w-3.5 h-3.5" />
         </button>
         <button
           onClick={onDelete}
-          className="p-1 text-slate-400 hover:text-rose-400 light:hover:text-rose-600 hover:bg-white/10 rounded transition-colors"
+          className="p-1 text-rose-500/70 light:text-rose-500 hover:text-rose-400 light:hover:text-rose-700 hover:bg-rose-500/10 light:hover:bg-rose-500/20 rounded transition-colors"
           title="Delete"
         >
           <Trash2 className="w-3.5 h-3.5" />

@@ -3,14 +3,14 @@
 export default function EmptyState() {
   return (
     <div className="flex-1 flex flex-col items-center justify-center p-8 bg-transparent">
-      <div className="w-16 h-16 mb-4 rounded-full bg-white/[0.03] border border-white/5 flex items-center justify-center">
+      <div className="w-16 h-16 mb-4 rounded-full bg-white/[0.03] light:bg-slate-100 border border-white/5 light:border-slate-200 flex items-center justify-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="w-8 h-8 text-slate-600"
+          className="w-8 h-8 text-slate-600 light:text-slate-400"
         >
           <path
             strokeLinecap="round"
@@ -19,9 +19,9 @@ export default function EmptyState() {
           />
         </svg>
       </div>
-      <h2 className="text-xl font-medium text-slate-300 mb-2">Select a person</h2>
-      <p className="text-sm text-slate-500 text-center max-w-xs">
-        Choose someone from the sidebar or add a new person to start tracking your balances.
+      <h2 className="text-xl font-bold text-slate-300 light:text-slate-800 mb-2">Select a Contact</h2>
+      <p className="text-sm font-semibold text-slate-500 light:text-slate-500 text-center max-w-xs leading-relaxed">
+        Choose someone from the sidebar or add a new person to start logging transactions.
       </p>
     </div>
   );

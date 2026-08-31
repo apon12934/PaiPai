@@ -699,7 +699,7 @@ export default function Home() {
             </div>
           ) : (
             <div className="p-6 rounded-2xl bg-white/[0.02] light:bg-slate-100 text-center space-y-2">
-              <p className="text-xs text-slate-400">Select a contact above to log transactions or view history.</p>
+              <p className="text-xs text-slate-400 light:text-slate-500">Select a contact above to log transactions or view history.</p>
             </div>
           )}
 
