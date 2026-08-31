@@ -80,9 +80,12 @@ export async function loginWithEmail(email, password) {
 export async function linkGoogleAccount() {
   if (!auth.currentUser) return { success: false, error: 'No user logged in.' };
   try {
+    googleProvider.setCustomParameters({ login_hint: auth.currentUser.email });
     const result = await linkWithPopup(auth.currentUser, googleProvider);
+    googleProvider.setCustomParameters({}); // Reset for regular logins
     return { success: true, user: result.user };
   } catch (error) {
+    googleProvider.setCustomParameters({}); // Reset on error too
     return { success: false, error: friendlyError(error) };
   }
 }
