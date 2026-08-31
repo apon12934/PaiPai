@@ -442,16 +442,16 @@ export default function Home() {
 
       {/* Guest Mode Warning Banner */}
       {!user && isGuestMode && (
-        <div className="w-full max-w-[1600px] mb-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-amber-500/10 border border-amber-500/20 rounded-lg flex sm:flex-row items-center justify-between gap-3 text-[10px] sm:text-xs text-amber-300 backdrop-blur-md animate-pop-in">
+        <div className="w-full max-w-[1600px] mb-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-amber-500/10 light:bg-amber-100/80 border border-amber-500/20 light:border-amber-300 rounded-lg flex sm:flex-row items-center justify-between gap-3 text-[10px] sm:text-xs text-amber-300 light:text-amber-800 backdrop-blur-md animate-pop-in shadow-sm">
           <div className="flex items-center gap-2">
-            <Eye className="w-4 h-4 text-amber-400 shrink-0 hidden sm:block" />
+            <Eye className="w-4 h-4 text-amber-400 light:text-amber-600 shrink-0 hidden sm:block" />
             <span className="leading-tight">
               <strong>Guest Mode:</strong> Temporary session. Data is permanently deleted on refresh.
             </span>
           </div>
           <button
             onClick={() => setAuthModalOpen(true)}
-            className="flex items-center justify-center gap-1.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 font-bold px-3 py-1.5 rounded-md border border-amber-500/30 transition-all shrink-0 whitespace-nowrap"
+            className="flex items-center justify-center gap-1.5 bg-amber-500/20 light:bg-amber-500 hover:bg-amber-500/30 light:hover:bg-amber-600 text-amber-200 light:text-white font-bold px-3 py-1.5 rounded-md border border-amber-500/30 light:border-amber-600 transition-all shrink-0 whitespace-nowrap shadow-sm"
           >
             <LogIn className="w-3.5 h-3.5" />
             <span>Sign In</span>
