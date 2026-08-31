@@ -181,6 +181,12 @@ export default function Sidebar({
             <input type="file" className="hidden" accept=".json" onChange={onImport} />
           </label>
         </div>
+        
+        <div className="pt-2 text-center">
+          <a href="/privacy" className="text-[10px] text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-300 hover:underline">
+            Privacy Policy
+          </a>
+        </div>
       </div>
     </div>
   );
