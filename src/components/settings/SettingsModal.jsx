@@ -202,7 +202,8 @@ export default function SettingsModal({
   const handleLinkEmail = async (e) => {
     e.preventDefault();
     setLinkMsg({ text: '', isError: false });
-    const res = await linkEmailAccount(linkEmail, linkPassword);
+    const targetEmail = user?.email || linkEmail;
+    const res = await linkEmailAccount(targetEmail, linkPassword);
     if (!res.success) {
       setLinkMsg({ text: res.error || 'Email linking failed', isError: true });
     } else {
