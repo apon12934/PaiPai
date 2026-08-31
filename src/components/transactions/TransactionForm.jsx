@@ -71,6 +71,7 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
           ref={amountInputRef}
           type="number"
           step="0.01"
+          max="999999999"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -84,6 +85,7 @@ export default function TransactionForm({ onSubmit, editingTx = null, onCancelEd
         <FileText className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 dark:text-slate-400 pointer-events-none" />
         <input
           type="text"
+          maxLength={60}
           value={note}
           onChange={(e) => setNote(e.target.value)}
           onKeyDown={handleKeyDown}
