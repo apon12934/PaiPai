@@ -189,7 +189,11 @@ export default function Home() {
   const handleAddPerson = useCallback(
     (name) => {
       if (!name) return;
-      const normalizedName = name.trim();
+      let normalizedName = name.trim();
+      // Strict XSS Sanitization
+      if (typeof window !== 'undefined') {
+        normalizedName = DOMPurify.sanitize(normalizedName, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] });
+      }
       
       if (normalizedName.startsWith('_')) {
         showToast('Contact names cannot start with an underscore.', true);
@@ -253,7 +257,7 @@ export default function Home() {
             ...newData[selectedPerson][txIndex],
             amount,
             type,
-            note,
+            note: sanitizedNote,
           };
         }
         setEditingTxId(null);
@@ -265,7 +269,7 @@ export default function Home() {
             date: new Date().toISOString(),
             amount,
             type,
-            note,
+            note: sanitizedNote,
           },
         ];
       }
