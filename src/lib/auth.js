@@ -40,15 +40,8 @@ export async function loginWithGoogle() {
     const result = await signInWithPopup(auth, googleProvider);
     return { success: true, user: result.user };
   } catch (error) {
-    if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
-      try {
-        await signInWithRedirect(auth, googleProvider);
-        return { success: true, redirecting: true };
-      } catch (redirectError) {
-        return { success: false, error: friendlyError(redirectError) };
-      }
-    }
-    return { success: false, error: friendlyError(error) };
+    console.error("FIREBASE POPUP ERROR:", error.code, error.message);
+    return { success: false, error: error.message };
   }
 }
 
