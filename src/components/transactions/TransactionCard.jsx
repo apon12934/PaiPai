@@ -44,7 +44,7 @@ export default function TransactionCard({ transaction, onEdit, onDelete, isEditi
       </div>
 
       {/* Hover Action Menu */}
-      <div className="absolute top-2.5 right-2.5 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900/90 light:bg-white/90 backdrop-blur-sm p-1 rounded-lg border border-white/10 light:border-slate-200 shadow-md">
+      <div className="absolute top-2.5 right-2.5 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity bg-slate-900/90 light:bg-white/90 backdrop-blur-sm p-1 rounded-lg border border-white/10 light:border-slate-200 shadow-md">
         <button
           onClick={onEdit}
           className="p-1 text-slate-400 hover:text-slate-700 dark:text-slate-300 light:hover:text-slate-900 dark:text-slate-100 hover:bg-white/10 rounded transition-colors"

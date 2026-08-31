@@ -474,7 +474,10 @@ export default function Home() {
             people={people}
             grandTotal={grandTotal}
             selectedPerson={selectedPerson}
-            onSelectPerson={setSelectedPerson}
+            onSelectPerson={(person) => {
+              setSelectedPerson(person);
+              setEditingTxId(null);
+            }}
             onAddPerson={handleAddPerson}
             onExport={handleExport}
             onImport={handleImport}
@@ -644,7 +647,7 @@ export default function Home() {
                 return (
                   <div
                     key={p.name}
-                    onClick={() => setSelectedPerson(p.name)}
+                    onClick={() => { setSelectedPerson(p.name); setEditingTxId(null); }}
                     className={`flex flex-col items-center p-3.5 rounded-xl border min-w-[110px] transition-all cursor-pointer ${
                       isSel
                         ? 'bg-slate-900 dark:bg-slate-100 border-slate-900 dark:border-slate-100 text-white dark:text-slate-900 shadow-lg shadow-black/20 dark:shadow-white/20 scale-105'
