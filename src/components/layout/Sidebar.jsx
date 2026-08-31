@@ -61,16 +61,16 @@ export default function Sidebar({
             <div className="flex items-center gap-1 shrink-0 ml-auto z-10">
               <button
                 onClick={onOpenSettings}
-                className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 bg-transparent hover:bg-slate-100 dark:hover:bg-white/5 rounded-lg transition-all shrink-0"
+                className="p-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 rounded-lg transition-all border border-slate-300 dark:border-white/5 shrink-0"
                 title="Settings"
               >
-                <Settings className="w-4 h-4" />
+                <Settings className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={onOpenLogin}
-                className="flex items-center gap-1.5 text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-transparent hover:bg-slate-100 dark:hover:bg-white/5 px-2.5 py-1.5 rounded-lg transition-all whitespace-nowrap shrink-0"
+                className="flex items-center gap-1 text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 px-2.5 py-1.5 rounded-lg transition-all border border-slate-300 dark:border-white/5 whitespace-nowrap shrink-0"
               >
-                <LogIn className="w-4 h-4 shrink-0" />
+                <LogIn className="w-3.5 h-3.5 shrink-0" />
                 <span>Log In</span>
               </button>
             </div>

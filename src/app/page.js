@@ -583,7 +583,7 @@ export default function Home() {
             ) : (
               <button
                 onClick={() => setAuthModalOpen(true)}
-                className="flex items-center gap-1.5 text-xs font-bold text-slate-700 light:text-slate-900 dark:text-slate-300 dark:hover:text-white bg-transparent hover:bg-slate-100 dark:hover:bg-white/5 px-3 py-1.5 rounded-lg transition-all whitespace-nowrap shrink-0"
+                className="flex items-center gap-1.5 text-xs font-medium text-slate-700 light:text-slate-900 dark:text-slate-300 dark:hover:text-white bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 px-3 py-1.5 rounded-lg transition-all border border-slate-300 dark:border-white/5 whitespace-nowrap shrink-0"
               >
                 <LogIn className="w-3.5 h-3.5" />
                 <span>Log In</span>
