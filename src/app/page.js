@@ -335,13 +335,35 @@ export default function Home() {
         try {
           const imported = JSON.parse(e.target.result);
           if (typeof imported === 'object' && imported !== null && !Array.isArray(imported)) {
+            // Strict Schema Validation
             for (const key of Object.keys(imported)) {
-              if (key === '_settings') continue;
-              if (!Array.isArray(imported[key])) {
+              if (key === '_settings') {
+                if (typeof imported[key] !== 'object' || imported[key] === null) {
+                  throw new Error('Invalid _settings format');
+                }
+                continue;
+              }
+              
+              const txs = imported[key];
+              if (!Array.isArray(txs)) {
                 throw new Error('Invalid backup data format for contact: ' + key);
               }
+              
+              // Validate every single transaction
+              for (const tx of txs) {
+                if (typeof tx !== 'object' || tx === null) throw new Error('Transaction must be an object');
+                if (typeof tx.id !== 'string') throw new Error('Transaction ID must be a string');
+                if (typeof tx.date !== 'string') throw new Error('Transaction date must be a string');
+                if (typeof tx.amount !== 'number' || isNaN(tx.amount)) throw new Error('Transaction amount must be a valid number');
+                if (tx.type !== 'gave' && tx.type !== 'received') throw new Error('Transaction type must be gave or received');
+                if (tx.note !== undefined && typeof tx.note !== 'string') throw new Error('Transaction note must be a string');
+              }
             }
-            saveData(imported);
+            
+            saveData((prev) => ({
+              ...imported,
+              _settings: imported._settings || prev._settings || {}
+            }));
             setSelectedPerson(null);
             setEditingTxId(null);
             showToast('PaiPai backup restored successfully!');
