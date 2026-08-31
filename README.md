@@ -27,6 +27,15 @@
 - 💾 **Backup**: Export & import local JSON backups.
 - 🔌 **Offline Support**: Works locally when signed out; seamlessly auto-migrates local data on your first login.
 
+
+## 🛡️ Security & Architecture
+
+PaiPai is hardened against common web vulnerabilities, making it a production-ready template:
+- **XSS & Payload Protection:** Aggressive client-side string sanitization using `DOMPurify`, coupled with strict JS-layer bounds checking (transactions caps, character limits, mathematical boundaries).
+- **Denial of Wallet Mitigation:** Cloudinary uploads are secured using strict server-side *Incoming Transformations* to permanently crush massive files before they hit storage quotas.
+- **Database Vault:** Firestore rules strictly isolate reads/writes to `request.auth.uid == userId`, preventing lateral data leakage.
+- **Verified OAuth:** Fully verified by Google Trust & Safety with a custom dynamic privacy policy and Google Search Console domain verification.
+
 ## Quick Start
 
 1. **Clone & install**:
