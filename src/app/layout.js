@@ -22,6 +22,9 @@ export const metadata = {
   description:
     'PaiPai (পাই পাই) — Track every penny. A modern debt and expense tab tracker with real-time cloud sync across all your devices.',
   keywords: ['debt tracker', 'expense tracker', 'paipai', 'পাই পাই', 'taka', 'finance'],
+  verification: {
+    google: 'QaPDI-ypAK-Hgoe2RgQk13d99B_vwU5wP1kdQZQdh98',
+  },
 };
 
 export default function RootLayout({ children }) {
