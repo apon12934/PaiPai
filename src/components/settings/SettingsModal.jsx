@@ -572,9 +572,10 @@ export default function SettingsModal({
                       <input 
                         type="email" 
                         placeholder="Email Address"
-                        value={linkEmail}
+                        value={user?.email || linkEmail}
                         onChange={(e) => setLinkEmail(e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg text-sm bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-black dark:text-white font-bold"
+                        disabled={!!user?.email}
+                        className="w-full px-3 py-2 rounded-lg text-sm bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-black dark:text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
                         required
                       />
                       <input 
