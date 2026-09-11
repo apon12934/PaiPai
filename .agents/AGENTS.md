@@ -24,3 +24,7 @@
 9. **Firestore Rules**: Database is strictly locked to `request.auth.uid == userId`. Client-side code in `db.js` MUST explicitly reference `doc(db, 'users', user.uid)`.
 10. **XSS & Payload Limits**: `DOMPurify` is strictly enforced in `page.js` on all user string inputs (names, transaction notes) before touching React state or Firestore. Hardcoded JS bounds limits (max 5000 transactions, amount < 1B, note < 100 chars) are required to emulate backend validation.
 11. **Google OAuth Branding**: The application is officially verified for `paipai.ddns.net`. Any structural changes must not break the `src/app/privacy/page.js` route or the Google Verification metadata tag in `src/app/layout.js`, as these are required to maintain Google Trust & Safety compliance for the login screen.
+
+## PWA & Service Worker Architecture
+12. **Native Installability**: The app is configured as a standalone PWA via `public/manifest.json`. The application name must strictly remain "PaiPai".
+13. **Service Worker Restrictions**: The Service Worker (`public/sw.js`) MUST explicitly bypass and ignore cross-origin requests. If cross-origin requests (like Google avatars or Cloudinary images) are intercepted by the SW `fetch` handler, they will return opaque responses and cache as permanently broken images.
