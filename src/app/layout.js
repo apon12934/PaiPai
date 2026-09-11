@@ -20,8 +20,15 @@ const anekBangla = Anek_Bangla({
 export const metadata = {
   title: 'PaiPai',
   description:
-    'PaiPai (পাই পাই) — Track every penny. A modern debt and expense tab tracker with real-time cloud sync across all your devices.',
-  keywords: ['debt tracker', 'expense tracker', 'paipai', 'পাই পাই', 'taka', 'finance'],
+    'PaiPai - Track every penny. A modern debt and expense tab tracker with real-time cloud sync across all your devices.',
+  keywords: ['debt tracker', 'expense tracker', 'paipai', 'finance'],
+  manifest: '/manifest.json',
+  themeColor: '#07080D',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'PaiPai',
+  },
   verification: {
     google: 'QaPDI-ypAK-Hgoe2RgQk13d99B_vwU5wP1kdQZQdh98',
   },
@@ -58,6 +65,24 @@ export default function RootLayout({ children }) {
         <AuthProvider>
           <DatabaseProvider>{children}</DatabaseProvider>
         </AuthProvider>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/sw.js').then(
+                    function(registration) {
+                      console.log('Service Worker registration successful with scope: ', registration.scope);
+                    },
+                    function(err) {
+                      console.log('Service Worker registration failed: ', err);
+                    }
+                  );
+                });
+              }
+            `,
+          }}
+        />
       </body>
     </html>
   );
