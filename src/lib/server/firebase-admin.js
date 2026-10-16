@@ -8,10 +8,22 @@ let services = null;
 export async function getAdmin() {
   if (services) return services;
 
-  const projectId =
+  let projectId =
     process.env.FIREBASE_ADMIN_PROJECT_ID || process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
-  const clientEmail = process.env.FIREBASE_ADMIN_CLIENT_EMAIL;
+  let clientEmail = process.env.FIREBASE_ADMIN_CLIENT_EMAIL;
   let privateKey = process.env.FIREBASE_ADMIN_PRIVATE_KEY;
+
+  // Support full JSON string pasted into FIREBASE_SERVICE_ACCOUNT_KEY
+  if (process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
+    try {
+      const parsed = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+      if (parsed.project_id) projectId = parsed.project_id;
+      if (parsed.client_email) clientEmail = parsed.client_email;
+      if (parsed.private_key) privateKey = parsed.private_key;
+    } catch (e) {
+      console.warn('Failed to parse FIREBASE_SERVICE_ACCOUNT_KEY JSON:', e.message);
+    }
+  }
 
   if (projectId && clientEmail && privateKey) {
     try {
@@ -19,7 +31,7 @@ export async function getAdmin() {
       const { getAuth } = await import('firebase-admin/auth');
       const { getFirestore } = await import('firebase-admin/firestore');
 
-      privateKey = privateKey.replace(/\\n/g, '\n');
+      privateKey = privateKey.replace(/\\n/g, '\n').replace(/^["']|["']$/g, '');
 
       const app =
         getApps().length > 0

@@ -89,19 +89,23 @@ export async function sendOtp(email, type = 'signup') {
     if (!res.ok || !data.success) {
       return { success: false, error: data.error || 'Failed to send verification code.' };
     }
-    return { success: true, message: data.message };
+    return {
+      success: true,
+      message: data.message,
+      verificationToken: data.verificationToken,
+    };
   } catch (error) {
     return { success: false, error: error.message || 'Network error while requesting verification code.' };
   }
 }
 
 // Verify Sign-Up OTP and authenticate user
-export async function verifySignupOtp(email, otp, password) {
+export async function verifySignupOtp(email, otp, password, verificationToken) {
   try {
     const res = await fetch('/api/auth/verify-otp', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, otp, password, type: 'signup' }),
+      body: JSON.stringify({ email, otp, password, type: 'signup', verificationToken }),
     });
     const data = await res.json();
     if (!res.ok || !data.success) {
@@ -124,12 +128,12 @@ export async function verifySignupOtp(email, otp, password) {
 }
 
 // Verify Reset Password OTP and update password
-export async function verifyResetOtp(email, otp, newPassword) {
+export async function verifyResetOtp(email, otp, newPassword, verificationToken) {
   try {
     const res = await fetch('/api/auth/verify-otp', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, otp, newPassword, type: 'reset' }),
+      body: JSON.stringify({ email, otp, newPassword, type: 'reset', verificationToken }),
     });
     const data = await res.json();
     if (!res.ok || !data.success) {

@@ -15,6 +15,7 @@ export default function AuthModal({ isOpen, onClose }) {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [otp, setOtp] = useState('');
+  const [verificationToken, setVerificationToken] = useState('');
   const [error, setError] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -38,6 +39,7 @@ export default function AuthModal({ isOpen, onClose }) {
     setNewPassword('');
     setConfirmPassword('');
     setOtp('');
+    setVerificationToken('');
     setError(null);
     setSuccessMsg(null);
     setIsSubmitting(false);
@@ -99,6 +101,7 @@ export default function AuthModal({ isOpen, onClose }) {
     setIsSubmitting(false);
 
     if (res.success) {
+      if (res.verificationToken) setVerificationToken(res.verificationToken);
       setResendCooldown(60);
       setOtp('');
       setMode('verify-signup');
@@ -121,7 +124,7 @@ export default function AuthModal({ isOpen, onClose }) {
     }
 
     setIsSubmitting(true);
-    const res = await verifySignupOtp(email, cleanOtp, password);
+    const res = await verifySignupOtp(email, cleanOtp, password, verificationToken);
     setIsSubmitting(false);
 
     if (res.success) {
@@ -142,6 +145,7 @@ export default function AuthModal({ isOpen, onClose }) {
     setIsSubmitting(false);
 
     if (res.success) {
+      if (res.verificationToken) setVerificationToken(res.verificationToken);
       setResendCooldown(60);
       setOtp('');
       setNewPassword('');
@@ -176,7 +180,7 @@ export default function AuthModal({ isOpen, onClose }) {
     }
 
     setIsSubmitting(true);
-    const res = await verifyResetOtp(email, cleanOtp, newPassword);
+    const res = await verifyResetOtp(email, cleanOtp, newPassword, verificationToken);
     setIsSubmitting(false);
 
     if (res.success) {
@@ -199,6 +203,7 @@ export default function AuthModal({ isOpen, onClose }) {
     setIsResending(false);
 
     if (res.success) {
+      if (res.verificationToken) setVerificationToken(res.verificationToken);
       setResendCooldown(60);
       setSuccessMsg('New verification code sent! Check your inbox.');
     } else {

@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { email: rawEmail, otp: rawOtp, password, newPassword, type = 'signup' } = body;
+    const { email: rawEmail, otp: rawOtp, password, newPassword, type = 'signup', verificationToken } = body;
 
     if (!rawEmail || typeof rawEmail !== 'string') {
       return Response.json(
@@ -35,12 +35,50 @@ export async function POST(request) {
     }
 
     const { adminAuth, adminDb } = await getAdmin();
+    const now = Date.now();
+    let isOtpValid = false;
 
-    // Retrieve active OTP record
-    let otpData = null;
+    // 1. First verify via stateless HMAC verificationToken (works across all serverless lambdas)
+    const secret =
+      process.env.FIREBASE_ADMIN_PRIVATE_KEY ||
+      process.env.SMTP_PASS ||
+      process.env.NEXT_PUBLIC_FIREBASE_API_KEY ||
+      'paipai-fallback-otp-secret-key';
+
+    if (verificationToken) {
+      try {
+        const payloadStr = Buffer.from(verificationToken, 'base64url').toString('utf8');
+        const tokenPayload = JSON.parse(payloadStr);
+
+        if (
+          tokenPayload.email === email &&
+          tokenPayload.type === type &&
+          now <= tokenPayload.expiresAt
+        ) {
+          const expectedSig = crypto
+            .createHmac('sha256', secret)
+            .update(`${email}:${otp}:${tokenPayload.expiresAt}:${type}`)
+            .digest('hex');
+
+          if (
+            tokenPayload.sig &&
+            expectedSig &&
+            tokenPayload.sig.length === expectedSig.length &&
+            crypto.timingSafeEqual(Buffer.from(tokenPayload.sig), Buffer.from(expectedSig))
+          ) {
+            isOtpValid = true;
+          }
+        }
+      } catch (tokenErr) {
+        console.warn('Stateless verification token parse error:', tokenErr.message);
+      }
+    }
+
+    // 2. If stateless verification token was not present or didn't match, check Firestore _auth_otps
     let docRef = null;
+    let otpData = null;
 
-    if (adminDb) {
+    if (!isOtpValid && adminDb) {
       try {
         docRef = adminDb.collection('_auth_otps').doc(email);
         const docSnap = await docRef.get();
@@ -50,76 +88,54 @@ export async function POST(request) {
       } catch (dbErr) {
         console.warn('Firestore OTP lookup warning:', dbErr.message);
       }
-    }
 
-    if (!otpData) {
-      return Response.json(
-        {
-          success: false,
-          error: 'No active verification code found for this email. Please request a new code.',
-        },
-        { status: 400 }
-      );
-    }
+      if (otpData) {
+        if (otpData.type === type && now <= otpData.expiresAt) {
+          const currentAttempts = (otpData.attempts || 0) + 1;
+          if (currentAttempts > 5) {
+            await docRef.delete().catch(() => {});
+            return Response.json(
+              {
+                success: false,
+                error: 'Too many incorrect attempts. Please request a new verification code.',
+              },
+              { status: 429 }
+            );
+          }
 
-    // Verify type match
-    if (otpData.type !== type) {
-      return Response.json(
-        {
-          success: false,
-          error: 'Invalid verification session. Please request a new code.',
-        },
-        { status: 400 }
-      );
-    }
+          const submittedHash = crypto
+            .createHash('sha256')
+            .update(`${otp}:${email}`)
+            .digest('hex');
 
-    // Verify expiration
-    const now = Date.now();
-    if (now > otpData.expiresAt) {
-      if (docRef) await docRef.delete().catch(() => {});
-      return Response.json(
-        {
-          success: false,
-          error: 'Verification code has expired. Please request a new code.',
-        },
-        { status: 400 }
-      );
-    }
-
-    // Verify attempt limit (brute force protection)
-    const currentAttempts = (otpData.attempts || 0) + 1;
-    if (currentAttempts > 5) {
-      if (docRef) await docRef.delete().catch(() => {});
-      return Response.json(
-        {
-          success: false,
-          error: 'Too many incorrect attempts. This code has been invalidated. Please request a new code.',
-        },
-        { status: 429 }
-      );
-    }
-
-    // Check code hash
-    const submittedHash = crypto
-      .createHash('sha256')
-      .update(`${otp}:${email}`)
-      .digest('hex');
-
-    if (submittedHash !== otpData.hash) {
-      if (docRef) {
-        await docRef.update({ attempts: currentAttempts }).catch(() => {});
+          if (submittedHash === otpData.hash) {
+            isOtpValid = true;
+          } else {
+            await docRef.update({ attempts: currentAttempts }).catch(() => {});
+            const remaining = 5 - currentAttempts;
+            return Response.json(
+              {
+                success: false,
+                error: `Incorrect verification code. ${remaining} attempt(s) remaining.`,
+              },
+              { status: 400 }
+            );
+          }
+        }
       }
-      const remainingAttempts = 5 - currentAttempts;
+    }
+
+    if (!isOtpValid) {
       return Response.json(
         {
           success: false,
-          error: `Incorrect verification code. ${remainingAttempts} attempt(s) remaining.`,
+          error: 'Invalid or expired verification code. Please check your code or request a new one.',
         },
         { status: 400 }
       );
     }
 
-    // Code is valid! Invalidate OTP to prevent replay attacks
+    // Clean up active Firestore OTP record if present
     if (docRef) {
       await docRef.delete().catch(() => {});
     }
@@ -190,7 +206,7 @@ export async function POST(request) {
           {
             success: false,
             error:
-              'Password reset requires Firebase Admin credentials. Please add FIREBASE_ADMIN_PRIVATE_KEY to .env.local.',
+              'Password reset requires Firebase Admin credentials. Please add FIREBASE_SERVICE_ACCOUNT_KEY or FIREBASE_ADMIN_PRIVATE_KEY in Vercel environment variables.',
           },
           { status: 500 }
         );

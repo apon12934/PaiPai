@@ -129,6 +129,27 @@ export async function POST(request) {
       fallbackCache.set(email, otpData);
     }
 
+    // Generate HMAC signed verification token for stateless serverless resilience
+    const secret =
+      process.env.FIREBASE_ADMIN_PRIVATE_KEY ||
+      process.env.SMTP_PASS ||
+      process.env.NEXT_PUBLIC_FIREBASE_API_KEY ||
+      'paipai-fallback-otp-secret-key';
+
+    const signature = crypto
+      .createHmac('sha256', secret)
+      .update(`${email}:${otp}:${otpData.expiresAt}:${type}`)
+      .digest('hex');
+
+    const verificationToken = Buffer.from(
+      JSON.stringify({
+        email,
+        expiresAt: otpData.expiresAt,
+        type,
+        sig: signature,
+      })
+    ).toString('base64url');
+
     // Send the email via Gmail SMTP
     try {
       await sendOtpEmail({ to: email, otp, type });
@@ -148,6 +169,7 @@ export async function POST(request) {
     return Response.json({
       success: true,
       message: 'Verification code sent to your email.',
+      verificationToken,
     });
   } catch (error) {
     console.error('Unhandled send-otp error:', error);
