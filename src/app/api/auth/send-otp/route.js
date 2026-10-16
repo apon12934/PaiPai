@@ -36,7 +36,7 @@ export async function POST(request) {
       );
     }
 
-    const { adminAuth, adminDb } = getAdmin();
+    const { adminAuth, adminDb } = await getAdmin();
 
     // Check account existence against Firebase Auth (if Admin SDK is configured)
     if (adminAuth) {

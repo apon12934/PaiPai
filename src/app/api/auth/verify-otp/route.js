@@ -34,7 +34,7 @@ export async function POST(request) {
       );
     }
 
-    const { adminAuth, adminDb } = getAdmin();
+    const { adminAuth, adminDb } = await getAdmin();
 
     // Retrieve active OTP record
     let otpData = null;
