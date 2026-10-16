@@ -1,6 +1,9 @@
 import crypto from 'crypto';
 import { getAdmin } from '@/lib/server/firebase-admin';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 export async function POST(request) {
   try {
     const body = await request.json();

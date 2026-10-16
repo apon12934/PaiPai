@@ -5,6 +5,9 @@ import { sendOtpEmail } from '@/lib/server/mailer';
 // In-memory fallback cache for development or environments without Firestore Admin credentials
 const fallbackCache = new Map();
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 export async function POST(request) {
   try {
     const body = await request.json();
