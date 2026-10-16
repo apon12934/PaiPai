@@ -152,7 +152,7 @@ export async function POST(request) {
   } catch (error) {
     console.error('Unhandled send-otp error:', error);
     return Response.json(
-      { success: false, error: 'Internal server error while processing verification.' },
+      { success: false, error: error.message || 'Internal server error while processing verification.' },
       { status: 500 }
     );
   }
