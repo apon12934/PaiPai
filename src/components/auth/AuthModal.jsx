@@ -100,6 +100,7 @@ export default function AuthModal({ isOpen, onClose }) {
 
     if (res.success) {
       setResendCooldown(60);
+      setOtp('');
       setMode('verify-signup');
       setSuccessMsg('A 6-digit verification code has been dispatched to your email.');
     } else {
@@ -142,6 +143,9 @@ export default function AuthModal({ isOpen, onClose }) {
 
     if (res.success) {
       setResendCooldown(60);
+      setOtp('');
+      setNewPassword('');
+      setConfirmPassword('');
       setMode('verify-reset');
       setSuccessMsg('Password reset code dispatched! Please check your inbox.');
     } else {
@@ -469,7 +473,7 @@ export default function AuthModal({ isOpen, onClose }) {
 
         {/* VIEW 3: VERIFY SIGN UP OTP */}
         {mode === 'verify-signup' && (
-          <form onSubmit={handleVerifySignup} className="flex flex-col gap-4">
+          <form onSubmit={handleVerifySignup} autoComplete="off" className="flex flex-col gap-4">
             <button
               type="button"
               onClick={() => {
@@ -494,6 +498,8 @@ export default function AuthModal({ isOpen, onClose }) {
                 6-Digit Verification Code
               </label>
               <input
+                id="signup-otp-input"
+                name="oneTimeCode"
                 type="text"
                 inputMode="numeric"
                 pattern="[0-9]*"
@@ -503,6 +509,10 @@ export default function AuthModal({ isOpen, onClose }) {
                 placeholder="&bull;&bull;&bull;&bull;&bull;&bull;"
                 className="w-full text-center text-2xl tracking-[0.4em] font-mono font-bold bg-black/40 light:bg-white border border-white/20 light:border-slate-300 rounded-lg py-3 text-white light:text-slate-900 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all placeholder-slate-600"
                 autoFocus
+                autoComplete="one-time-code"
+                data-lpignore="true"
+                data-1p-ignore="true"
+                data-form-type="other"
                 required
               />
             </div>
@@ -606,7 +616,7 @@ export default function AuthModal({ isOpen, onClose }) {
 
         {/* VIEW 5: VERIFY RESET CODE & SET NEW PASSWORD */}
         {mode === 'verify-reset' && (
-          <form onSubmit={handleVerifyReset} className="flex flex-col gap-3">
+          <form onSubmit={handleVerifyReset} autoComplete="off" className="flex flex-col gap-3">
             <button
               type="button"
               onClick={() => {
@@ -631,6 +641,8 @@ export default function AuthModal({ isOpen, onClose }) {
                 6-Digit Reset Code
               </label>
               <input
+                id="reset-otp-input"
+                name="oneTimeCode"
                 type="text"
                 inputMode="numeric"
                 pattern="[0-9]*"
@@ -640,6 +652,10 @@ export default function AuthModal({ isOpen, onClose }) {
                 placeholder="&bull;&bull;&bull;&bull;&bull;&bull;"
                 className="w-full text-center text-xl tracking-[0.4em] font-mono font-bold bg-black/40 light:bg-white border border-white/20 light:border-slate-300 rounded-lg py-2.5 text-white light:text-slate-900 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all placeholder-slate-600"
                 autoFocus
+                autoComplete="one-time-code"
+                data-lpignore="true"
+                data-1p-ignore="true"
+                data-form-type="other"
                 required
               />
             </div>
@@ -667,11 +683,14 @@ export default function AuthModal({ isOpen, onClose }) {
 
             <div>
               <input
+                id="reset-new-password"
+                name="newPassword"
                 type="password"
                 placeholder="New Password (min 6 characters)"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 minLength={6}
+                autoComplete="new-password"
                 className="w-full bg-black/20 light:bg-white border border-white/10 light:border-slate-300 rounded-lg px-4 py-2.5 text-slate-200 light:text-slate-900 placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:focus:border-slate-100 focus:ring-1 focus:ring-slate-900 dark:focus:ring-slate-100 transition-all text-sm"
                 required
               />
@@ -679,11 +698,14 @@ export default function AuthModal({ isOpen, onClose }) {
 
             <div>
               <input
+                id="reset-confirm-password"
+                name="confirmPassword"
                 type="password"
                 placeholder="Confirm New Password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 minLength={6}
+                autoComplete="new-password"
                 className="w-full bg-black/20 light:bg-white border border-white/10 light:border-slate-300 rounded-lg px-4 py-2.5 text-slate-200 light:text-slate-900 placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:focus:border-slate-100 focus:ring-1 focus:ring-slate-900 dark:focus:ring-slate-100 transition-all text-sm"
                 required
               />

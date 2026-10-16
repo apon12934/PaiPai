@@ -28,6 +28,8 @@ function createTransporter() {
 
 /**
  * Sends a branded, monochromatic HTML email containing a 6-digit OTP code.
+ * Optimized with standard OTP patterns and Schema.org metadata to trigger
+ * Gmail's automated "Copy code" button on web and mobile.
  *
  * @param {Object} params
  * @param {string} params.to - Recipient email address
@@ -39,14 +41,22 @@ export async function sendOtpEmail({ to, otp, type = 'signup' }) {
   const senderEmail = process.env.SMTP_USER || 'system.apon@gmail.com';
 
   const isSignup = type === 'signup';
+
+  // Placing the 6-digit code at the start of the subject is the primary heuristic
+  // that triggers Gmail's instant "Copy code" button in notifications and the inbox.
   const subject = isSignup
-    ? `[PaiPai] Your Verification Code: ${otp}`
-    : `[PaiPai] Your Password Reset Code: ${otp}`;
+    ? `${otp} is your PaiPai verification code`
+    : `${otp} is your PaiPai password reset code`;
 
   const title = isSignup ? 'Confirm Your Email' : 'Reset Your Password';
   const description = isSignup
     ? 'Welcome to PaiPai! Please use the 6-digit verification code below to verify your email address and activate your account.'
     : 'We received a request to reset your PaiPai account password. Enter the 6-digit code below to set a new password.';
+
+  // Plain text fallback is parsed by Gmail NLP for quick action triggers
+  const text = `Your verification code is: ${otp}\n\nUse this code to complete your ${
+    isSignup ? 'account registration' : 'password reset'
+  } on PaiPai.\n\nThis code is valid for 10 minutes.\n\nIf you did not request this code, you can safely ignore this email.`;
 
   const html = `
 <!DOCTYPE html>
@@ -55,15 +65,34 @@ export async function sendOtpEmail({ to, otp, type = 'signup' }) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${title}</title>
+  <script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "EmailMessage",
+    "description": "Your PaiPai verification code is ${otp}"
+  }
+  </script>
 </head>
 <body style="margin: 0; padding: 0; background-color: #0a0a0a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #f1f5f9;">
+  <!-- Preheader text for inbox preview & Gmail OTP detection -->
+  <div style="display: none; font-size: 1px; color: #0a0a0a; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">
+    Your verification code is ${otp}. Valid for 10 minutes.
+  </div>
+
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #0a0a0a; padding: 40px 16px;">
     <tr>
       <td align="center">
         <table role="presentation" width="100%" style="max-width: 480px; background-color: #141414; border: 1px solid #262626; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
-          <!-- Header -->
+          <!-- Header with Logo -->
           <tr>
-            <td style="padding: 32px 32px 16px 32px; text-align: center; border-bottom: 1px solid #1f1f1f;">
+            <td style="padding: 32px 32px 20px 32px; text-align: center; border-bottom: 1px solid #1f1f1f;">
+              <img 
+                src="https://paipai-app.vercel.app/icon-192x192.png" 
+                width="54" 
+                height="54" 
+                style="display: block; margin: 0 auto 14px auto; border-radius: 50%; border: 1px solid #2e2e2e; background-color: #0a0a0a; box-shadow: 0 4px 12px rgba(0,0,0,0.4);" 
+                alt="PaiPai Logo" 
+              />
               <h1 style="margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.025em; color: #ffffff;">
                 PaiPai <span style="font-size: 14px; font-weight: 400; color: #71717a; margin-left: 4px;">(পাই পাই)</span>
               </h1>
@@ -83,12 +112,17 @@ export async function sendOtpEmail({ to, otp, type = 'signup' }) {
                 ${description}
               </p>
 
+              <!-- Phrasing specifically tuned for Gmail's 'Copy code' chip detection -->
+              <p style="margin: 0 0 10px 0; font-size: 13px; font-weight: 600; color: #d4d4d8; text-align: center; text-transform: uppercase; letter-spacing: 0.05em;">
+                Your verification code is:
+              </p>
+
               <!-- OTP Code Display -->
-              <div style="background-color: #0a0a0a; border: 1px solid #2e2e2e; border-radius: 12px; padding: 20px; text-align: center; margin: 24px 0;">
-                <div style="font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 36px; font-weight: 800; letter-spacing: 0.3em; color: #ffffff; text-indent: 0.3em;">
+              <div style="background-color: #0a0a0a; border: 1px solid #2e2e2e; border-radius: 12px; padding: 22px 16px; text-align: center; margin: 0 0 24px 0;">
+                <div style="font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 38px; font-weight: 800; letter-spacing: 0.25em; color: #ffffff; text-indent: 0.25em;">
                   ${otp}
                 </div>
-                <div style="font-size: 11px; color: #71717a; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.05em;">
+                <div style="font-size: 11px; color: #71717a; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;">
                   Valid for 10 minutes
                 </div>
               </div>
@@ -120,6 +154,7 @@ export async function sendOtpEmail({ to, otp, type = 'signup' }) {
     from: `"PaiPai" <${senderEmail}>`,
     to,
     subject,
+    text,
     html,
   });
 }
