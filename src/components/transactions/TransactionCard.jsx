@@ -18,7 +18,7 @@ export default function TransactionCard({ transaction, onEdit, onDelete, isEditi
       className={`p-3.5 group relative overflow-hidden transition-all duration-150 rounded-xl ${
         isGave ? 'history-card-gave' : 'history-card-received'
       } ${
-        isEditing ? 'border-slate-900 dark:border-slate-100 bg-slate-100 dark:bg-slate-9000/10' : 'hover:border-white/15 light:hover:border-slate-300'
+        isEditing ? 'border-slate-900 dark:border-slate-100 bg-slate-100 dark:bg-white/10' : 'hover:border-white/15 light:hover:border-slate-300'
       }`}
     >
       {/* Top Row: Type Pill + Date */}

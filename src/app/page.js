@@ -319,7 +319,8 @@ export default function Home() {
 
   // Export / Import
   const handleExport = useCallback(() => {
-    if (people.length === 0) {
+    const contactCount = Object.keys(dbState).filter((k) => k !== '_settings').length;
+    if (contactCount === 0) {
       showToast("No data available to export yet!", true);
       return;
     }
@@ -331,7 +332,7 @@ export default function Home() {
     a.click();
     URL.revokeObjectURL(url);
     showToast("JSON backup downloaded successfully!");
-  }, [dbState, people.length, showToast]);
+  }, [dbState, showToast]);
 
   const handleImport = useCallback(
     (event) => {

@@ -466,7 +466,7 @@ export default function SettingsModal({
                   <label className="block text-xs font-bold uppercase tracking-wider text-black dark:text-slate-300 mb-2">
                     Upload Photo from PC (Cloudinary)
                   </label>
-                  <label className="flex items-center justify-center gap-2 w-full p-3 border border-dashed border-slate-900 dark:border-slate-100/40 hover:border-slate-900 dark:border-slate-100 bg-slate-100 dark:bg-slate-900 dark:bg-slate-100 dark:bg-slate-9000/5 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-800 dark:hover:bg-white/10 rounded-lg cursor-pointer transition-all">
+                  <label className="flex items-center justify-center gap-2 w-full p-3 border border-dashed border-slate-300 dark:border-white/20 hover:border-slate-500 dark:hover:border-white/40 bg-slate-50 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 rounded-lg cursor-pointer transition-all">
                     {isUploadingPhoto ? (
                       <Loader2 className="w-4 h-4 text-slate-900 dark:text-slate-300 animate-spin" />
                     ) : (

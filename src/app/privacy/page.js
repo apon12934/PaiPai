@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export const metadata = {
   title: 'Privacy Policy - PaiPai',
   description: 'Privacy Policy for PaiPai Debt Tracker',
@@ -10,7 +12,7 @@ export default function PrivacyPolicy() {
         
         <div className="border-b border-slate-200 dark:border-white/10 pb-6">
           <h1 className="text-3xl font-black tracking-tight mb-2">Privacy Policy</h1>
-          <p className="text-slate-500">Last updated: {new Date().toLocaleDateString()}</p>
+          <p className="text-slate-500">Last updated: October 2026</p>
         </div>
 
         <div className="space-y-6 text-sm leading-relaxed text-slate-700 dark:text-slate-400">
@@ -47,9 +49,9 @@ export default function PrivacyPolicy() {
         </div>
         
         <div className="pt-8">
-          <a href="/" className="text-indigo-600 dark:text-indigo-400 hover:underline font-bold text-sm">
+          <Link href="/" className="text-slate-900 dark:text-white hover:underline font-bold text-sm">
             &larr; Return to Application
-          </a>
+          </Link>
         </div>
 
       </div>

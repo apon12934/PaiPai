@@ -2,36 +2,26 @@
 import React, { useState, useEffect } from 'react';
 import Modal from '../ui/Modal';
 import Button from '../ui/Button';
+import PasswordInput from '../ui/PasswordInput';
 import { useAuth } from '@/hooks/useAuth';
 import GlassCard from '../ui/GlassCard';
 
 export default function AccountLinkModal({ isOpen, onClose }) {
   const { user, getLinkedProviders, linkGoogleAccount, linkEmailAccount, loading } = useAuth();
-  const [providers, setProviders] = useState({ google: false, password: false });
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    if (isOpen) {
-      const p = getLinkedProviders();
-      setProviders({
-        google: p.includes('google.com'),
-        password: p.includes('password')
-      });
-      setError(null);
-    }
-  }, [isOpen, getLinkedProviders]);
+  const linked = getLinkedProviders ? getLinkedProviders() : { hasGoogle: false, hasEmail: false };
+  const providers = {
+    google: !!linked.hasGoogle,
+    password: !!linked.hasEmail,
+  };
 
   const handleLinkGoogle = async () => {
     try {
       setError(null);
       await linkGoogleAccount();
-      const p = getLinkedProviders();
-      setProviders({
-        google: p.includes('google.com'),
-        password: p.includes('password')
-      });
     } catch (err) {
       setError(err.message || 'Failed to link Google account');
     }
@@ -43,11 +33,6 @@ export default function AccountLinkModal({ isOpen, onClose }) {
       setError(null);
       const targetEmail = user?.email || email;
       await linkEmailAccount(targetEmail, password);
-      const p = getLinkedProviders();
-      setProviders({
-        google: p.includes('google.com'),
-        password: p.includes('password')
-      });
       setEmail('');
       setPassword('');
     } catch (err) {
@@ -116,12 +101,11 @@ export default function AccountLinkModal({ isOpen, onClose }) {
                 className="w-full bg-black/20 light:bg-white border border-white/10 light:border-slate-300 rounded-lg px-3 py-2 text-slate-200 light:text-slate-900 placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:focus:border-slate-100 focus:ring-1 focus:ring-slate-900 dark:focus:ring-slate-100 transition-all text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                 required
               />
-              <input 
-                type="password" 
+              <PasswordInput 
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-black/20 light:bg-white border border-white/10 light:border-slate-300 rounded-lg px-3 py-2 text-slate-200 light:text-slate-900 placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:focus:border-slate-100 focus:ring-1 focus:ring-slate-900 dark:focus:ring-slate-100 transition-all text-sm"
+                className="bg-black/20 light:bg-white border border-white/10 light:border-slate-300 rounded-lg px-3 py-2 text-slate-200 light:text-slate-900 placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:focus:border-slate-100 focus:ring-1 focus:ring-slate-900 dark:focus:ring-slate-100 transition-all text-sm"
                 required
               />
               <Button type="submit" variant="glass" className="w-full text-xs" disabled={loading}>

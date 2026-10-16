@@ -22,7 +22,7 @@ export default function HelpModal({ isOpen, onClose }) {
             <div>
               <h4 className="text-sm font-bold text-slate-900 dark:text-white">Add a Contact</h4>
               <p className="text-xs font-medium text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
-                Click "+ Add" to create a new person you want to track debts with.
+                Click &quot;+ Add&quot; to create a new person you want to track debts with.
               </p>
             </div>
           </div>

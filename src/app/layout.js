@@ -18,12 +18,12 @@ const anekBangla = Anek_Bangla({
 });
 
 export const metadata = {
+  metadataBase: new URL('https://paipai.ddns.net'),
   title: 'PaiPai',
   description:
     'PaiPai - Track every penny. A modern debt and expense tab tracker with real-time cloud sync across all your devices.',
   keywords: ['debt tracker', 'expense tracker', 'paipai', 'finance'],
   manifest: '/manifest.json',
-  themeColor: '#07080D',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -32,6 +32,10 @@ export const metadata = {
   verification: {
     google: 'QaPDI-ypAK-Hgoe2RgQk13d99B_vwU5wP1kdQZQdh98',
   },
+};
+
+export const viewport = {
+  themeColor: '#0A0A0A',
 };
 
 export default function RootLayout({ children }) {

@@ -222,7 +222,13 @@ export async function deleteUserAccount(currentPassword) {
   if (!user) return { success: false, error: 'No user logged in.' };
 
   try {
-    // 1. Delete Firestore user document
+    // 1. Re-authenticate first to verify password and refresh credentials
+    if (currentPassword && user.email) {
+      const credential = EmailAuthProvider.credential(user.email, currentPassword);
+      await reauthenticateWithCredential(user, credential);
+    }
+
+    // 2. Delete Firestore user document while still authenticated
     try {
       const userDocRef = doc(db, 'users', user.uid);
       await deleteDoc(userDocRef);
@@ -230,21 +236,8 @@ export async function deleteUserAccount(currentPassword) {
       console.warn('Firestore user doc delete warning:', e);
     }
 
-    // 2. Re-authenticate if password provided
-    if (currentPassword && user.email) {
-      try {
-        const credential = EmailAuthProvider.credential(user.email, currentPassword);
-        await reauthenticateWithCredential(user, credential);
-      } catch (reAuthErr) {
-        console.warn('Re-auth warning:', reAuthErr);
-      }
-    }
-
     // 3. Delete user account from Firebase Auth
     await deleteUser(user);
-
-
-
 
     return { success: true };
   } catch (error) {
