@@ -35,20 +35,11 @@ function initAdmin() {
     };
   }
 
-  // Fallback for default application credentials (e.g. Google Cloud / Firebase Hosting environment)
-  try {
-    const app = initializeApp({ projectId });
-    return {
-      adminAuth: getAuth(app),
-      adminDb: getFirestore(app),
-    };
-  } catch (err) {
-    console.warn('Firebase Admin SDK initialized in unauthenticated mode:', err.message);
-    return {
-      adminAuth: null,
-      adminDb: null,
-    };
-  }
+  // If private key credentials are not provided, return null services so fallbackCache is used safely
+  return {
+    adminAuth: null,
+    adminDb: null,
+  };
 }
 
 let services = null;
