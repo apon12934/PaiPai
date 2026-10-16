@@ -21,6 +21,7 @@ import {
   UploadCloud,
   Loader2,
   RotateCcw,
+  KeyRound,
 } from 'lucide-react';
 
 const CURRENCIES = [
@@ -50,6 +51,7 @@ export default function SettingsModal({
     linkEmailAccount,
     getLinkedProviders,
     deleteUserAccount,
+    updateUserPassword,
   } = useAuth();
 
   const [activeTab, setActiveTab] = useState('general');
@@ -79,6 +81,14 @@ export default function SettingsModal({
   const [linkMsg, setLinkMsg] = useState({ text: '', isError: false });
   const [linkEmail, setLinkEmail] = useState('');
   const [linkPassword, setLinkPassword] = useState('');
+
+  // Change Password states
+  const [showChangePassword, setShowChangePassword] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordMsg, setPasswordMsg] = useState({ text: '', isError: false });
+  const [isSavingPassword, setIsSavingPassword] = useState(false);
 
   // Delete Account Confirmation Modal inside Settings
   const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
@@ -210,6 +220,38 @@ export default function SettingsModal({
       setLinkMsg({ text: 'Email/Password login added successfully!', isError: false });
       setLinkEmail('');
       setLinkPassword('');
+    }
+  };
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    setPasswordMsg({ text: '', isError: false });
+
+    if (newPassword.length < 6) {
+      setPasswordMsg({ text: 'New password must be at least 6 characters long.', isError: true });
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setPasswordMsg({ text: 'New passwords do not match.', isError: true });
+      return;
+    }
+
+    setIsSavingPassword(true);
+    const res = await updateUserPassword(currentPassword, newPassword);
+    setIsSavingPassword(false);
+
+    if (!res.success) {
+      setPasswordMsg({ text: res.error || 'Failed to update password.', isError: true });
+    } else {
+      setPasswordMsg({ text: 'Password updated successfully!', isError: false });
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+      setTimeout(() => {
+        setShowChangePassword(false);
+        setPasswordMsg({ text: '', isError: false });
+      }, 2500);
     }
   };
 
@@ -561,11 +603,98 @@ export default function SettingsModal({
                       </div>
                     </div>
                     {isEmailLinked ? (
-                      <span className="flex items-center gap-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-300 dark:border-emerald-500/20">
-                        <Check className="w-3.5 h-3.5" /> Linked
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="flex items-center gap-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-300 dark:border-emerald-500/20">
+                          <Check className="w-3.5 h-3.5" /> Linked
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setShowChangePassword(!showChangePassword);
+                            setPasswordMsg({ text: '', isError: false });
+                          }}
+                          className="bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900 text-xs px-3 py-1.5 rounded-lg transition font-bold shadow-sm"
+                        >
+                          {showChangePassword ? 'Cancel' : 'Change Password'}
+                        </button>
+                      </div>
                     ) : null}
                   </div>
+
+                  {/* Change Password Form (When Linked) */}
+                  {isEmailLinked && showChangePassword && (
+                    <form onSubmit={handleChangePassword} className="flex flex-col gap-2.5 pt-3 border-t border-slate-200 dark:border-white/10">
+                      <div className="flex items-center gap-1.5 text-xs font-bold text-black dark:text-slate-200">
+                        <KeyRound className="w-3.5 h-3.5 text-slate-700 dark:text-slate-300" />
+                        <span>Update Password</span>
+                      </div>
+
+                      {passwordMsg.text && (
+                        <div
+                          className={`flex items-center gap-2 text-xs p-2.5 rounded-lg border font-bold ${
+                            passwordMsg.isError
+                              ? 'bg-rose-500/10 border-rose-500/20 text-rose-500 dark:text-rose-400'
+                              : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400'
+                          }`}
+                        >
+                          {passwordMsg.isError ? (
+                            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                          ) : (
+                            <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                          )}
+                          <span>{passwordMsg.text}</span>
+                        </div>
+                      )}
+
+                      <div>
+                        <input
+                          type="password"
+                          placeholder="Current Password"
+                          value={currentPassword}
+                          onChange={(e) => setCurrentPassword(e.target.value)}
+                          className="w-full px-3 py-2 rounded-lg text-sm bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-black dark:text-white font-bold placeholder-slate-400"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <input
+                          type="password"
+                          placeholder="New Password (min 6 characters)"
+                          value={newPassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
+                          minLength={6}
+                          className="w-full px-3 py-2 rounded-lg text-sm bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-black dark:text-white font-bold placeholder-slate-400"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <input
+                          type="password"
+                          placeholder="Confirm New Password"
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          minLength={6}
+                          className="w-full px-3 py-2 rounded-lg text-sm bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-black dark:text-white font-bold placeholder-slate-400"
+                          required
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={isSavingPassword}
+                        className="w-full bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900 text-xs py-2 rounded-lg transition font-bold shadow-sm mt-0.5 flex items-center justify-center gap-2"
+                      >
+                        {isSavingPassword ? (
+                          <>
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            Updating Password...
+                          </>
+                        ) : (
+                          'Save New Password'
+                        )}
+                      </button>
+                    </form>
+                  )}
                   
                   {!isEmailLinked && (
                     <form onSubmit={handleLinkEmail} className="flex flex-col gap-2 mt-1">
