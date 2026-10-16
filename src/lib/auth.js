@@ -15,6 +15,7 @@ import {
   updatePassword,
   deleteUser,
   signOut,
+  signInWithCustomToken,
 } from 'firebase/auth';
 import { doc, deleteDoc } from 'firebase/firestore';
 
@@ -71,6 +72,86 @@ export async function loginWithEmail(email, password) {
   try {
     const result = await signInWithEmailAndPassword(auth, email, password);
     return { success: true, user: result.user };
+  } catch (error) {
+    return { success: false, error: friendlyError(error) };
+  }
+}
+
+// Request 6-digit OTP code for Email Verification or Password Reset
+export async function sendOtp(email, type = 'signup') {
+  try {
+    const res = await fetch('/api/auth/send-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, type }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      return { success: false, error: data.error || 'Failed to send verification code.' };
+    }
+    return { success: true, message: data.message };
+  } catch (error) {
+    return { success: false, error: error.message || 'Network error while requesting verification code.' };
+  }
+}
+
+// Verify Sign-Up OTP and authenticate user
+export async function verifySignupOtp(email, otp, password) {
+  try {
+    const res = await fetch('/api/auth/verify-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, otp, password, type: 'signup' }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      return { success: false, error: data.error || 'Verification failed.' };
+    }
+
+    if (data.customToken) {
+      const userCred = await signInWithCustomToken(auth, data.customToken);
+      return { success: true, user: userCred.user };
+    } else if (data.verified) {
+      // Fallback for client-side registration when Admin SDK token isn't generated
+      const result = await createUserWithEmailAndPassword(auth, email, password);
+      return { success: true, user: result.user };
+    }
+
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: friendlyError(error) };
+  }
+}
+
+// Verify Reset Password OTP and update password
+export async function verifyResetOtp(email, otp, newPassword) {
+  try {
+    const res = await fetch('/api/auth/verify-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, otp, newPassword, type: 'reset' }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      return { success: false, error: data.error || 'Password reset failed.' };
+    }
+
+    if (data.customToken) {
+      const userCred = await signInWithCustomToken(auth, data.customToken);
+      return { success: true, user: userCred.user, message: data.message };
+    }
+
+    return { success: true, message: data.message || 'Password updated successfully!' };
+  } catch (error) {
+    return { success: false, error: friendlyError(error) };
+  }
+}
+
+// Sign in with custom Firebase token
+export async function loginWithCustomToken(customToken) {
+  try {
+    const userCred = await signInWithCustomToken(auth, customToken);
+    return { success: true, user: userCred.user };
   } catch (error) {
     return { success: false, error: friendlyError(error) };
   }

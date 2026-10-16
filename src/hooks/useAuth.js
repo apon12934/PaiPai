@@ -13,6 +13,9 @@ import {
   deleteUserAccount as _deleteUserAccount,
   getLinkedProviders as _getLinkedProviders,
   logoutUser as _logoutUser,
+  sendOtp as _sendOtp,
+  verifySignupOtp as _verifySignupOtp,
+  verifyResetOtp as _verifyResetOtp,
 } from '@/lib/auth';
 
 
@@ -92,6 +95,9 @@ export function AuthProvider({ children }) {
     deleteUserAccount,
     getLinkedProviders,
     logout,
+    sendOtp: _sendOtp,
+    verifySignupOtp: _verifySignupOtp,
+    verifyResetOtp: _verifyResetOtp,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

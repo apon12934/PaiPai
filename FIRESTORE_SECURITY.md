@@ -29,6 +29,11 @@ service cloud.firestore {
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
+
+    // Completely lock OTP collection from direct client access (Server-only via Admin SDK)
+    match /_auth_otps/{document=**} {
+      allow read, write: if false;
+    }
     
   }
 }

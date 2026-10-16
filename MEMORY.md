@@ -9,8 +9,8 @@
 - **Name**: PaiPai (পাই পাই) — Debt & Tab Expense Tracker
 - **Meaning**: "Pai Pai" (পাই পাই হিসাব) is a Bengali expression meaning keeping track of every single penny / pie.
 - **Currency**: Bangladeshi Taka (`৳`)
-- **Tech Stack**: Next.js 15 (App Router, Static Export), React 19, TailwindCSS v4, Firebase v11 (Auth + Firestore)
-- **Deployment**: Vercel (static export via `output: 'export'`)
+- **Tech Stack**: Next.js 16 (App Router), React 19, TailwindCSS v4, Firebase v11 (Auth + Firestore), Nodemailer, Firebase Admin
+- **Deployment**: Vercel / Node.js (Static optimization for pages + Serverless Route Handlers for Auth OTP)
 - **Design**: Dark-mode glassmorphism UI with Inter font
 
 ---
@@ -20,39 +20,48 @@
 PaiPai/
 ├── src/
 │   ├── app/
-│   │   ├── layout.js               # Root layout (Inter font, Auth+DB providers)
-│   │   ├── page.js                  # Main app page (3-panel tracker)
-│   │   └── globals.css              # Dark theme, glassmorphism, animations
+│   │   ├── api/
+│   │   │   └── auth/
+│   │   │       ├── send-otp/route.js     # Serverless OTP dispatcher (Gmail SMTP)
+│   │   │       └── verify-otp/route.js   # Serverless OTP validator & user admin
+│   │   ├── layout.js                     # Root layout (Inter font, Auth+DB providers)
+│   │   ├── page.js                       # Main app page (3-panel tracker)
+│   │   ├── privacy/page.js               # Privacy policy route
+│   │   └── globals.css                   # Dark theme, glassmorphism, animations
 │   ├── components/
 │   │   ├── auth/
-│   │   │   ├── AuthModal.jsx        # Login/Signup modal (Google + Email)
-│   │   │   ├── AccountLinkModal.jsx # Provider linking dialog
-│   │   │   └── UserProfileBar.jsx   # Logged-in user bar in sidebar
+│   │   │   ├── AuthModal.jsx             # Login/Signup modal (Google + Email + 6-Digit OTP)
+│   │   │   ├── AccountLinkModal.jsx      # Provider linking dialog
+│   │   │   └── UserProfileBar.jsx        # Logged-in user bar in sidebar
 │   │   ├── layout/
-│   │   │   ├── Sidebar.jsx          # Left panel: brand, people, totals
-│   │   │   ├── MainPanel.jsx        # Center: balance card, tx form
-│   │   │   ├── HistoryPanel.jsx     # Right: transaction history
-│   │   │   └── EmptyState.jsx       # Empty selection view
+│   │   │   ├── Sidebar.jsx               # Left panel: brand, people, totals
+│   │   │   ├── MainPanel.jsx             # Center: balance card, tx form
+│   │   │   ├── HistoryPanel.jsx          # Right: transaction history
+│   │   │   └── EmptyState.jsx            # Empty selection view
 │   │   ├── transactions/
-│   │   │   ├── TransactionForm.jsx  # Amount/note form + keyboard shortcuts
-│   │   │   └── TransactionCard.jsx  # History item card
+│   │   │   ├── TransactionForm.jsx       # Amount/note form + keyboard shortcuts
+│   │   │   └── TransactionCard.jsx       # History item card
 │   │   └── ui/
-│   │       ├── GlassCard.jsx        # Glassmorphism container
-│   │       ├── BalanceCard.jsx      # Gradient balance display
-│   │       ├── Modal.jsx            # Animated modal base
-│   │       ├── Button.jsx           # Button variants
-│   │       └── PersonItem.jsx       # Sidebar person item
+│   │       ├── GlassCard.jsx             # Glassmorphism container
+│   │       ├── BalanceCard.jsx           # Gradient balance display
+│   │       ├── Modal.jsx                 # Animated modal base
+│   │       ├── Button.jsx                # Button variants
+│   │       └── PersonItem.jsx            # Sidebar person item
 │   ├── hooks/
-│   │   ├── useAuth.js              # Auth context + hook
-│   │   └── useDatabase.js          # Database context + hook
+│   │   ├── useAuth.js                    # Auth context + hook (Google, Email, OTP)
+│   │   └── useDatabase.js                # Database context + hook
 │   └── lib/
-│       ├── firebase.js             # Firebase SDK init from env vars
-│       ├── auth.js                 # Auth operations + friendly errors
-│       └── db.js                   # Firestore sync + localStorage fallback
-├── .env.local                      # Firebase secrets (gitignored)
-├── .env.example                    # Public env template
+│       ├── firebase.js                   # Firebase Client SDK init
+│       ├── auth.js                       # Client auth operations + OTP API clients
+│       ├── db.js                         # Firestore sync + localStorage fallback
+│       ├── cloudinary.js                 # Cloudinary image cropping & upload
+│       └── server/
+│           ├── mailer.js                 # Nodemailer Gmail SMTP dispatcher
+│           └── firebase-admin.js         # Firebase Admin SDK singleton
+├── .env.local                            # Firebase & SMTP secrets (gitignored)
+├── .env.example                          # Public env template
 ├── .gitignore
-├── next.config.mjs                 # Static export config
+├── next.config.mjs                       # Next.js config
 ├── package.json
 ├── MEMORY.md
 └── README.md
@@ -101,9 +110,10 @@ PaiPai/
 ---
 
 ## 🛠️ Key Conventions for AI Agents
-- All components use `'use client'` directive
+- All UI components use `'use client'` directive
 - TailwindCSS v4 for all styling (no CSS modules)
-- Dark theme: base `#0B1120`, glassmorphism with `bg-white/[0.02-0.07]`
+- Dark theme: base `#0A0A0A`, panels `#141414`, monochromatic styling with only rose/emerald flow accents
 - Currency: `৳` (Bangladeshi Taka)
 - Keyboard shortcuts: Enter = gave, Shift+Enter = received
-- Static export: no server-side features (`cookies()`, `headers()`, etc.)
+- Server-side routes: Under `src/app/api/` (Serverless Node.js Route Handlers for OTP and SMTP email dispatch)
+- SMTP secrets: Stored strictly in `.env.local` without `NEXT_PUBLIC_` prefixes; NEVER exposed to the client bundle
