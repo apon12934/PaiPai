@@ -28,3 +28,6 @@
 ## PWA & Service Worker Architecture
 12. **Native Installability**: The app is configured as a standalone PWA via `public/manifest.json`. The application name must strictly remain "PaiPai".
 13. **Service Worker Restrictions**: The Service Worker (`public/sw.js`) MUST explicitly bypass and ignore cross-origin requests. If cross-origin requests (like Google avatars or Cloudinary images) are intercepted by the SW `fetch` handler, they will return opaque responses and cache as permanently broken images.
+
+## Deployment & Identity
+14. **Account & Deployment Identity**: All Git commits, Vercel deployments, and account scopes must strictly belong to user **`apon12934`** (`apon12934@gmail.com`). Never deploy under or reference secondary accounts (such as `pucsc-1436`).
