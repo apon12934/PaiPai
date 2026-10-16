@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Modal from '../ui/Modal';
 import Button from '../ui/Button';
+import PasswordInput from '../ui/PasswordInput';
 import { useAuth } from '@/hooks/useAuth';
 import { useDatabase } from '@/hooks/useDatabase';
 import { Eye, ArrowLeft, Loader2, CheckCircle2, RefreshCw } from 'lucide-react';
@@ -300,12 +301,11 @@ export default function AuthModal({ isOpen, onClose }) {
                 />
               </div>
               <div>
-                <input
-                  type="password"
+                <PasswordInput
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-black/20 light:bg-white border border-white/10 light:border-slate-300 rounded-lg px-4 py-2.5 text-slate-200 light:text-slate-900 placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:focus:border-slate-100 focus:ring-1 focus:ring-slate-900 dark:focus:ring-slate-100 transition-all text-sm"
+                  className="bg-black/20 light:bg-white border border-white/10 light:border-slate-300 rounded-lg px-4 py-2.5 text-slate-200 light:text-slate-900 placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:focus:border-slate-100 focus:ring-1 focus:ring-slate-900 dark:focus:ring-slate-100 transition-all text-sm"
                   required
                 />
                 <div className="flex justify-end mt-1.5">
@@ -418,13 +418,12 @@ export default function AuthModal({ isOpen, onClose }) {
                 />
               </div>
               <div>
-                <input
-                  type="password"
+                <PasswordInput
                   placeholder="Password (minimum 6 characters)"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   minLength={6}
-                  className="w-full bg-black/20 light:bg-white border border-white/10 light:border-slate-300 rounded-lg px-4 py-2.5 text-slate-200 light:text-slate-900 placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:focus:border-slate-100 focus:ring-1 focus:ring-slate-900 dark:focus:ring-slate-100 transition-all text-sm"
+                  className="bg-black/20 light:bg-white border border-white/10 light:border-slate-300 rounded-lg px-4 py-2.5 text-slate-200 light:text-slate-900 placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:focus:border-slate-100 focus:ring-1 focus:ring-slate-900 dark:focus:ring-slate-100 transition-all text-sm"
                   required
                 />
               </div>
@@ -687,31 +686,29 @@ export default function AuthModal({ isOpen, onClose }) {
             </div>
 
             <div>
-              <input
+              <PasswordInput
                 id="reset-new-password"
                 name="newPassword"
-                type="password"
                 placeholder="New Password (min 6 characters)"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 minLength={6}
                 autoComplete="new-password"
-                className="w-full bg-black/20 light:bg-white border border-white/10 light:border-slate-300 rounded-lg px-4 py-2.5 text-slate-200 light:text-slate-900 placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:focus:border-slate-100 focus:ring-1 focus:ring-slate-900 dark:focus:ring-slate-100 transition-all text-sm"
+                className="bg-black/20 light:bg-white border border-white/10 light:border-slate-300 rounded-lg px-4 py-2.5 text-slate-200 light:text-slate-900 placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:focus:border-slate-100 focus:ring-1 focus:ring-slate-900 dark:focus:ring-slate-100 transition-all text-sm"
                 required
               />
             </div>
 
             <div>
-              <input
+              <PasswordInput
                 id="reset-confirm-password"
                 name="confirmPassword"
-                type="password"
                 placeholder="Confirm New Password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 minLength={6}
                 autoComplete="new-password"
-                className="w-full bg-black/20 light:bg-white border border-white/10 light:border-slate-300 rounded-lg px-4 py-2.5 text-slate-200 light:text-slate-900 placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:focus:border-slate-100 focus:ring-1 focus:ring-slate-900 dark:focus:ring-slate-100 transition-all text-sm"
+                className="bg-black/20 light:bg-white border border-white/10 light:border-slate-300 rounded-lg px-4 py-2.5 text-slate-200 light:text-slate-900 placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:focus:border-slate-100 focus:ring-1 focus:ring-slate-900 dark:focus:ring-slate-100 transition-all text-sm"
                 required
               />
             </div>

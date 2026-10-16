@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import Modal from '../ui/Modal';
+import PasswordInput from '../ui/PasswordInput';
 import {
   Coins,
   Moon,
@@ -647,34 +648,31 @@ export default function SettingsModal({
                       )}
 
                       <div>
-                        <input
-                          type="password"
+                        <PasswordInput
                           placeholder="Current Password"
                           value={currentPassword}
                           onChange={(e) => setCurrentPassword(e.target.value)}
-                          className="w-full px-3 py-2 rounded-lg text-sm bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-black dark:text-white font-bold placeholder-slate-400"
+                          className="px-3 py-2 rounded-lg text-sm bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-black dark:text-white font-bold placeholder-slate-400"
                           required
                         />
                       </div>
                       <div>
-                        <input
-                          type="password"
+                        <PasswordInput
                           placeholder="New Password (min 6 characters)"
                           value={newPassword}
                           onChange={(e) => setNewPassword(e.target.value)}
                           minLength={6}
-                          className="w-full px-3 py-2 rounded-lg text-sm bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-black dark:text-white font-bold placeholder-slate-400"
+                          className="px-3 py-2 rounded-lg text-sm bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-black dark:text-white font-bold placeholder-slate-400"
                           required
                         />
                       </div>
                       <div>
-                        <input
-                          type="password"
+                        <PasswordInput
                           placeholder="Confirm New Password"
                           value={confirmPassword}
                           onChange={(e) => setConfirmPassword(e.target.value)}
                           minLength={6}
-                          className="w-full px-3 py-2 rounded-lg text-sm bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-black dark:text-white font-bold placeholder-slate-400"
+                          className="px-3 py-2 rounded-lg text-sm bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-black dark:text-white font-bold placeholder-slate-400"
                           required
                         />
                       </div>
@@ -707,12 +705,11 @@ export default function SettingsModal({
                         className="w-full px-3 py-2 rounded-lg text-sm bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-black dark:text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
                         required
                       />
-                      <input 
-                        type="password" 
+                      <PasswordInput 
                         placeholder="Create Password"
                         value={linkPassword}
                         onChange={(e) => setLinkPassword(e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg text-sm bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-black dark:text-white font-bold"
+                        className="px-3 py-2 rounded-lg text-sm bg-slate-50 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-black dark:text-white font-bold"
                         required
                         minLength={6}
                       />

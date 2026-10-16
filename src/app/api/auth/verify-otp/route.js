@@ -34,7 +34,7 @@ export async function POST(request) {
       );
     }
 
-    const { adminAuth, adminDb } = await getAdmin();
+    const { adminAuth, adminDb, error: adminInitError } = await getAdmin();
     const now = Date.now();
     let isOtpValid = false;
 
@@ -205,8 +205,9 @@ export async function POST(request) {
         return Response.json(
           {
             success: false,
-            error:
-              'Password reset requires Firebase Admin credentials. Please add FIREBASE_SERVICE_ACCOUNT_KEY or FIREBASE_ADMIN_PRIVATE_KEY in Vercel environment variables.',
+            error: adminInitError
+              ? `Firebase Admin error: ${adminInitError}`
+              : 'Password reset requires Firebase Admin credentials. Please add FIREBASE_SERVICE_ACCOUNT_KEY or FIREBASE_ADMIN_PRIVATE_KEY in Vercel environment variables.',
           },
           { status: 500 }
         );

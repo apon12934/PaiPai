@@ -1,4 +1,5 @@
 let services = null;
+let initError = null;
 
 /**
  * Lazy/dynamic loader for Firebase Admin SDK.
@@ -31,33 +32,45 @@ export async function getAdmin() {
       const { getAuth } = await import('firebase-admin/auth');
       const { getFirestore } = await import('firebase-admin/firestore');
 
-      privateKey = privateKey.replace(/\\n/g, '\n').replace(/^["']|["']$/g, '');
+      privateKey = privateKey
+        .replace(/\\r/g, '')
+        .replace(/\\n/g, '\n')
+        .replace(/^["']|["']$/g, '')
+        .trim();
 
+      const APP_NAME = 'paipai-admin';
+      const existingApps = getApps();
       const app =
-        getApps().length > 0
-          ? getApps()[0]
-          : initializeApp({
-              credential: cert({
-                projectId,
-                clientEmail,
-                privateKey,
-              }),
-            });
+        existingApps.find((a) => a.name === APP_NAME) ||
+        initializeApp(
+          {
+            credential: cert({
+              projectId,
+              clientEmail,
+              privateKey,
+            }),
+          },
+          APP_NAME
+        );
 
       services = {
         adminAuth: getAuth(app),
         adminDb: getFirestore(app),
+        error: null,
       };
       return services;
     } catch (err) {
-      console.warn('Failed to load Firebase Admin SDK:', err.message);
+      console.error('Failed to load Firebase Admin SDK:', err);
+      initError = err.message || 'Firebase Admin initialization exception';
     }
+  } else {
+    initError = `Missing credentials: projectId=${!!projectId}, clientEmail=${!!clientEmail}, privateKey=${!!privateKey}`;
   }
 
-  // Fallback when private key is not configured
-  services = {
+  // Fallback when credentials are not configured or fail to initialize
+  return {
     adminAuth: null,
     adminDb: null,
+    error: initError,
   };
-  return services;
 }
